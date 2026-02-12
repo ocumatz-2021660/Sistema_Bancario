@@ -1,20 +1,29 @@
-import dotenv from 'dotenv';
-import { initServer } from './configs/app.js'; 
+'use strict';
 
-//cargar variables de enorno
+import dotenv from 'dotenv';
+import app from './configs/app.js';
+import { dbConnection } from './configs/db.js';
+
+// Cargar variables de entorno
 dotenv.config();
 
-//manejo de errores
-process.on('uncaughtException', (error) => {
-    console.error('Uncaught Exception in Admin Server:', error);
-    process.exit(1);
-});
+const PORT = process.env.PORT || 3000;
 
-process.on('unhandledRejection', (error,promise) =>{
-    console.error('Unhandled Rejection at: ' + promise, 'reason:', error);
-    process.exit(1);
-});
+// Función principal
+const startServer = async () => {
+    try {
+        await dbConnection();
+        
+        app.listen(PORT, () => {
+            console.log(` Servidor corriendo en http://localhost:${PORT}`);
+            console.log(` Entorno: ${process.env.NODE_ENV || 'development'}`);
+            console.log(` Iniciado: ${new Date().toLocaleString()}\n`);
+        });
+    } catch (error) {
+        console.error(' Error al iniciar el servidor:', error);
+        process.exit(1);
+    }
+};
 
-//servidor ensendido
-console.log('Starting GestionBancaria Server...');
-initServer();
+// Ejecutar
+startServer();

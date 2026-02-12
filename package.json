@@ -1,7 +1,7 @@
 {
-  "name": "Sistema_Bancario",
+  "name": "Sistema Bancario",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sistema Bancario API",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "keywords": [],
+  "keywords": ["banking", "api", "express"],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.29.2",
@@ -17,11 +17,12 @@
     "nodemon": "^3.1.11"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
-    "mongoose": "^9.2.1",
+    "mongoose": "^9.1.6",
     "morgan": "^1.10.1"
   }
 }
