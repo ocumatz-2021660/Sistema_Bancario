@@ -10,10 +10,10 @@ import { dbConnection } from './db.js';
 import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configuration.js';
 
-import fieldRoutes from '../src/fields/field.routes.js';
+//import fieldRoutes from '../src/fields/field.routes.js';
 
 //en cada enpoints agregamos esta url
-const BASE_PATH = '/kinalSportsAdmin/v1';
+const BASE_PATH = '/GestionBancaria/v1';
 
 //configuracion del servidor
 const middlewares = (app) => {
@@ -26,6 +26,7 @@ const middlewares = (app) => {
 }
 
 //configuracion de rutas
+/*
 const routes = (app) => {
 
     app.use(`${BASE_PATH}/fields`, fieldRoutes);
@@ -43,7 +44,7 @@ const routes = (app) => {
         })
     })
 }
-
+*/
 export const initServer = async () => {
     //creamos el servidor
     const app = express(); //crea el servidor xd
@@ -56,7 +57,7 @@ export const initServer = async () => {
         //metodo asincrono
         await dbConnection();
         middlewares(app);
-        routes(app);
+        //routes(app);
         //nos muestra en donde esat en ejecucion el servidor
         app.listen(PORT, () =>{
             console.log(`Admin server running on port ${PORT}`);
