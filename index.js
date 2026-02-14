@@ -1,29 +1,19 @@
-'use strict';
-
 import dotenv from 'dotenv';
-import app from './configs/app.js';
-import { dbConnection } from './configs/db.js';
+import { initServer } from './configs/app.js';
 
-// Cargar variables de entorno
+// Configurar variables de entorno
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+// Manejar errores no capturados
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  process.exit(1);
+});
 
-// Función principal
-const startServer = async () => {
-    try {
-        await dbConnection();
-        
-        app.listen(PORT, () => {
-            console.log(` Servidor corriendo en http://localhost:${PORT}`);
-            console.log(` Entorno: ${process.env.NODE_ENV || 'development'}`);
-            console.log(` Iniciado: ${new Date().toLocaleString()}\n`);
-        });
-    } catch (error) {
-        console.error(' Error al iniciar el servidor:', error);
-        process.exit(1);
-    }
-};
+process.on('unhandledRejection', (err, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', err);
+  process.exit(1);
+});
 
-// Ejecutar
-startServer();
+// Inicializar servidor
+initServer();

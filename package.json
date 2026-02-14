@@ -1,28 +1,49 @@
 {
-  "name": "Sistema Bancario",
+  "name": "auth-node",
   "version": "1.0.0",
-  "description": "Sistema Bancario API",
+  "description": "API REST de autenticación robusta con Node.js y PostgreSQL",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
-  "keywords": ["banking", "api", "express"],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.29.2",
-  "devDependencies": {
-    "nodemon": "^3.1.11"
-  },
+  "keywords": [
+    "auth",
+    "authentication",
+    "nodejs",
+    "postgresql",
+    "jwt",
+    "api"
+  ],
+  "author": "Braulio Echeverria",
+  "license": "MIT",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "cors": "^2.8.6",
-    "dotenv": "^17.2.4",
-    "express": "^5.2.1",
+    "argon2": "^0.44.0",
+    "cloudinary": "^2.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "express-validator": "^7.2.1",
     "helmet": "^8.1.0",
-    "mongoose": "^9.1.6",
-    "morgan": "^1.10.1"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^9.2.1",
+    "morgan": "^1.10.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.17",
+    "nodemon": "^3.1.10",
+    "pg": "^8.13.1",
+    "sequelize": "^6.35.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "nodemon": "^3.1.10"
   }
 }
