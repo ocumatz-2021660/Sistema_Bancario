@@ -1,404 +1,445 @@
 {
-  "info": {
-    "_postman_id": "a5ab80ac-5940-46ff-9e70-93d3642ccf8c",
-    "name": "Sistema_Bancario",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "48332496",
-    "_collection_link": "https://go.postman.co/collection/48332496-a5ab80ac-5940-46ff-9e70-93d3642ccf8c?source=collection_link"
-  },
-  "item": [
-    {
-      "name": "AUTENTICACIÓN",
-      "item": [
-        {
-          "name": "USUARIOS",
-          "item": [
-            {
-              "name": "AGREGAR_USUARIO",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"name\": \"Oscar\",\r\n  \"surname\": \"Cumatz\",\r\n  \"username\": \"cumatzsitoUWU\",\r\n  \"email\": \"miguelhillofuentes223@gmail.com\",\r\n  \"password\": \"Password123!\",\r\n  \"phone\": \"55895932\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/register",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "INICIAR_SESION",
-          "item": [
-            {
-              "name": "LOGIN",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"emailOrUsername\": \"cumatzsitoUWU\",\r\n  \"password\": \"Password123!\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/login",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "VERIFICACIÓN_EMAIL",
-          "item": [
-            {
-              "name": "VERIFICAR_EMAIL",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"token\": \"69cwsasoF6dCI9gBot6mhJMZBu-G4gP714x7e_sRG3w\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/verify-email",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "verify-email"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "FORGOTE_PASSWORD",
-          "item": [
-            {
-              "name": "VERIFI_ACOUNT",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"email\": \"miguelhillofuentes223@gmail.com\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/forgot-password",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "forgot-password"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "NEW_PASSWORD",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"token\": \"0lcvvmkLulRftXyLxFa8Kl8-WrRarRyo1P3WJ0NR55k\",\r\n  \"newPassword\": \"24489607\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/reset-password",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "reset-password"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "PERFIL",
-      "item": [
-        {
-          "name": "VER_PERFIL",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/v1/auth/profile",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "BUSCAR_ID",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n     \"userId\": \"usr_TDvq1DCeKAH3\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/v1/auth/profile/by-id",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "profile",
-                "by-id"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "CUENTAS",
-      "item": [
-        {
-          "name": "AGREGAR_CUENTA",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"saldo\": 1000,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_HYCf8hFh87Z5\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/create",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "cuentas",
-                "create"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "VER_CUENTAS",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": ""
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "BUSCAR_CUENTA",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "{\r",
-                  "    \"id\": \"\"\r",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/698fbd31d10e9a4841f72276",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "cuentas",
-                "698fbd31d10e9a4841f72276"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "SERVICIOS",
-      "item": [
-        {
-          "name": "CANJEAR_SERVICIO",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"descripcion_servicio\": \"Pago de Internet Fibra Óptica\",\r\n    \"puntos_minimos_servicio\": 150,\r\n    \"cuenta_servicio\": \"65e43210f123456789abcdef\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3005/api/v1/services/create",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "services",
-                "create"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "VER_SERVICIOS_POR_CUENTA",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3005/api/v1/services/65e43210f123456789abcdef",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "services",
-                "65e43210f123456789abcdef"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    }
-  ]
+	"info": {
+		"_postman_id": "b4a1666b-5735-4550-993a-c0547ec7108f",
+		"name": "Sistema_Bancario",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48332499",
+		"_collection_link": "https://cchacon-2021560-931585.postman.co/workspace/IN5BM~c9345e6c-7e8b-4dbe-b6b3-14ff20b474a8/collection/48332499-b4a1666b-5735-4550-993a-c0547ec7108f?action=share&source=collection_link&creator=48332499"
+	},
+	"item": [
+		{
+			"name": "AUTENTICACIÓN",
+			"item": [
+				{
+					"name": "USUARIOS",
+					"item": [
+						{
+							"name": "AGREGAR_USUARIO",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oscar\",\r\n  \"surname\": \"Cumatz\",\r\n  \"username\": \"cumatzsitoUWU\",\r\n  \"email\": \"miguelhillofuentes223@gmail.com\",\r\n  \"password\": \"Password123!\",\r\n  \"phone\": \"55895932\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3005/api/v1/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3005",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "INICIAR_SESION",
+					"item": [
+						{
+							"name": "LOGIN",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"emailOrUsername\": \"cumatzsitoUWU\",\r\n  \"password\": \"Password123!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3005/api/v1/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3005",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "VERIFICACIÓN_EMAIL",
+					"item": [
+						{
+							"name": "VERIFICAR_EMAIL",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"token\": \"-owu0xLmKL9fojZnaAImtSILrNMfDRpom-McQsLZmZA\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3005/api/v1/auth/verify-email",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3005",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"verify-email"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "FORGOTE_PASSWORD",
+					"item": [
+						{
+							"name": "VERIFI_ACOUNT",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"miguelhillofuentes223@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3005/api/v1/auth/forgot-password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3005",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"forgot-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "NEW_PASSWORD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"token\": \"0lcvvmkLulRftXyLxFa8Kl8-WrRarRyo1P3WJ0NR55k\",\r\n  \"newPassword\": \"24489607\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3005/api/v1/auth/reset-password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3005",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"reset-password"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "PERFIL",
+			"item": [
+				{
+					"name": "VER_PERFIL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/auth/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BUSCAR_ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"userId\": \"usr_TDvq1DCeKAH3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/auth/profile/by-id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile",
+								"by-id"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CUENTAS",
+			"item": [
+				{
+					"name": "AGREGAR_CUENTA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"saldo\": 1000,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_GAUD1pWueYaE\",\r\n  \"alias\": \"Ahorros para mi carro.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3005/api/v1/cuentas/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"cuentas",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VER_CUENTAS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"saldo\": 1000,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_HYCf8hFh87Z5\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3005/api/v1/cuentas/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"cuentas",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BUSCAR_CUENTA",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"{\r",
+									"    \"id\": \"\"\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3005/api/v1/cuentas/69913a7b084ff34959dbad7d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"cuentas",
+								"69913a7b084ff34959dbad7d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FAVORITOS_CUENTA",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3005/api/v1/cuentas/buscar/favoritos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"cuentas",
+								"buscar",
+								"favoritos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SERVICIOS",
+			"item": [
+				{
+					"name": "CANJEAR_SERVICIO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion_servicio\": \"Pago de Internet Fibra Óptica\",\r\n    \"puntos_minimos_servicio\": 150,\r\n    \"cuenta_servicio\": \"65e43210f123456789abcdef\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3005/api/v1/services/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VER_SERVICIOS_POR_CUENTA",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3005/api/v1/services/65e43210f123456789abcdef",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"65e43210f123456789abcdef"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
 }
