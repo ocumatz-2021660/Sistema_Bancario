@@ -171,3 +171,37 @@ export const getCuentasByUsuario = async (request, response) => {
         });
     }
 }
+
+//Obtener cuentas por favoritos
+export const getFavoritos = async (request, response) => {
+    try {
+        const { search } = request.query;
+        
+        //Mostrar solo las cuentas que tienen alias.
+        let filter = {
+            alias: { $ne: null, $exists: true},
+            isActive: true
+        };
+
+        //Para buscar por alias específico
+        if (search && search.trim() !=="") {
+            filter.alias = {$regex: search, $options: 'i'};
+        }
+
+        const favoritos = await Cuenta.find(filter);
+
+        response.status(200).json({
+            succes: true,
+            total: favoritos.length,
+            message: "Listado de favoritos obtenido",
+            data: favoritos
+        });
+
+    } catch (error) {
+        response.status(500).json({
+            success: false,
+            message: "Error al obtener favoritos",
+            error: error.message
+        });
+    }
+}
