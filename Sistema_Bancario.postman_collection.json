@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "191101c1-8dd8-4a71-a5cd-743c283822a2",
+    "_postman_id": "a5ab80ac-5940-46ff-9e70-93d3642ccf8c",
     "name": "Sistema_Bancario",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "48332462",
-    "_collection_link": "https://go.postman.co/collection/48332462-191101c1-8dd8-4a71-a5cd-743c283822a2?source=collection_link"
+    "_exporter_id": "48332496",
+    "_collection_link": "https://go.postman.co/collection/48332496-a5ab80ac-5940-46ff-9e70-93d3642ccf8c?source=collection_link"
   },
   "item": [
     {
@@ -284,7 +284,10 @@
           "name": "VER_CUENTAS",
           "request": {
             "method": "GET",
-            "header": []
+            "header": [],
+            "url": {
+              "raw": ""
+            }
           },
           "response": []
         },
@@ -332,6 +335,64 @@
                 "v1",
                 "cuentas",
                 "698fbd31d10e9a4841f72276"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "SERVICIOS",
+      "item": [
+        {
+          "name": "CANJEAR_SERVICIO",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"descripcion_servicio\": \"Pago de Internet Fibra Óptica\",\r\n    \"puntos_minimos_servicio\": 150,\r\n    \"cuenta_servicio\": \"65e43210f123456789abcdef\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/services/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "services",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VER_SERVICIOS_POR_CUENTA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/services/65e43210f123456789abcdef",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "services",
+                "65e43210f123456789abcdef"
               ]
             }
           },

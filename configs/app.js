@@ -19,6 +19,7 @@ import {
 import authRoutes from '../src/auth/auth.routes.js';
 import userRoutes from '../src/users/user.routes.js';
 import cuentasRoutes from '../src/cuentas/cuenta.routes.js';
+import serviceRoutes from '../src/services/service.routes.js';
 
 const BASE_PATH = '/api/v1';
 
@@ -35,6 +36,7 @@ const routes = (app) => {
   app.use(`${BASE_PATH}/auth`, authRoutes);
   app.use(`${BASE_PATH}/users`, userRoutes);
   app.use(`${BASE_PATH}/cuentas`, cuentasRoutes);
+  app.use(`${BASE_PATH}/services`, serviceRoutes);
   
 
   app.get(`${BASE_PATH}/health`, (req, res) => {
