@@ -4,6 +4,7 @@ import {
     getCuentas,
     getCuentaById,
     getCuentasByUsuario,
+    getFavoritos
 } from "./cuenta.controller.js";
 
 const router = Router();
@@ -12,6 +13,8 @@ const router = Router();
 router.post('/create', createCuenta);
 // Obtener todas las cuentas
 router.get('/', getCuentas);
+//Obtener listado de favoritos
+router.get('/buscar/favoritos', getFavoritos);
 // Obtener una cuenta específica por ID
 router.get('/:id', getCuentaById);
 // Obtener cuentas de un usuario específico
