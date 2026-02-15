@@ -43,6 +43,12 @@ const cuentaSchema = mongoose.Schema(
         isActive: {
             type: Boolean,
             default: true
+        },
+        //Agregar atributo de alias para manejo de favoritos
+        alias:{
+            type: String,
+            trim: true,
+            default: null
         }
     },
     {
