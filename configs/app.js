@@ -20,6 +20,7 @@ import authRoutes from '../src/auth/auth.routes.js';
 import userRoutes from '../src/users/user.routes.js';
 import cuentasRoutes from '../src/cuentas/cuenta.routes.js';
 import serviceRoutes from '../src/services/service.routes.js';
+import solicitudRoutes from '../src/solicitudes/solicitud.routes.js';
 
 const BASE_PATH = '/api/v1';
 
@@ -37,7 +38,8 @@ const routes = (app) => {
   app.use(`${BASE_PATH}/users`, userRoutes);
   app.use(`${BASE_PATH}/cuentas`, cuentasRoutes);
   app.use(`${BASE_PATH}/services`, serviceRoutes);
-  
+  app.use(`${BASE_PATH}/solicitudes`, solicitudRoutes);
+
 
   app.get(`${BASE_PATH}/health`, (req, res) => {
     res.status(200).json({
@@ -59,11 +61,11 @@ export const initServer = async () => {
     // Conectar PostgreSQL
     await dbConnection();
     console.log('✅ PostgreSQL connected successfully');
-    
+
     // Conectar MongoDB
     await dbMongoConnection();
     console.log('✅ MongoDB connected successfully');
-    
+
     // Seed essential data (roles)
     const { seedRoles } = await import('../helpers/role-seed.js');
     await seedRoles();

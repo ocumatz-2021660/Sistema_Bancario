@@ -440,6 +440,84 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "SOLICITUDES",
+			"item": [
+				{
+					"name": "CREAR_SOLICITUD",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cuenta\": \"699253700e00be56191d1310\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3005/api/v1/solicitudes/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"solicitudes",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VER_SOLICITUDES",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfNjRod1ZRYmVzQURWIiwianRpIjoiMWVjNmQzMWItOTk5YS00MDgyLTk0NTMtZTI1ZDI1NWEwZDk1IiwiaWF0IjoxNzcxMTk2MzE2LCJyb2xlIjoiVVNFUl9ST0xFIiwiZXhwIjoxNzcxMTk4MTE2LCJhdWQiOiJBdXRoU2VydmljZSIsImlzcyI6IkF1dGhTZXJ2aWNlIn0.-G9qjPZtTGQW609TFV4p4ELsLA9NlSGA63T2UwWM_xo",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
