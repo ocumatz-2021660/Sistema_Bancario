@@ -9,6 +9,7 @@ import { dbConnection as dbMongoConnection } from './dbMongo.js';
 // Ensure models are registered before DB sync
 import '../src/users/user.model.js';
 import '../src/auth/role.model.js';
+import '../src/transactions/transaction.model.js';
 import { requestLimit } from '../middlewares/request-limit.js';
 import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configuration.js';
@@ -21,6 +22,7 @@ import userRoutes from '../src/users/user.routes.js';
 import cuentasRoutes from '../src/cuentas/cuenta.routes.js';
 import serviceRoutes from '../src/services/service.routes.js';
 import solicitudRoutes from '../src/solicitudes/solicitud.routes.js';
+import transactionRoutes from '../src/transactions/transaction.routes.js';
 
 const BASE_PATH = '/api/v1';
 
@@ -39,6 +41,7 @@ const routes = (app) => {
   app.use(`${BASE_PATH}/cuentas`, cuentasRoutes);
   app.use(`${BASE_PATH}/services`, serviceRoutes);
   app.use(`${BASE_PATH}/solicitudes`, solicitudRoutes);
+  app.use(`${BASE_PATH}/transactions`, transactionRoutes);
 
 
   app.get(`${BASE_PATH}/health`, (req, res) => {
