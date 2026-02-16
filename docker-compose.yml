@@ -1,4 +1,4 @@
-/*
+
 version: "3.8"
 
 services:
@@ -7,14 +7,13 @@ services:
     container_name: proyectobancario_postgres
     restart: always
     environment:
-      POSTGRES_DB: ProyectoBancario3
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-     - "5436:5432"
+     - "${DB_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgressql/data
 
 volumes:
   postgres_data:
-*/
