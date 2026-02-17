@@ -20,3 +20,7 @@ Sistema bancario IN6BM
 
 --extras
 recuperacion de cuenta: Verificacion por token para restablecer la contraseña predeterminada
+
+-- Créditos
+Este proyecto utiliza como base el código de [AuthServiceIN6BM-NodeJS(https://github.com/esantos2019254/Node-AuthService-IN6B.git)].  
+Desarollado por [Elmer Santos](https://github.com/esantos2019254).
