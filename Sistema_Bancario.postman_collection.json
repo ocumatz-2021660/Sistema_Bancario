@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "8c1adaf9-b4c7-4034-898e-aa0d3e4e603b",
+    "_postman_id": "d14dd9e5-544d-4847-9782-1c6f7c5a1c53",
     "name": "Sistema_Bancario",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "48332707",
-    "_collection_link": "https://go.postman.co/collection/48332707-8c1adaf9-b4c7-4034-898e-aa0d3e4e603b?source=collection_link"
+    "_exporter_id": "48332462",
+    "_collection_link": "https://go.postman.co/collection/48332462-d14dd9e5-544d-4847-9782-1c6f7c5a1c53?source=collection_link"
   },
   "item": [
     {
@@ -20,7 +20,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"name\": \"Oscar\",\r\n  \"surname\": \"Cumatz\",\r\n  \"username\": \"cumatzsitoUWU\",\r\n  \"email\": \"miguelhillofuentes223@gmail.com\",\r\n  \"password\": \"Password123!\",\r\n  \"phone\": \"55895932\"\r\n}",
+                  "raw": "{\r\n  \"name\": \"Miguel\",\r\n  \"surname\": \"Fuentes\",\r\n  \"username\": \"MiguelHilloRLM\",\r\n  \"email\": \"miguelhillofuentes223@gmail.com\",\r\n  \"password\": \"Password123!\",\r\n  \"phone\": \"12345678\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -41,6 +41,14 @@
                     "register"
                   ]
                 }
+              },
+              "response": []
+            },
+            {
+              "name": "VER_USUARIO",
+              "request": {
+                "method": "GET",
+                "header": []
               },
               "response": []
             }
@@ -207,38 +215,6 @@
                 "v1",
                 "auth",
                 "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "BUSCAR_ID",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n     \"userId\": \"usr_TDvq1DCeKAH3\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/v1/auth/profile/by-id",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "profile",
-                "by-id"
               ]
             }
           },
@@ -553,7 +529,22 @@
           "name": "HISTORIAL_TRANSACCIONES",
           "request": {
             "method": "GET",
-            "header": []
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/transactions/account/2284975843",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "account",
+                "2284975843"
+              ]
+            }
           },
           "response": []
         }
