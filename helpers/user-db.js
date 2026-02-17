@@ -368,3 +368,25 @@ export const updateUserPassword = async (userId, hashedPassword) => {
     throw new Error('Error al actualizar contraseña');
   }
 };
+
+export const getAllUsers = async () => {
+  try {
+    const users = await User.findAll({
+      include: [
+        { model: UserProfile, as: 'UserProfile' },
+        { model: UserEmail, as: 'UserEmail' },
+        {
+          model: UserRole,
+          as: 'UserRoles',
+          include: [{ model: Role, as: 'Role' }],
+        },
+      ],
+      order: [['CreatedAt', 'DESC']],
+    });
+
+    return users;
+  } catch (error) {
+    console.error('Error obteniendo todos los usuarios:', error);
+    throw new Error('Error al obtener usuarios');
+  }
+};
