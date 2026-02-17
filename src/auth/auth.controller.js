@@ -8,6 +8,8 @@ import {
 } from '../../helpers/auth-operations.js';
 import { getUserProfileHelper } from '../../helpers/profile-operations.js';
 import { asyncHandler } from '../../middlewares/server-genericError-handler.js';
+import { buildUserResponse } from '../../utils/user-helpers.js';  
+
 
 export const register = asyncHandler(async (req, res) => {
   try {
@@ -200,5 +202,19 @@ export const getProfileById = asyncHandler(async (req, res) => {
     success: true,
     message: 'Perfil obtenido exitosamente',
     data: user,
+  });
+});
+export const getAllUsers = asyncHandler(async (req, res) => {
+  // Importar desde user-db
+  const { getAllUsers: getAllUsersFromDb } = await import('../../helpers/user-db.js');
+  
+  const users = await getAllUsersFromDb();
+  const usersResponse = users.map(buildUserResponse);
+
+  return res.status(200).json({
+    success: true,
+    message: 'Usuarios obtenidos exitosamente',
+    data: usersResponse,
+    total: usersResponse.length,
   });
 });

@@ -289,4 +289,23 @@ router.get('/profile', validateJWT, authController.getProfile);
  */
 router.post('/profile/by-id', requestLimit, authController.getProfileById);
 
+/**
+ * @swagger
+ * /api/v1/auth/users:
+ *   get:
+ *     tags: [Users]
+ *     summary: Obtiene todos los usuarios
+ *     description: Devuelve la lista completa de usuarios (solo para administradores)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Usuarios obtenidos exitosamente
+ *       401:
+ *         description: Token inválido
+ *       403:
+ *         description: No autorizado (solo admin)
+ */
+router.get('/users', authController.getAllUsers);
+
 export default router;
