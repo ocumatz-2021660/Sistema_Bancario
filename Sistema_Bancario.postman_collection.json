@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "d14dd9e5-544d-4847-9782-1c6f7c5a1c53",
+    "_postman_id": "1dc3c5a1-6b8e-40be-8182-ff0e2bc55e21",
     "name": "Sistema_Bancario",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "48332462",
-    "_collection_link": "https://go.postman.co/collection/48332462-d14dd9e5-544d-4847-9782-1c6f7c5a1c53?source=collection_link"
+    "_exporter_id": "48332499",
+    "_collection_link": "https://go.postman.co/collection/48332499-1dc3c5a1-6b8e-40be-8182-ff0e2bc55e21?source=collection_link"
   },
   "item": [
     {
@@ -48,7 +48,10 @@
               "name": "VER_USUARIO",
               "request": {
                 "method": "GET",
-                "header": []
+                "header": [],
+                "url": {
+                  "raw": ""
+                }
               },
               "response": []
             }
@@ -269,7 +272,7 @@
               "raw": "{\r\n  \"saldo\": 1000,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_HYCf8hFh87Z5\"\r\n}"
             },
             "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/",
+              "raw": "http://localhost:3005/api/v1/cuentas?currency=USD",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -278,8 +281,13 @@
               "path": [
                 "api",
                 "v1",
-                "cuentas",
-                ""
+                "cuentas"
+              ],
+              "query": [
+                {
+                  "key": "currency",
+                  "value": "USD"
+                }
               ]
             }
           },
@@ -318,7 +326,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/69913a7b084ff34959dbad7d",
+              "raw": "http://localhost:3005/api/v1/cuentas/69913a7b084ff34959dbad7d?currency=USD",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -329,6 +337,12 @@
                 "v1",
                 "cuentas",
                 "69913a7b084ff34959dbad7d"
+              ],
+              "query": [
+                {
+                  "key": "currency",
+                  "value": "USD"
+                }
               ]
             }
           },
@@ -474,7 +488,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n\"monto\": 50,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"0123456789\",\r\n\"cuenta_destinatoria\": \"9876543210\"\r\n}",
+              "raw": "{\r\n\"monto\": 50,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"4637690266\",\r\n\"cuenta_destinatoria\": \"1574769559\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -510,7 +524,7 @@
               "raw": "{\r\n\"monto\": 50,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"0123456789\",\r\n\"cuenta_destinatoria\": \"9876543210\"\r\n}"
             },
             "url": {
-              "raw": "http://localhost:3005/api/v1/transactions",
+              "raw": "http://localhost:3005/api/v1/transactions?currency=USD",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -520,6 +534,12 @@
                 "api",
                 "v1",
                 "transactions"
+              ],
+              "query": [
+                {
+                  "key": "currency",
+                  "value": "USD"
+                }
               ]
             }
           },
@@ -531,7 +551,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:3005/api/v1/transactions/account/2284975843",
+              "raw": "http://localhost:3005/api/v1/transactions/account/4637690266?currency=EUR",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -542,7 +562,13 @@
                 "v1",
                 "transactions",
                 "account",
-                "2284975843"
+                "4637690266"
+              ],
+              "query": [
+                {
+                  "key": "currency",
+                  "value": "EUR"
+                }
               ]
             }
           },
