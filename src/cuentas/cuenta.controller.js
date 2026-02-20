@@ -1,5 +1,6 @@
 import Cuenta from './cuenta.model.js';
 import { User } from '../users/user.model.js';
+import { getExchangeRate } from '../../helpers/currency-service.js';
 
 // Crear una nueva cuenta
 export const createCuenta = async (request, response) => {
@@ -70,7 +71,7 @@ export const createCuenta = async (request, response) => {
 // Obtener todas las cuentas
 export const getCuentas = async (request, response) => {
     try {
-        const { page = 1, limit = 10, tipo_cuenta, isActive = true } = request.query;
+        const { page = 1, limit = 10, tipo_cuenta, isActive = true, currency } = request.query;
 
         const filter = { isActive };
 
@@ -83,11 +84,27 @@ export const getCuentas = async (request, response) => {
             .skip((page - 1) * limit)
             .sort({ createdAt: -1 });
 
+        // Lógica para conversión de moneda si se especifica una moneda diferente a GTQ
+        let dataFinal = cuentas.map(c => c.toObject());
+        
+        if (currency && currency.toUpperCase() !== 'GTQ') {
+            const rate = await getExchangeRate(currency.toUpperCase());
+            if (rate) {
+                dataFinal = dataFinal.map(cuenta => ({
+                    ...cuenta,
+                    conversion: {
+                        moneda: currency.toUpperCase(),
+                        saldo_convertido: (cuenta.saldo * rate).toFixed(2)
+                    }
+                }));
+            }
+        }
+
         const total = await Cuenta.countDocuments(filter);
 
         response.status(200).json({
             success: true,
-            data: cuentas,
+            data: dataFinal, // para enviar la data con la conversión incluida
             pagination: {
                 currentPage: parseInt(page),
                 totalPages: Math.ceil(total / limit),
@@ -109,6 +126,7 @@ export const getCuentas = async (request, response) => {
 export const getCuentaById = async (request, response) => {
     try {
         const { id } = request.params;
+        const { currency } = request.query; //para poder obtener la mondeda a convertir
 
         const cuenta = await Cuenta.findById(id);
 
@@ -125,6 +143,19 @@ export const getCuentaById = async (request, response) => {
         // 3. Unimos los datos manualmente
         const cuentaObj = cuenta.toObject();
         cuentaObj.usuario_cuenta = usuario ? usuario : 'Usuario no encontrado en PostgreSQL';
+
+        //Aplicar la lógica de conversión de moneda si se especifica una moneda diferente a GTQ
+if (currency && currency.toUpperCase() !== 'GTQ') {
+            const rate = await getExchangeRate(currency.toUpperCase());
+            
+            if (rate) {
+                cuentaObj.conversion = {
+                    moneda_destino: currency.toUpperCase(),
+                    tasa_cambio: rate,
+                    saldo_convertido: (cuenta.saldo * rate).toFixed(2)
+                };
+            }
+        }
 
         response.status(200).json({
             success: true,
