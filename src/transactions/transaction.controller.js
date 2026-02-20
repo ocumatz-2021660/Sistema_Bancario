@@ -2,6 +2,7 @@
 
 import Cuenta from '../cuentas/cuenta.model.js';
 import Transaccion from './transaction.model.js';
+import { getExchangeRate } from '../../helpers/currency-service.js';
 
 // Crear una transacción (transferencia o depósito)
 export const createTransaccion = async (req, res) => {
@@ -50,7 +51,7 @@ export const createTransaccion = async (req, res) => {
 // Obtener transacciones (paginado)
 export const getTransacciones = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, currency } = req.query;
     const trans = await Transaccion.find()
       .populate('cuenta_origen')
       .populate('cuenta_destinatoria')
@@ -60,7 +61,25 @@ export const getTransacciones = async (req, res) => {
 
     const total = await Transaccion.countDocuments();
 
-    return res.status(200).json({ success: true, data: trans, pagination: { currentPage: Number(page), totalPages: Math.ceil(total / limit), totalRecords: total } });
+    // lógica para conversión de moneda si se especifica una moneda diferente a GTQ
+    let dataFinal = trans.map(t => t.toObject());
+
+    if (currency && currency.toUpperCase() !== 'GTQ') {
+      const rate = await getExchangeRate(currency.toUpperCase());
+
+      if (rate) {
+        dataFinal = dataFinal.map(t => ({
+          ...t,
+          conversion: {
+            moneda_destino: currency.toUpperCase(),
+            tasa: rate,
+            monto_convertido: (t.monto * rate).toFixed(2)
+          }
+        }));
+      }
+    }
+
+    return res.status(200).json({ success: true, data: dataFinal, pagination: { currentPage: Number(page), totalPages: Math.ceil(total / limit), totalRecords: total } });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Error al obtener transacciones', error: error.message });
   }
@@ -70,20 +89,40 @@ export const getTransacciones = async (req, res) => {
 export const getTransaccionesByCuenta = async (req, res) => {
   try {
     const { no_cuenta } = req.params;
+    const { currency } = req.query; // Para permitir conversión de moneda en el historial
+
     const cuenta = await Cuenta.findOne({ no_cuenta, isActive: true });
     if (!cuenta) {
       return res.status(404).json({ success: false, message: 'Cuenta no encontrada' });
     }
 
     const trans = await Transaccion.find({
-      $or: [ { cuenta_origen: cuenta._id }, { cuenta_destinatoria: cuenta._id } ]
+      $or: [{ cuenta_origen: cuenta._id }, { cuenta_destinatoria: cuenta._id }]
     })
       .populate('cuenta_origen')
       .populate('cuenta_destinatoria')
       .limit(5)
       .sort({ createdAt: -1 });
 
-    return res.status(200).json({ success: true, data: trans });
+    // lógica para conversión de moneda si se especifica una moneda diferente a GTQ
+    let dataFinal = trans.map(t => t.toObject());
+
+    if (currency && currency.toUpperCase() !== 'GTQ') {
+      const rate = await getExchangeRate(currency.toUpperCase());
+
+      if (rate) {
+        dataFinal = dataFinal.map(t => ({
+          ...t,
+          conversion: {
+            moneda_destino: currency.toUpperCase(),
+            tasa: rate,
+            monto_convertido: (t.monto * rate).toFixed(2)
+          }
+        }));
+      }
+    }
+
+    return res.status(200).json({ success: true, data: dataFinal });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Error al obtener historial', error: error.message });
   }
