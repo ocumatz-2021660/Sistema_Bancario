@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../../configs/db.js';
 import { generateUserId } from '../../helpers/uuid-generator.js';
+import { ACCOUNT_STATUS, ACCOUNT_STATUS_VALUES } from '../../helpers/account-status-constants.js';
 
-// Modelo User principal (equivalente a User.cs en .NET) - usando snake_case
+// Modelo User principal
 export const User = sequelize.define(
   'User',
   {
@@ -81,6 +82,14 @@ export const User = sequelize.define(
       allowNull: false,
       field: 'status',
     },
+    
+    AccountStatus: {
+      type: DataTypes.ENUM(...ACCOUNT_STATUS_VALUES),
+      allowNull: false,
+      defaultValue: ACCOUNT_STATUS.INACTIVE, // Por defecto: inactivo hasta verificar email
+      field: 'account_status',
+    },
+
     CreatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -102,7 +111,7 @@ export const User = sequelize.define(
   }
 );
 
-// Modelo UserProfile (equivalente a UserProfile.cs en .NET) - usando snake_case
+// Modelo UserProfile
 export const UserProfile = sequelize.define(
   'UserProfile',
   {
@@ -116,10 +125,7 @@ export const UserProfile = sequelize.define(
       type: DataTypes.STRING(16),
       allowNull: false,
       field: 'user_id',
-      references: {
-        model: User,
-        key: 'id',
-      },
+      references: { model: User, key: 'id' },
     },
     ProfilePicture: {
       type: DataTypes.STRING(512),
@@ -132,10 +138,7 @@ export const UserProfile = sequelize.define(
       field: 'phone',
       validate: {
         notEmpty: { msg: 'El número de teléfono es obligatorio.' },
-        len: {
-          args: [8, 8],
-          msg: 'El número de teléfono debe tener exactamente 8 dígitos.',
-        },
+        len: { args: [8, 8], msg: 'El número de teléfono debe tener exactamente 8 dígitos.' },
         isNumeric: { msg: 'El teléfono solo debe contener números.' },
       },
     },
@@ -146,7 +149,7 @@ export const UserProfile = sequelize.define(
   }
 );
 
-// Modelo UserEmail (equivalente a UserEmail.cs en .NET) - usando snake_case
+// Modelo UserEmail
 export const UserEmail = sequelize.define(
   'UserEmail',
   {
@@ -160,10 +163,7 @@ export const UserEmail = sequelize.define(
       type: DataTypes.STRING(16),
       allowNull: false,
       field: 'user_id',
-      references: {
-        model: User,
-        key: 'id',
-      },
+      references: { model: User, key: 'id' },
     },
     EmailVerified: {
       type: DataTypes.BOOLEAN,
@@ -188,7 +188,7 @@ export const UserEmail = sequelize.define(
   }
 );
 
-// Modelo UserPasswordReset (equivalente a UserPasswordReset.cs en .NET) - usando snake_case
+// Modelo UserPasswordReset
 export const UserPasswordReset = sequelize.define(
   'UserPasswordReset',
   {
@@ -202,10 +202,7 @@ export const UserPasswordReset = sequelize.define(
       type: DataTypes.STRING(16),
       allowNull: false,
       field: 'user_id',
-      references: {
-        model: User,
-        key: 'id',
-      },
+      references: { model: User, key: 'id' },
     },
     PasswordResetToken: {
       type: DataTypes.STRING(256),
@@ -224,16 +221,12 @@ export const UserPasswordReset = sequelize.define(
   }
 );
 
-// Definir las relaciones (equivalente a las navigation properties en .NET)
+// Relaciones
 User.hasOne(UserProfile, { foreignKey: 'user_id', as: 'UserProfile' });
 UserProfile.belongsTo(User, { foreignKey: 'user_id', as: 'User' });
 
 User.hasOne(UserEmail, { foreignKey: 'user_id', as: 'UserEmail' });
 UserEmail.belongsTo(User, { foreignKey: 'user_id', as: 'User' });
 
-User.hasOne(UserPasswordReset, {
-  foreignKey: 'user_id',
-  as: 'UserPasswordReset',
-});
+User.hasOne(UserPasswordReset, { foreignKey: 'user_id', as: 'UserPasswordReset' });
 UserPasswordReset.belongsTo(User, { foreignKey: 'user_id', as: 'User' });
-export default User;
