@@ -1,19 +1,24 @@
 import { Router } from 'express';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
+import { isAdmin } from '../../middlewares/is.admin.js';
 import {
   updateUserRole,
   getUserRoles,
   getUsersByRole,
 } from './user.controller.js';
+import {
+  updateAccountStatus,
+  getAccountStatus,
+} from './account-status.controller.js';
 
 const router = Router();
 
-// PUT /api/v1/users/:userId/role
-router.put('/:userId/role', ...updateUserRole);
+router.put('/:userId/role', validateJWT, isAdmin, updateUserRole);
+router.get('/:userId/roles', validateJWT, getUserRoles);
+router.get('/by-role/:roleName', validateJWT, isAdmin, getUsersByRole);
 
-// GET /api/v1/users/:userId/roles
-router.get('/:userId/roles', ...getUserRoles);
-
-// GET /api/v1/users/by-role/:roleName
-router.get('/by-role/:roleName', ...getUsersByRole);
+//ver estados de cuenta (verificar cuentas a futuro)
+router.put('/:userId/status', validateJWT, isAdmin, updateAccountStatus);
+router.get('/:userId/status', validateJWT, isAdmin, getAccountStatus);
 
 export default router;
