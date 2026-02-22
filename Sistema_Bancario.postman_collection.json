@@ -1,230 +1,12 @@
 {
   "info": {
-    "_postman_id": "414b5086-a27a-493f-94e5-65057f78eb06",
+    "_postman_id": "54b20023-97e6-49f1-b843-28f43e0bc630",
     "name": "Sistema_Bancario",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "48332496",
-    "_collection_link": "https://go.postman.co/collection/48332496-414b5086-a27a-493f-94e5-65057f78eb06?source=collection_link"
+    "_exporter_id": "48332492",
+    "_collection_link": "https://go.postman.co/collection/48332492-54b20023-97e6-49f1-b843-28f43e0bc630?source=collection_link"
   },
   "item": [
-    {
-      "name": "AUTENTICACIÓN",
-      "item": [
-        {
-          "name": "USUARIOS",
-          "item": [
-            {
-              "name": "AGREGAR_USUARIO",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"name\": \"Miguel\",\r\n  \"surname\": \"Fuentes\",\r\n  \"username\": \"MiguelHilloRLM\",\r\n  \"email\": \"miguelhillofuentes223@gmail.com\",\r\n  \"password\": \"Password123!\",\r\n  \"phone\": \"12345678\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/register",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "VER_USUARIO",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": ""
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "INICIAR_SESION",
-          "item": [
-            {
-              "name": "LOGIN",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"emailOrUsername\": \"cumatzsitoUWU\",\r\n  \"password\": \"Password123!\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/login",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "VERIFICACIÓN_EMAIL",
-          "item": [
-            {
-              "name": "VERIFICAR_EMAIL",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"token\": \"-owu0xLmKL9fojZnaAImtSILrNMfDRpom-McQsLZmZA\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/verify-email",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "verify-email"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "FORGOTE_PASSWORD",
-          "item": [
-            {
-              "name": "VERIFI_ACOUNT",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"email\": \"miguelhillofuentes223@gmail.com\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/forgot-password",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "forgot-password"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "NEW_PASSWORD",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"token\": \"0lcvvmkLulRftXyLxFa8Kl8-WrRarRyo1P3WJ0NR55k\",\r\n  \"newPassword\": \"24489607\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:3005/api/v1/auth/reset-password",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "3005",
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth",
-                    "reset-password"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "PERFIL",
-      "item": [
-        {
-          "name": "VER_PERFIL",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/v1/auth/profile",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
     {
       "name": "CUENTAS",
       "item": [
@@ -628,6 +410,455 @@
             }
           },
           "response": []
+        }
+      ]
+    },
+    {
+      "name": "PERFIL",
+      "item": [
+        {
+          "name": "GET_PERFIL",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/auth/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_PERFIL_BY_IID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n     \"userId\": \"usr_TDvq1DCeKAH3\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/profile/by-id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "profile",
+                "by-id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UPDATE_PERFIL",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Sebastian",
+                  "type": "text",
+                  "uuid": "1d647d3d-6808-48dc-85cf-e97349fed5e2"
+                },
+                {
+                  "key": "surname",
+                  "value": "Lopez",
+                  "type": "text",
+                  "uuid": "67b89dbb-798a-41ca-997f-0c5a5731ff85"
+                },
+                {
+                  "key": "phone",
+                  "value": "66602221",
+                  "type": "text",
+                  "uuid": "a0b58fc2-b70e-48b2-8517-1f6a241a9120"
+                },
+                {
+                  "key": "profilePicture",
+                  "type": "file",
+                  "uuid": "9faf6cdc-53f9-46cd-887c-02956242b9da",
+                  "src": "/C:/Users/Clara Lopez/Desktop/sebas/perro waos.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/auth/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ADMIN",
+      "item": [
+        {
+          "name": "ADMIN_ROLES",
+          "item": [
+            {
+              "name": "UPDATE_ROLE",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"roleName\": \"ADMIN_ROLE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/usr_MZ8N98zTKihA/role",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "usr_MZ8N98zTKihA",
+                    "role"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET_ALL_USERS",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/by-role/USER_ROLE",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "by-role",
+                    "USER_ROLE"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DESABILITI_USER",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"accountStatus\": \"inactivo\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/usr_MZ8N98zTKihA/status",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "usr_MZ8N98zTKihA",
+                    "status"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AUTH",
+      "item": [
+        {
+          "name": "USERS",
+          "item": [
+            {
+              "name": "ADD_USER",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Cumatz\",\r\n    \"surname\": \"Lopez\",\r\n    \"username\": \"ocumatz\",\r\n    \"email\": \"ocumatz-2021660@kinal.edu.gt\",\r\n    \"password\": \"Password123!\",\r\n    \"confirmPassword\": \"Password123!\",\r\n    \"phone\": \"55895932\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "INICIAR_SESION",
+          "item": [
+            {
+              "name": "LOGIN",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"emailOrUsername\": \"admin\",\r\n  \"password\": \"Admin1234!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "VERIFY_EMAIL",
+          "item": [
+            {
+              "name": "VERIFY_EMAIL",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"token\": \"1JWmTFMSO6d0rcDHFb4NCfHByrL8JAnDkC2Es-djZM0\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/verify-email",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "verify-email"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "FORGOTE_PASSWORD",
+          "item": [
+            {
+              "name": "VERIFI_ACOUNT",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"ocumatz-2021660@kinal.edu.gt\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/forgot-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "NEW_PASSWORD",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"token\": \"FUsttZrZfpPo-bVh1XV9tYbzZD_G3SnYfA7hV5c0DkM\",\r\n  \"newPassword\": \"24489607\",\r\n  \"confirmPassword\": \"24489607\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/reset-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ]
     }
