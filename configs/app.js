@@ -21,7 +21,7 @@ import authRoutes from '../src/auth/auth.routes.js';
 import userRoutes from '../src/users/user.routes.js';
 import cuentasRoutes from '../src/cuentas/cuenta.routes.js';
 import serviceRoutes from '../src/services/service.routes.js';
-import solicitudRoutes from '../src/solicitudes/solicitud.routes.js';
+import requestAccountsRoutes from '../src/request_accounts/request_accounts.routes.js';
 import transactionRoutes from '../src/transactions/transaction.routes.js';
 
 const BASE_PATH = '/api/v1';
@@ -40,7 +40,7 @@ const routes = (app) => {
   app.use(`${BASE_PATH}/users`, userRoutes);
   app.use(`${BASE_PATH}/cuentas`, cuentasRoutes);
   app.use(`${BASE_PATH}/services`, serviceRoutes);
-  app.use(`${BASE_PATH}/solicitudes`, solicitudRoutes);
+  app.use(`${BASE_PATH}/request_accounts`, requestAccountsRoutes);
   app.use(`${BASE_PATH}/transactions`, transactionRoutes);
 
 
