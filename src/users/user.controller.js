@@ -1,86 +1,100 @@
 import { asyncHandler } from '../../middlewares/server-genericError-handler.js';
-import { validateJWT } from '../../middlewares/validate-JWT.js';
 import { findUserById } from '../../helpers/user-db.js';
 import {
   getUserRoleNames,
   getUsersByRole as repoGetUsersByRole,
   setUserSingleRole,
 } from '../../helpers/role-db.js';
-import { ALLOWED_ROLES, ADMIN_ROLE } from '../../helpers/role-constants.js';
+import { ALLOWED_ROLES } from '../../helpers/role-constants.js';
 import { buildUserResponse } from '../../utils/user-helpers.js';
 import { sequelize } from '../../configs/db.js';
 
-const ensureAdmin = async (req) => {
-  const currentUserId = req.userId;
-  if (!currentUserId) return false;
-  const roles =
-    req.user?.UserRoles?.map((ur) => ur.Role?.Name).filter(Boolean) ??
-    (await getUserRoleNames(currentUserId));
-  return roles.includes(ADMIN_ROLE);
-};
+export const updateUserRole = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const { roleName } = req.body || {};
 
-export const updateUserRole = [
-  validateJWT,
-  asyncHandler(async (req, res) => {
-    if (!(await ensureAdmin(req))) {
-      return res.status(403).json({ success: false, message: 'Forbidden' });
-    }
+  // Validar que se envió un rol
+  if (!roleName) {
+    return res.status(400).json({
+      success: false,
+      message: 'El campo "roleName" es requerido.',
+    });
+  }
 
-    const { userId } = req.params;
-    const { roleName } = req.body || {};
+  const normalized = roleName.trim().toUpperCase();
 
-    const normalized = (roleName || '').trim().toUpperCase();
-    if (!ALLOWED_ROLES.includes(normalized)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Role not allowed. Use ADMIN_ROLE or USER_ROLE',
-      });
-    }
+  // Validar que el rol sea permitido
+  if (!ALLOWED_ROLES.includes(normalized)) {
+    return res.status(400).json({
+      success: false,
+      message: `Rol no permitido. Los roles válidos son: ${ALLOWED_ROLES.join(', ')}`,
+    });
+  }
 
-    const user = await findUserById(userId);
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: 'User not found' });
-    }
+  const user = await findUserById(userId);
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: 'Usuario no encontrado.',
+    });
+  }
 
-    const { updatedUser } = await setUserSingleRole(
-      user,
-      normalized,
-      sequelize
-    );
+  // Evitar que un admin se cambie el rol a sí mismo por error
+  if (userId === req.userId) {
+    return res.status(400).json({
+      success: false,
+      message: 'No puedes cambiar tu propio rol.',
+    });
+  }
 
-    return res.status(200).json(buildUserResponse(updatedUser));
-  }),
-];
+  // Aplicar el nuevo rol
+  const { updatedUser } = await setUserSingleRole(user, normalized, sequelize);
 
-export const getUserRoles = [
-  validateJWT,
-  asyncHandler(async (req, res) => {
-    const { userId } = req.params;
-    const roles = await getUserRoleNames(userId);
-    return res.status(200).json(roles);
-  }),
-];
+  return res.status(200).json({
+    success: true,
+    message: `Rol actualizado a "${normalized}" exitosamente.`,
+    data: buildUserResponse(updatedUser),
+  });
+});
 
-export const getUsersByRole = [
-  validateJWT,
-  asyncHandler(async (req, res) => {
-    if (!(await ensureAdmin(req))) {
-      return res.status(403).json({ success: false, message: 'Forbidden' });
-    }
 
-    const { roleName } = req.params;
-    const normalized = (roleName || '').trim().toUpperCase();
-    if (!ALLOWED_ROLES.includes(normalized)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Role not allowed. Use ADMIN_ROLE or USER_ROLE',
-      });
-    }
+export const getUserRoles = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
 
-    const users = await repoGetUsersByRole(normalized);
-    const payload = users.map(buildUserResponse);
-    return res.status(200).json(payload);
-  }),
-];
+  const user = await findUserById(userId);
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: 'Usuario no encontrado.',
+    });
+  }
+
+  const roles = await getUserRoleNames(userId);
+
+  return res.status(200).json({
+    success: true,
+    message: 'Roles obtenidos exitosamente.',
+    data: { userId, roles },
+  });
+});
+
+export const getUsersByRole = asyncHandler(async (req, res) => {
+  const { roleName } = req.params;
+  const normalized = (roleName || '').trim().toUpperCase();
+
+  if (!ALLOWED_ROLES.includes(normalized)) {
+    return res.status(400).json({
+      success: false,
+      message: `Rol no permitido. Los roles válidos son: ${ALLOWED_ROLES.join(', ')}`,
+    });
+  }
+
+  const users = await repoGetUsersByRole(normalized);
+  const payload = users.map(buildUserResponse);
+
+  return res.status(200).json({
+    success: true,
+    message: `Usuarios con rol "${normalized}" obtenidos exitosamente.`,
+    data: payload,
+  });
+});
