@@ -130,7 +130,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n\"monto\": 50,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"4637690266\",\r\n\"cuenta_destinatoria\": \"1574769559\"\r\n}",
+              "raw": "{\r\n\"monto\": 500,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"6805726024\",\r\n\"cuenta_destinatoria\": \"8150512524\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -391,7 +391,7 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:3005/api/v1/users/usr_MZ8N98zTKihA/role",
+                  "raw": "http://localhost:3005/api/v1/users/usr_apkEBk4i8vpJ/role",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -401,7 +401,7 @@
                     "api",
                     "v1",
                     "users",
-                    "usr_MZ8N98zTKihA",
+                    "usr_apkEBk4i8vpJ",
                     "role"
                   ]
                 }
@@ -458,7 +458,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"accountStatus\": \"inactivo\"\r\n}",
+                  "raw": "{\r\n  \"accountStatus\": \"deshabilitado\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -466,7 +466,7 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:3005/api/v1/users/usr_MZ8N98zTKihA/status",
+                  "raw": "http://localhost:3005/api/v1/users/usr_bZXirH3qSpNB/status",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -476,7 +476,7 @@
                     "api",
                     "v1",
                     "users",
-                    "usr_MZ8N98zTKihA",
+                    "usr_bZXirH3qSpNB",
                     "status"
                   ]
                 }
@@ -572,7 +572,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"token\": \"1JWmTFMSO6d0rcDHFb4NCfHByrL8JAnDkC2Es-djZM0\"\r\n}",
+                  "raw": "{\r\n    \"token\": \"OkbTfpkYxcXnApgbBpnURmaWH-3CQtY1MHZakXpr5-I\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -687,7 +687,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"saldo\": 500,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_kv76vG8xWvD9\"\r\n}",
+              "raw": "{\r\n  \"saldo\": 401,\r\n  \"tipo_cuenta\": \"MONETARIA\",\r\n  \"usuario_cuenta\": \"usr_bZXirH3qSpNB\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -712,7 +712,7 @@
           "response": []
         },
         {
-          "name": "GET_CUENTAS(ADMIN)",
+          "name": "GET_ACCOUNT(ADMIN)",
           "request": {
             "auth": {
               "type": "bearer",
@@ -760,7 +760,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"saldo\": 900\r\n}",
+              "raw": "{\r\n  \"saldo\": 1900\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -768,7 +768,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/699a1b64f30a8c1354b09d68/saldo",
+              "raw": "http://localhost:3005/api/v1/cuentas/699bbd7bfd5f72c0a9a0fd6e/saldo",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -778,7 +778,7 @@
                 "api",
                 "v1",
                 "cuentas",
-                "699a1b64f30a8c1354b09d68",
+                "699bbd7bfd5f72c0a9a0fd6e",
                 "saldo"
               ]
             }
@@ -871,7 +871,7 @@
             "method": "PUT",
             "header": [],
             "url": {
-              "raw": "http://localhost:3005/api/v1/request_accounts/699a6996f981d447fd96971b/aprobar",
+              "raw": "http://localhost:3005/api/v1/request_accounts/699bc2a1fd5f72c0a9a0fd91/aprobar",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -881,7 +881,7 @@
                 "api",
                 "v1",
                 "request_accounts",
-                "699a6996f981d447fd96971b",
+                "699bc2a1fd5f72c0a9a0fd91",
                 "aprobar"
               ]
             }
@@ -896,7 +896,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{vault:authorization-secret}}",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQ0VVZmpEbXY5QndpIiwianRpIjoiMzI1NDRkOGItYTE4My00YTBhLWIwMzItY2IzMGY0MTE0MDVhIiwiaWF0IjoxNzcxODE1NTA2LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MTgxNzMwNiwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.lGTEcwAUfgtyCWyWEWxsnub1DtQmTJdXA7LGvJn0_uE",
                   "type": "string"
                 }
               ]
@@ -904,7 +904,7 @@
             "method": "PUT",
             "header": [],
             "url": {
-              "raw": "http://localhost:3005/api/v1/request_accounts/699a684af981d447fd969708/rechazar",
+              "raw": "http://localhost:3005/api/v1/request_accounts/699bc19dfd5f72c0a9a0fd80/rechazar",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -914,12 +914,46 @@
                 "api",
                 "v1",
                 "request_accounts",
-                "699a684af981d447fd969708",
+                "699bc19dfd5f72c0a9a0fd80",
                 "rechazar"
               ]
             }
           },
           "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{vault:authorization-secret}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
         }
       ]
     }
