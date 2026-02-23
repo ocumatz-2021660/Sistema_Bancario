@@ -72,6 +72,11 @@ export const initServer = async () => {
     // Seed essential data (roles)
     const { seedRoles } = await import('../helpers/role-seed.js');
     await seedRoles();
+
+    await seedRoles();
+    // Seed usuario admin por default
+    const { seedAdminUser } = await import('../helpers/admin-seed.js');
+    await seedAdminUser();
     middlewares(app);
     routes(app);
 
