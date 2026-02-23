@@ -127,3 +127,50 @@ export const getTransaccionesByCuenta = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Error al obtener historial', error: error.message });
   }
 };
+//eliminar solo si a pasado 1 minuto (si se elimina se devuelve el edinero)
+export const deleteTransaccion = async (req, res) => {
+    try {
+        const transaccion = req.transaccionParaEliminar; //del middleware time-out-transaction
+        const { monto, cuenta_origen, cuenta_destinatoria, tipo_transaccion } = transaccion;
+
+        //Revertir saldo en Cuenta Destino (Restar lo que se le depositó)
+        const cuentaDestino = await Cuenta.findById(cuenta_destinatoria);
+        if (cuentaDestino) {
+            cuentaDestino.saldo = Number(cuentaDestino.saldo) - Number(monto);
+            
+            // restar los puntos del servicio (no realizao la transaccion xd)
+            if (tipo_transaccion === 'DEPOSITO') {
+                cuentaDestino.puntos_cuenta = Math.max(0, (cuentaDestino.puntos_cuenta || 0) - 1);
+            }
+            
+            await cuentaDestino.save();
+        }
+
+        // Sumar el dinero a la cuenta de origen
+        if (cuenta_origen) {
+            const cuentaOrigen = await Cuenta.findById(cuenta_origen);
+            if (cuentaOrigen) {
+                cuentaOrigen.saldo = Number(cuentaOrigen.saldo) + Number(monto);
+              
+                if (tipo_transaccion === 'TRANSFERENCIA') {
+                    cuentaOrigen.puntos_cuenta = Math.max(0, (cuentaOrigen.puntos_cuenta || 0) - 1);
+                }
+                
+                await cuentaOrigen.save();
+            }
+        }
+        await Transaccion.findByIdAndDelete(transaccion._id);
+
+        return res.status(200).json({ 
+            success: true, 
+            message: 'Transacción eliminada correctamente' 
+        });
+
+    } catch (error) {
+        return res.status(500).json({ 
+            success: false, 
+            message: 'Error al revertir la transacción', 
+            error: error.message 
+        });
+    }
+};
