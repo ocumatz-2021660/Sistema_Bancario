@@ -1,6 +1,6 @@
 'use strict';
 
-import Cuenta from '../cuentas/cuenta.model.js';
+import Cuenta from '../account/account.model.js';
 import Transaccion from './transaction.model.js';
 import { getExchangeRate } from '../../helpers/currency-service.js';
 

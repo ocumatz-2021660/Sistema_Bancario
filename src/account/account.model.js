@@ -19,7 +19,7 @@ const cuentaSchema = mongoose.Schema(
             type: Number,
             required: [true, 'El saldo es obligatorio'],
             default: 0,
-            min: [0, 'El saldo no puede ser negativo'],          
+            min: [100, 'El saldo mínimo debe ser de 100Q'],          
         },
         tipo_cuenta: {
             type: String,
@@ -43,12 +43,6 @@ const cuentaSchema = mongoose.Schema(
         isActive: {
             type: Boolean,
             default: true
-        },
-        //Agregar atributo de alias para manejo de favoritos
-        alias:{
-            type: String,
-            trim: true,
-            default: null
         }
     },
     {

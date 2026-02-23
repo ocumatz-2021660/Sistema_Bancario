@@ -1,6 +1,6 @@
 // solicitud.controller.js
 import Solicitud from './request_accounts.model.js';
-import Cuenta from '../account/cuenta.model.js';
+import Cuenta from '../account/account.model.js';
 import { enrichWithUser } from '../../helpers/enrich-with-user.js';
 
 //solo los admin las ven

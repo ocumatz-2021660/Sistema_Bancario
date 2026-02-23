@@ -1,5 +1,5 @@
 import Service from './service.model.js';
-import Cuenta from '../cuentas/cuenta.model.js';
+import Cuenta from '../account/account.model.js';
 
 export const saveService = async (req, res) => {
     try {
