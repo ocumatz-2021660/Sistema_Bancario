@@ -1,160 +1,12 @@
 {
   "info": {
-    "_postman_id": "54b20023-97e6-49f1-b843-28f43e0bc630",
+    "_postman_id": "f02d6607-299e-461f-a9e8-84db5d980b94",
     "name": "Sistema_Bancario",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "48332492",
-    "_collection_link": "https://go.postman.co/collection/48332492-54b20023-97e6-49f1-b843-28f43e0bc630?source=collection_link"
+    "_exporter_id": "48332462",
+    "_collection_link": "https://go.postman.co/collection/48332462-f02d6607-299e-461f-a9e8-84db5d980b94?source=collection_link"
   },
   "item": [
-    {
-      "name": "CUENTAS",
-      "item": [
-        {
-          "name": "AGREGAR_CUENTA",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"saldo\": 1000,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_GAUD1pWueYaE\",\r\n  \"alias\": \"Ahorros para mi carro.\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/create",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "cuentas",
-                "create"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "VER_CUENTAS",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"saldo\": 1000,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_HYCf8hFh87Z5\"\r\n}"
-            },
-            "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas?currency=USD",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "cuentas"
-              ],
-              "query": [
-                {
-                  "key": "currency",
-                  "value": "USD"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "BUSCAR_CUENTA",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "{\r",
-                  "    \"id\": \"\"\r",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/69913a7b084ff34959dbad7d?currency=USD",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "cuentas",
-                "69913a7b084ff34959dbad7d"
-              ],
-              "query": [
-                {
-                  "key": "currency",
-                  "value": "USD"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "FAVORITOS_CUENTA",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/buscar/favoritos",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "cuentas",
-                "buscar",
-                "favoritos"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
     {
       "name": "SERVICIOS",
       "item": [
@@ -262,53 +114,6 @@
                 "delete",
                 "ID_DEL_SERVICIO"
               ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "SOLICITUDES",
-      "item": [
-        {
-          "name": "CREAR_SOLICITUD",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"cuenta\": \"699253700e00be56191d1310\"\r\n}\r\n",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3005/api/v1/solicitudes/create",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3005",
-              "path": [
-                "api",
-                "v1",
-                "solicitudes",
-                "create"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "VER_SOLICITUDES",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": ""
             }
           },
           "response": []
@@ -859,6 +664,262 @@
               "response": []
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "ACCOUNT",
+      "item": [
+        {
+          "name": "ADD_ACOUNT",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"saldo\": 500,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_kv76vG8xWvD9\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/cuentas/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "cuentas",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_CUENTAS(ADMIN)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/cuentas/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "cuentas",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UPDATE_SALDO(ADMIN)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"saldo\": 900\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/cuentas/699a1b64f30a8c1354b09d68/saldo",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "cuentas",
+                "699a1b64f30a8c1354b09d68",
+                "saldo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DESACTIVE_ACCOUNT(ADMIN)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/cuentas/699a1b64f30a8c1354b09d68/deactivate",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "cuentas",
+                "699a1b64f30a8c1354b09d68",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "REQUEST_ACCOUNTS",
+      "item": [
+        {
+          "name": "GET_REQUEST_ACCOUNTS(ADMIN)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/request_accounts/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "request_accounts",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "APROVED_REQUEST",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/request_accounts/699a6996f981d447fd96971b/aprobar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "request_accounts",
+                "699a6996f981d447fd96971b",
+                "aprobar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DENIED_REQUEST",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/request_accounts/699a684af981d447fd969708/rechazar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "request_accounts",
+                "699a684af981d447fd969708",
+                "rechazar"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
