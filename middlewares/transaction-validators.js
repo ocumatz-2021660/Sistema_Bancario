@@ -1,6 +1,6 @@
 'use strict';
 
-import Cuenta from '../src/cuentas/cuenta.model.js';
+import Cuenta from '../src/account/account.model.js';
 
 // Validar datos de entrada de transacción
 export const validateTransactionInput = (req, res, next) => {
