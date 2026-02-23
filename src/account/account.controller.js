@@ -1,5 +1,5 @@
 // cuenta.controller.js
-import Cuenta from './cuenta.model.js';
+import Cuenta from './account.routes.js';
 import Solicitud from '../request_accounts/request_accounts.model.js';
 import { User } from '../users/user.model.js';
 import { enrichWithUser } from '../../helpers/enrich-with-user.js';
