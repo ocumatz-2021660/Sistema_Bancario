@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "f02d6607-299e-461f-a9e8-84db5d980b94",
+    "_postman_id": "f3ad4b42-ea71-4022-a2e8-32cef83d9f4b",
     "name": "Sistema_Bancario",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "48332462",
-    "_collection_link": "https://go.postman.co/collection/48332462-f02d6607-299e-461f-a9e8-84db5d980b94?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/48332462-f3ad4b42-ea71-4022-a2e8-32cef83d9f4b?source=collection_link"
   },
   "item": [
     {
@@ -130,7 +130,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n\"monto\": 500,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"6805726024\",\r\n\"cuenta_destinatoria\": \"8150512524\"\r\n}",
+              "raw": "{\r\n\"monto\": 500,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"8150512524\",\r\n\"cuenta_destinatoria\": \"6805726024\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -154,11 +154,21 @@
           "response": []
         },
         {
-          "name": "LISTA_TRANSACCIONES",
+          "name": "LISTA_TRANSACCIONES(ADMIN)",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "body": {
@@ -211,6 +221,39 @@
                   "key": "currency",
                   "value": "EUR"
                 }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CANCELAR_TRANSACCION(ADMIN)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/transactions/cancelar/699c612dd7b90cde4b39e2a7",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "transactions",
+                "cancelar",
+                "699c612dd7b90cde4b39e2a7"
               ]
             }
           },
@@ -760,7 +803,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"saldo\": 1900\r\n}",
+              "raw": "{\r\n  \"saldo\": 3900\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -896,7 +939,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQ0VVZmpEbXY5QndpIiwianRpIjoiMzI1NDRkOGItYTE4My00YTBhLWIwMzItY2IzMGY0MTE0MDVhIiwiaWF0IjoxNzcxODE1NTA2LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MTgxNzMwNiwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.lGTEcwAUfgtyCWyWEWxsnub1DtQmTJdXA7LGvJn0_uE",
+                  "value": "{{vault:authorization-secret}}",
                   "type": "string"
                 }
               ]
