@@ -107,6 +107,12 @@ user1("monto": 50,"tipo_transaccion": "TRANSFERENCIA","cuenta_origen": "46376902
 3. Busca el hisotiral de transacciones por medio de un no. de cuenta 
 -- (TRANSACCION -> historial transaccion)
 
+4. Eliminar transacciones (solo administradores pueden realizarlo) si pasa mas de 60s no se podrá eliminar la transacción y se almacenara los cambios de salgo en cada cuenta
+si se cancela la transacción se regresara el dinero a la cuenta de origen y se restara a la cuenta destinada
+se restaran los puntos de servicio al no haber realizado la operación
+-- (TRANSACCION -> CANCELAR_TRANSACCION)
+("monto": 10,"tipo_transaccion": "TRANSFERENCIA","cuenta_origen": "6805726024","cuenta_destinatoria": "8150512524")
+
 • Conversion Monetaria (USD) 
 ______________________________
 1. Al momento de ingresar la ruta Ver Transacciones, al final de la ruta especificar la moneda que se desea realizar la conversion (USD por ejemplo)
@@ -116,9 +122,6 @@ ______________________________
 ______________
 En desarrollo
 
-(En desarrollo)
-Eliminación de transacción en 1 minuto
-Maximo de 2000, transferidos
 Aumento de 1Q por cada 10 segundos en cuentas de ahorro
 
 crear servicios fijos
