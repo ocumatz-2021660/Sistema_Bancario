@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import { initInteresJob } from '../jobs/interest.job.js';
 import { dbConnection } from './db.js';
 import { dbConnection as dbMongoConnection } from './dbMongo.js';
 // Ensure models are registered before DB sync
@@ -77,6 +78,7 @@ export const initServer = async () => {
     // Seed usuario admin por default
     const { seedAdminUser } = await import('../helpers/admin-seed.js');
     await seedAdminUser();
+    initInteresJob();//jobs  
     middlewares(app);
     routes(app);
 
