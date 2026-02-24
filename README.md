@@ -76,6 +76,8 @@ ___________________________________________________________________________
 user1(  "saldo": 500,"tipo_cuenta": "AHORRO","usuario_cuenta": "usr_apkEBk4i8vpJ")
 user2(  "saldo": 401,"tipo_cuenta": "MONETARIA", "usuario_cuenta": "usr_bZXirH3qSpNB")
 
+Si la cuenta es de tipo AHORRO, esta generara intereses con el tiempo (1 minuto = +1 en el saldo de la cuenta) por medio de node-cron
+
 2. al crear la cuenta se generara una solicitud de forma automática, Ingresar a solicitudes en estado PENDIENTE por default, ingresar en forma de administrador para continuar
 Ingresar ala petición GET_REQUEST_ACCOUNTS(ADMIN) y agregar el token de administrador, si no es token de administrador no realizara la peticion
 -- (REQUEST_ACCOUNTS -> GET_REQUEST_ACCOUNTS(ADMIN))
