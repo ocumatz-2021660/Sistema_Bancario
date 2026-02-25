@@ -1,124 +1,161 @@
+
 import Service from './service.model.js';
-import Cuenta from '../account/account.model.js';
 
-export const saveService = async (req, res) => {
+export const createService = async (request, response) => {
     try {
-        const { descripcion_servicio, puntos_minimos_servicio, cuenta_servicio } = req.body;
+        const { nombre_servicio, descripcion_servicio, puntos_requeridos } = request.body;
 
-        // 1. Buscar la cuenta del cliente
-        const cuenta = await Cuenta.findById(cuenta_servicio);
-
-        if (!cuenta || !cuenta.isActive) {
-            return res.status(404).json({
-                success: false,
-                message: 'Cuenta no encontrada o inactiva'
-            });
-        }
-
-        // 2. Validar puntos (Lógica: puntos_cuenta debe ser >= puntos_minimos)
-        if (cuenta.puntos_cuenta < puntos_minimos_servicio) {
-            return res.status(400).json({
-                success: false,
-                message: `Puntos insuficientes. Tienes ${cuenta.puntos_cuenta} y necesitas ${puntos_minimos_servicio}`
-            });
-        }
-
-        // 3. Restar los puntos a la cuenta y salvar cambios
-        cuenta.puntos_cuenta -= puntos_minimos_servicio;
-        await cuenta.save();
-
-        // 4. Crear el registro del servicio
-        const newService = new Service({
-            descripcion_servicio,
-            puntos_minimos_servicio,
-            cuenta_servicio
+        const existente = await Service.findOne({
+            nombre_servicio: nombre_servicio?.trim(),
+            isActive: true
         });
-        await newService.save();
+        if (existente) {
+            return response.status(409).json({
+                success: false,
+                message: 'Ya existe un servicio activo con ese nombre'
+            });
+        }
 
-        res.status(201).json({
+        const service = new Service({ nombre_servicio, descripcion_servicio, puntos_requeridos });
+        await service.save();
+
+        return response.status(201).json({
             success: true,
-            message: 'Servicio otorgado y puntos descontados',
-            data: newService,
-            puntos_restantes: cuenta.puntos_cuenta
+            message: 'Servicio creado exitosamente',
+            data: service
         });
 
     } catch (error) {
-        res.status(500).json({
+        console.error('Error en createService:', error);
+        return response.status(500).json({
             success: false,
-            message: 'Error al procesar el servicio',
+            message: 'Error al crear el servicio',
             error: error.message
         });
     }
 };
 
-export const updateService = async (req, res) => {
+export const getServices = async (request, response) => {
     try {
-        const { id } = req.params;
-        const { descripcion_servicio } = req.body;
+        const { page = 1, limit = 10, isActive, puntos_max, puntos_min } = request.query;
 
-        // Buscar y actualizar solo la descripción del servicio
-        const updatedService = await Service.findByIdAndUpdate(
-            id,
-            { descripcion_servicio },
-            { new: true }
-        );
+        const filter = {};
+        if (isActive !== undefined) filter.isActive = isActive === 'true';
+        if (puntos_min !== undefined) filter.puntos_requeridos = { $gte: Number(puntos_min) };
+        if (puntos_max !== undefined) {
+            filter.puntos_requeridos = {
+                ...filter.puntos_requeridos,
+                $lte: Number(puntos_max)
+            };
+        }
 
-        if (!updatedService) {
-            return res.status(404).json({
+        const [services, total] = await Promise.all([
+            Service.find(filter)
+                .limit(Number(limit))
+                .skip((Number(page) - 1) * Number(limit))
+                .sort({ puntos_requeridos: 1 }),
+            Service.countDocuments(filter)
+        ]);
+
+        return response.status(200).json({
+            success: true,
+            data: services,
+            pagination: {
+                currentPage: parseInt(page),
+                totalPages: Math.ceil(total / limit),
+                totalRecords: total,
+                limit: parseInt(limit)
+            }
+        });
+
+    } catch (error) {
+        console.error('Error en getServices:', error);
+        return response.status(500).json({
+            success: false,
+            message: 'Error al obtener los servicios',
+            error: error.message
+        });
+    }
+};
+
+export const updateService = async (request, response) => {
+    try {
+        const { id } = request.params;
+        const { nombre_servicio, descripcion_servicio, puntos_requeridos } = request.body;
+
+        const service = await Service.findById(id);
+        if (!service) {
+            return response.status(404).json({
                 success: false,
                 message: 'Servicio no encontrado'
             });
         }
 
-        res.status(200).json({
+        if (!service.isActive) {
+            return response.status(400).json({
+                success: false,
+                message: 'No se puede modificar un servicio inactivo'
+            });
+        }
+
+        if (nombre_servicio !== undefined) service.nombre_servicio = nombre_servicio;
+        if (descripcion_servicio !== undefined) service.descripcion_servicio = descripcion_servicio;
+        if (puntos_requeridos !== undefined) service.puntos_requeridos = puntos_requeridos;
+
+        await service.save();
+
+        return response.status(200).json({
             success: true,
-            message: 'Servicio actualizado correctamente',
-            data: updatedService
+            message: 'Servicio actualizado exitosamente',
+            data: service
         });
+
     } catch (error) {
-        res.status(500).json({
+        console.error('Error en updateService:', error);
+        return response.status(500).json({
             success: false,
             message: 'Error al actualizar el servicio',
             error: error.message
         });
     }
 };
-
-export const deleteService = async (req, res) => {
+export const deleteService = async (request, response) => {
     try {
-        const { id } = req.params;
+        const { id } = request.params;
 
-        // 1. Buscar el servicio para saber cuántos puntos devolver y a qué cuenta
         const service = await Service.findById(id);
-        
-        if (!service || !service.isActive) {
-            return res.status(404).json({
+        if (!service) {
+            return response.status(404).json({
                 success: false,
-                message: 'Servicio no encontrado o ya está inactivo'
+                message: 'Servicio no encontrado'
             });
         }
 
-        // 2. Devolver los puntos a la cuenta vinculada antes de darle al eliiminar
-        const cuenta = await Cuenta.findById(service.cuenta_servicio);
-        if (cuenta) {
-            cuenta.puntos_cuenta += service.puntos_minimos_servicio;
-            await cuenta.save();
+        if (!service.isActive) {
+            return response.status(400).json({
+                success: false,
+                message: 'El servicio ya se encuentra desactivado'
+            });
         }
 
-        // 3. Eliminación 
         service.isActive = false;
         await service.save();
 
-        res.status(200).json({
+        return response.status(200).json({
             success: true,
-            message: 'Servicio eliminado y puntos revertidos a la cuenta',
-            puntos_devueltos: service.puntos_minimos_servicio,
-            nuevo_saldo_puntos: cuenta ? cuenta.puntos_cuenta : 'Cuenta no encontrada'
+            message: 'Servicio desactivado exitosamente',
+            data: {
+                _id: service._id,
+                nombre_servicio: service.nombre_servicio,
+                isActive: service.isActive
+            }
         });
+
     } catch (error) {
-        res.status(500).json({
+        console.error('Error en deleteService:', error);
+        return response.status(500).json({
             success: false,
-            message: 'Error al eliminar el servicio',
+            message: 'Error al desactivar el servicio',
             error: error.message
         });
     }
