@@ -8,16 +8,26 @@
   },
   "item": [
     {
-      "name": "SERVICIOS",
+      "name": "SERVICES",
       "item": [
         {
-          "name": "CANJEAR_SERVICIO",
+          "name": "ADD_SERVICE(ADMIN)",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"descripcion_servicio\": \"Pago de Internet Fibra Óptica\",\r\n    \"puntos_minimos_servicio\": 150,\r\n    \"cuenta_servicio\": \"65e43210f123456789abcdef\"\r\n}",
+              "raw": "{\r\n    \"nombre_servicio\":\"Viaje a Cancun 2026\",\r\n    \"descripcion_servicio\": \"Un viaje de 4 voletos para ospedaje de 2 dias en cancun.\",\r\n    \"puntos_requeridos\": 150\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -42,12 +52,12 @@
           "response": []
         },
         {
-          "name": "VER_SERVICIOS_POR_CUENTA",
+          "name": "GET_SERVICES",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:3005/api/v1/services/65e43210f123456789abcdef",
+              "raw": "http://localhost:3005/api/v1/services/",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -57,20 +67,30 @@
                 "api",
                 "v1",
                 "services",
-                "65e43210f123456789abcdef"
+                ""
               ]
             }
           },
           "response": []
         },
         {
-          "name": "EDITAR_SERVICIO",
+          "name": "UPDATE_SERVICE(ADMIN)",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PUT",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"descripcion_servicio\": \"Pago de Internet - Plan Familiar Marzo\"\r\n}",
+              "raw": "{\r\n    \"nombre_servicio\":\"Viaje a Venezulea 2026\",\r\n    \"descripcion_servicio\": \"Un viaje de 4 voletos para ospedaje de 2 dias en Venezuela.\",\r\n    \"puntos_requeridos\": 50\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -78,7 +98,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3005/api/v1/services/update/ID_DEL_SERVICIO",
+              "raw": "http://localhost:3005/api/v1/services/update/699e342f51013a64bc95967e",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -89,19 +109,29 @@
                 "v1",
                 "services",
                 "update",
-                "ID_DEL_SERVICIO"
+                "699e342f51013a64bc95967e"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "ELIMINAR_SERVICIO",
+          "name": "DESACTIVE_SERVICE(ADMIN)",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:3005/api/v1/services/delete/ID_DEL_SERVICIO",
+              "raw": "http://localhost:3005/api/v1/services/delete/699e342f51013a64bc95967e",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -112,7 +142,7 @@
                 "v1",
                 "services",
                 "delete",
-                "ID_DEL_SERVICIO"
+                "699e342f51013a64bc95967e"
               ]
             }
           },
@@ -130,7 +160,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n\"monto\": 500,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"8150512524\",\r\n\"cuenta_destinatoria\": \"6805726024\"\r\n}",
+              "raw": "{\r\n\"monto\": 50,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"8150512524\",\r\n\"cuenta_destinatoria\": \"6805726024\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -575,6 +605,16 @@
             {
               "name": "LOGIN",
               "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
                 "method": "POST",
                 "header": [],
                 "body": {
@@ -997,6 +1037,119 @@
               ""
             ]
           }
+        }
+      ]
+    },
+    {
+      "name": "REDEEM_SERVICE",
+      "item": [
+        {
+          "name": "ADD_REDEEM_SERVICE",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cuenta_canje\":\"699bbd7bfd5f72c0a9a0fd6e\",\r\n    \"servicio_canje\":\"699e3ba18d0df5a3c12526d6\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/api/v1/redeem_services/redeem",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "redeem_services",
+                "redeem"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_REDEEM_SERVICE",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/redeem_services/699bbd7bfd5f72c0a9a0fd6e",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "redeem_services",
+                "699bbd7bfd5f72c0a9a0fd6e"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_ALL_REDEEM_SERVICE(ADMIN)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/redeem_services/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "redeem_services",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE_REDEEM_SERVICE",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/redeem_services/cancel/699e472f702285e13a9183b1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "redeem_services",
+                "cancel",
+                "699e472f702285e13a9183b1"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
