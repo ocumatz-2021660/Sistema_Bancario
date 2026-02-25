@@ -24,6 +24,7 @@ import acountRoutes from '../src/account/account.routes.js';
 import serviceRoutes from '../src/services/service.routes.js';
 import requestAccountsRoutes from '../src/request_accounts/request_accounts.routes.js';
 import transactionRoutes from '../src/transactions/transaction.routes.js';
+import reddemServicesRoutes from '../src/redeem_service/redeem_service.routes.js';
 
 const BASE_PATH = '/api/v1';
 
@@ -41,6 +42,7 @@ const routes = (app) => {
   app.use(`${BASE_PATH}/users`, userRoutes);
   app.use(`${BASE_PATH}/cuentas`, acountRoutes);
   app.use(`${BASE_PATH}/services`, serviceRoutes);
+  app.use(`${BASE_PATH}/redeem_services`, reddemServicesRoutes);
   app.use(`${BASE_PATH}/request_accounts`, requestAccountsRoutes);
   app.use(`${BASE_PATH}/transactions`, transactionRoutes);
 
