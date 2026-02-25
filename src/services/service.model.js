@@ -2,23 +2,26 @@
 
 import mongoose from "mongoose";
 
+// Este modelo es un CATÁLOGO de servicios disponibles para canjear.
+// Ya no está atado a ninguna cuenta específica.
 const serviceSchema = mongoose.Schema(
     {
+        nombre_servicio: {
+            type: String,
+            required: [true, 'El nombre del servicio es requerido'],
+            trim: true,
+            maxLength: [100, 'El nombre no puede exceder 100 caracteres']
+        },
         descripcion_servicio: {
             type: String,
             required: [true, 'La descripción del servicio es requerida'],
             trim: true,
             maxLength: [200, 'La descripción no puede exceder 200 caracteres']
         },
-        puntos_minimos_servicio: {
+        puntos_requeridos: {
             type: Number,
-            required: [true, 'Los puntos mínimos son requeridos'],
-            min: [0, 'Los puntos mínimos deben ser mayor o igual a 0']
-        },
-        cuenta_servicio: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Cuenta', // Referencia al modelo de tu compañero
-            required: [true, 'El ID de la cuenta es requerido']
+            required: [true, 'Los puntos requeridos son obligatorios'],
+            min: [1, 'Los puntos requeridos deben ser mayor a 0']
         },
         isActive: {
             type: Boolean,
@@ -32,5 +35,6 @@ const serviceSchema = mongoose.Schema(
 );
 
 serviceSchema.index({ isActive: 1 });
+serviceSchema.index({ puntos_requeridos: 1 });
 
 export default mongoose.model('Service', serviceSchema);
