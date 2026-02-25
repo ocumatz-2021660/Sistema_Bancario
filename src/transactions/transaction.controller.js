@@ -27,7 +27,7 @@ export const createTransaccion = async (req, res) => {
     // Para depósitos sin origen, se consideran puntos para la cuenta destinatoria.
     const performingAccount = cuentaOrigen ? cuentaOrigen : cuentaDestino;
     if (performingAccount) {
-      performingAccount.puntos_cuenta = (performingAccount.puntos_cuenta || 0) + 1;
+      performingAccount.puntos_cuenta = (performingAccount.puntos_cuenta || 0) + 150; // 150 para probar canjes
       await performingAccount.save();
     }
 
