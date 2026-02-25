@@ -99,7 +99,7 @@ realizara la acción
 
 • Realizar Transacciones (TRANSFERENCIA', 'DEPOSITO) 
 ____________________________________________________
-1.Realisar una transaccion respetando los saldos de las cuentas (si se realiza una operacion sin saldo suficiente se cancelara)
+1.Realisar una transaccion respetando los saldos de las cuentas (si se realiza una operacion sin saldo suficiente se cancelara) cada transaccion generara puntos para canjear servicios a la cuenta que realize la operacion (150 por el momento para probar el canjeo de puntos)
 --(TRANSACCION -> CREAR_TRANSACCION)
 user1("monto": 50,"tipo_transaccion": "TRANSFERENCIA","cuenta_origen": "4637690266","cuenta_destinatoria": "1574769559")
 
@@ -122,9 +122,37 @@ ______________________________
 
 • Servicios
 ______________
-En desarrollo
 
-Aumento de 1Q por cada 10 segundos en cuentas de ahorro
+1. Crear un servicio (Catalogo de servicios disponibles) para ser canjeados por cuentas habilitadas con los puntos nesesarios para el canje de servicio, solo administradores pueden crear nuevos servicios
+
+-- (SERVICES -> ADD_SERVICE(ADMIN))
+
+servicio1("nombre_servicio":"Viaje a Cancun 2026", "descripcion_servicio": "Un viaje de 4 voletos para ospedaje de 2 dias en cancun.", "puntos_requeridos": 150)
+
+2. Ver servicios, pueden ser vistos por todos los usuarios es como un catalogo de servicios disponibles 
+
+-- (SERVICES -> GET_SERVICES)
+
+3. Actualizar servicio, solo puede ser actualizado por parte de administradores, agregando el id del servicio en el encabezado
+
+--(SERVICES -> UPDATE_SERVICE(ADMIN))
+
+4. eliminar servicio, solamente se desactiva para evitar errores dentro de la vinculacion (cuenta -> canje servicio -> servicio)(solo administradores pueden hacerlo)
+-- (SERVICE -> DELETE_SERVICE)
+
+• Canjear Servicios 
+____________________
+1. Canjear un servicio, la cuenta que va canjear el servicio debe cumplir con un minimo de puntos para establecido en el servicio a canjear, de lo contrario no se realiara el canje
+--(REDEEM_SERVICES -> ADD_REDEEM_SERVICE)
+
+2. Ver el hisotiral de canjeos de una cuenta 
+-- (REEDEM_SERVICES -> GET_REDEEM_SERVICE) (busc uno especifico para mostrarlo (historial))
+
+3. Ver todos los registros de canjes existentes (Solo administradores)
+--(REEDEM_SERVICES -> GET_ALL_REDEEM_SERVICE)
+
+4. Eliminar o cancelar un canje solo despues de 1 minuto de su operacion, de lo contrario no se elmiinara (requiere el di del canjeo)(las canceladas se mantienen para guardar registro de sus operaciones canceladas)(se regresan los puntos al cancelar)
+--(REEDEM_SERVICES -> DELETE_REDEEM_SERVICE)
 
 crear servicios fijos
 
