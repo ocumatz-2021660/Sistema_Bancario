@@ -12,11 +12,11 @@ import { validateDailyLimit } from '../../middlewares/max-transaction-money.js';
 import { getTransaccionesByCuenta } from './transaction.controller.js';
 import { validateJWT } from '../../middlewares/validate-JWT.js';
 import { isAdmin } from '../../middlewares/is.admin.js';
- 
+import { isAccountOwnerTransaction } from '../../middlewares/is_account_owner.js';
 const router = Router();
  
 // Crear transacción (transferencia o depósito)
-router.post('/', validateTransactionInput, validateAccountsAndFunds, validateDailyLimit, createTransaccion);
+router.post('/',validateJWT, isAccountOwnerTransaction, validateTransactionInput, validateAccountsAndFunds, validateDailyLimit, createTransaccion);
  
 // Listar transacciones
 router.get('/', validateJWT, isAdmin, getTransacciones);
