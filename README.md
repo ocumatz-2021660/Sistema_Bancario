@@ -99,7 +99,7 @@ realizara la acción
 
 • Realizar Transacciones (TRANSFERENCIA', 'DEPOSITO) 
 ____________________________________________________
-1.Realisar una transaccion respetando los saldos de las cuentas (si se realiza una operacion sin saldo suficiente se cancelara) cada transaccion generara puntos para canjear servicios a la cuenta que realize la operacion (150 por el momento para probar el canjeo de puntos)
+1.Realisar una transaccion respetando los saldos de las cuentas (si se realiza una operacion sin saldo suficiente se cancelara) cada transaccion generara puntos para canjear servicios a la cuenta que realize la operacion (150 por el momento para probar el canjeo de puntos)(solo los dueños de la cuenta que realizara el proceso, podran agregar la transaccion, si el numero de cuenta y el token no coinciden no realizara la operacion)
 --(TRANSACCION -> CREAR_TRANSACCION)
 user1("monto": 50,"tipo_transaccion": "TRANSFERENCIA","cuenta_origen": "4637690266","cuenta_destinatoria": "1574769559")
 
@@ -143,6 +143,7 @@ servicio1("nombre_servicio":"Viaje a Cancun 2026", "descripcion_servicio": "Un v
 • Canjear Servicios 
 ____________________
 1. Canjear un servicio, la cuenta que va canjear el servicio debe cumplir con un minimo de puntos para establecido en el servicio a canjear, de lo contrario no se realiara el canje
+(solo los propietarios de la cuenta podran canjear servicios, el token debe coincidir con el dueño de la cuenta)
 --(REDEEM_SERVICES -> ADD_REDEEM_SERVICE)
 
 2. Ver el hisotiral de canjeos de una cuenta 
