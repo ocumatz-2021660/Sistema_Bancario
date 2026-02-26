@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import { config } from '../configs/config.js';
-
+ 
 // Configurar el transportador de email (aligned with .NET SmtpSettings)
 const createTransporter = () => {
   if (!config.smtp.username || !config.smtp.password) {
@@ -9,7 +9,7 @@ const createTransporter = () => {
     );
     return null;
   }
-
+ 
   return nodemailer.createTransport({
     host: config.smtp.host,
     port: config.smtp.port,
@@ -27,124 +27,146 @@ const createTransporter = () => {
     },
   });
 };
-
+ 
 const transporter = createTransporter();
-
+ 
 export const sendVerificationEmail = async (email, name, verificationToken) => {
-  if (!transporter) {
-    throw new Error('SMTP transporter not configured');
-  }
-
+  if (!transporter) throw new Error('SMTP transporter not configured');
+ 
   try {
     const frontendUrl = config.app.frontendUrl || 'http://localhost:3000';
     const verificationUrl = `${frontendUrl}/verify-email?token=${verificationToken}`;
-
+ 
     const mailOptions = {
       from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
       to: email,
-      subject: 'Verify your email address', // Aligned with .NET
+      subject: 'Verificación de Seguridad - Registro de Cuenta',
       html: `
-        <h2>Welcome ${name}!</h2>
-        <p>Please verify your email address by clicking the link below:</p>
-        <a href='${verificationUrl}' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>
-            Verify Email
-        </a>
-        <p>If you cannot click the link, copy and paste this URL into your browser:</p>
-        <p>${verificationUrl}</p>
-        <p>This link will expire in 24 hours.</p>
-        <p>If you didn't create an account, please ignore this email.</p>
+        <div style="background-color: #f4f4f4; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: center;">
+          <div style="max-width: 500px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-top: 4px solid #004a99; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <h2 style="color: #333; margin-top: 0;">Confirmación de Identidad</h2>
+            <p style="color: #555; font-size: 16px; line-height: 1.5;">Bienvenido/a <strong>${name}</strong>,<br>Para completar el proceso de activación de su cuenta bancaria, es necesario verificar su dirección de correo electrónico.</p>
+            <p  style="color: #055387; font-size: 12px; border-top: 1px solid #eee; padding-top: 20px;">
+            ${verificationUrl}
+            </p>
+            <p style="color: #888; font-size: 12px; border-top: 1px solid #eee; padding-top: 20px;">
+              Copiar la url despues del signo " = ".<br>
+            </p>
+            <p style="color: #888; font-size: 12px; border-top: 1px solid #eee; padding-top: 20px;">
+              Este enlace tiene una validez de 24 horas por motivos de seguridad.<br>
+              Si no ha solicitado esta acción, por favor ignore este mensaje.
+            </p>
+          </div>
+        </div>
       `,
     };
-
+ 
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.error('Error sending verification email:', error);
     throw error;
   }
 };
-
+ 
 export const sendPasswordResetEmail = async (email, name, resetToken) => {
-  if (!transporter) {
-    throw new Error('SMTP transporter not configured');
-  }
-
+  if (!transporter) throw new Error('SMTP transporter not configured');
+ 
   try {
     const frontendUrl = config.app.frontendUrl || 'http://localhost:3000';
     const resetUrl = `${frontendUrl}/reset-password?token=${resetToken}`;
-
+ 
     const mailOptions = {
       from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
       to: email,
-      subject: 'Reset your password', // Aligned with .NET
+      subject: 'Notificación de Seguridad: Restablecimiento de Contraseña',
       html: `
-        <h2>Password Reset Request</h2>
-        <p>Hello ${name},</p>
-        <p>You requested to reset your password. Click the link below to reset it:</p>
-        <a href='${resetUrl}' style='background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>
-            Reset Password
-        </a>
-        <p>If you cannot click the link, copy and paste this URL into your browser:</p>
-        <p>${resetUrl}</p>
-        <p>This link will expire in 1 hour.</p>
-        <p>If you didn't request this, please ignore this email and your password will remain unchanged.</p>
+        <div style="background-color: #f4f4f4; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: center;">
+          <div style="max-width: 500px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-top: 4px solid #d9534f; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <h2 style="color: #333; margin-top: 0;">Solicitud de Restablecimiento</h2>
+            <p style="color: #555; font-size: 16px; line-height: 1.5;">Hola <strong>${name}</strong>,<br>Hemos recibido una solicitud para cambiar la contraseña de acceso a su banca en línea.</p>
+            <p style="text-align: left; color: #555; font-size: 13px; background-color: #fdf7f7; padding: 15px; border-radius: 4px;">
+              <strong>Atención:</strong> Si usted no solicitó este cambio, su cuenta podría estar en riesgo. No comparta este enlace con nadie.
+            </p>
+            <p style="text-align: left; color: #055387; font-size: 13px; background-color: #fdf7f7; padding: 15px; border-radius: 4px;">
+              ${resetUrl}
+                <br>
+            </p>
+            <p style="color: #888; font-size: 12px; border-top: 1px solid #eee; padding-top: 20px;">
+              Copiar la url despues del signo " = ".<br>
+            </p>
+            <p style="color: #888; font-size: 12px; margin-top: 20px;">Este enlace expirará en 1 hora. <br></p>
+          </div>
+        </div>
       `,
     };
-
+ 
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.error('Error sending password reset email:', error);
     throw error;
   }
 };
-
+ 
 export const sendWelcomeEmail = async (email, name) => {
-  if (!transporter) {
-    throw new Error('SMTP transporter not configured');
-  }
-
+  if (!transporter) throw new Error('SMTP transporter not configured');
+ 
   try {
     const mailOptions = {
       from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
       to: email,
-      subject: 'Welcome to AuthDotnet!', // Aligned with .NET
+      subject: 'Bienvenido/a a su Banca Digital',
       html: `
-        <h2>Welcome to AuthDotnet, ${name}!</h2>
-        <p>Your account has been successfully verified and activated.</p>
-        <p>You can now enjoy all the features of our platform.</p>
-        <p>If you have any questions, feel free to contact our support team.</p>
-        <p>Thank you for joining us!</p>
+        <div style="background-color: #f4f4f4; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: center;">
+          <div style="max-width: 500px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-top: 4px solid #28a745; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <h2 style="color: #333; margin-top: 0;">¡Registro Exitoso!</h2>
+            <p style="color: #555; font-size: 16px; line-height: 1.5;">Estimado/a <strong>${name}</strong>,<br>Su cuenta ha sido verificada y activada correctamente.</p>
+            <p style="color: #555; font-size: 15px;">Ya puede realizar operaciones y consultar sus movimientos desde nuestra plataforma digital de forma segura.</p>
+            <div style="padding: 20px 0; border-top: 1px solid #eee; margin-top: 20px;">
+                <p style="color: #888; font-size: 13px; margin: 0;">Gracias por depositar su confianza en nuestra institución.</p>
+            </div>
+          </div>
+        </div>
       `,
     };
-
+ 
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.error('Error sending welcome email:', error);
     throw error;
   }
 };
-
+ 
 export const sendPasswordChangedEmail = async (email, name) => {
-  if (!transporter) {
-    throw new Error('SMTP transporter not configured');
-  }
-
+  if (!transporter) throw new Error('SMTP transporter not configured');
+ 
   try {
     const mailOptions = {
       from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
       to: email,
-      subject: 'Password Changed Successfully', // More aligned with .NET style
+      subject: 'Alerta de Seguridad: Cambio de Contraseña Confirmado',
       html: `
-        <h2>Password Changed</h2>
-        <p>Hello ${name},</p>
-        <p>Your password has been successfully updated.</p>
-        <p>If you didn't make this change, please contact our support team immediately.</p>
-        <p>This is an automated email, please do not reply to this message.</p>
+        <div style="background-color: #f4f4f4; padding: 40px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: center;">
+          <div style="max-width: 500px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-top: 4px solid #333; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <h2 style="color: #333; margin-top: 0;">Contraseña Actualizada</h2>
+            <p style="color: #555; font-size: 16px; line-height: 1.5; text-align: left;">
+              Le informamos que la contraseña de su cuenta ha sido modificada satisfactoriamente hoy.
+            </p>
+            <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; text-align: left; margin: 20px 0;">
+                <p style="color: #856404; font-size: 14px; margin: 0;">
+                    <strong>¿No reconoce esta actividad?</strong><br>
+                    Si no realizó este cambio, comuníquese de inmediato con nuestra línea de atención al cliente para bloquear su acceso.
+                </p>
+            </div>
+            <p style="color: #888; font-size: 12px;">Este es un mensaje automático generado por nuestro sistema de seguridad.</p>
+          </div>
+        </div>
       `,
     };
-
+ 
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.error('Error sending password changed email:', error);
     throw error;
   }
 };
+ 
