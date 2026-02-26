@@ -156,6 +156,16 @@
         {
           "name": "CREAR_TRANSACCION",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQ0VVZmpEbXY5QndpIiwianRpIjoiMGU5YjM1OGEtN2YzYS00N2Q3LWE2ZTYtYzExMWRiZmU1NDI5IiwiaWF0IjoxNzcyMDY0Nzg4LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjA2NjU4OCwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.wXBx5pvR9UuxT-2vWOYlsWnERvbBcLYLOPY48GXlmow",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
@@ -596,6 +606,79 @@
                 }
               },
               "response": []
+            },
+            {
+              "name": "GET_ALL_USERS(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "UPDATE_USERS(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQ0VVZmpEbXY5QndpIiwianRpIjoiODBiZDMwZjQtODRiYS00NjU5LThlOTItZGJjZTM4NzA4ODFhIiwiaWF0IjoxNzcyMDY3Mjc1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjA2OTA3NSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.mheogTW9jwKNaVlo1sPKXUoTJy3cPG6LNXFa9xw5wzg",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Carlos\",\r\n  \"surname\": \"cac\",\r\n  \"username\": \"CarlitosCac\",\r\n  \"phone\": \"55895932\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/usr_bZXirH3qSpNB",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "usr_bZXirH3qSpNB"
+                  ]
+                }
+              },
+              "response": []
             }
           ]
         },
@@ -802,7 +885,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{vault:authorization-secret}}",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQ0VVZmpEbXY5QndpIiwianRpIjoiNjI0ZDdhNWUtZmJlOS00YWIwLWEwMTAtOWIzMGFiNTZjZTU5IiwiaWF0IjoxNzcyMDY0Njc1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjA2NjQ3NSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.MMjsqCLA-XRJuoWVMT7t3U8xdaWOGtMBwtvJq2SyfRo",
                   "type": "string"
                 }
               ]
@@ -1046,6 +1129,16 @@
         {
           "name": "ADD_REDEEM_SERVICE",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfYXBrRUJrNGk4dnBKIiwianRpIjoiYzUyZjI0MjEtMDk0Mi00OWI0LWJlZGQtYTI0MzM4NzFlOWM0IiwiaWF0IjoxNzcyMDY2MjAxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjA2ODAwMSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.F9NbimuJ7ugjK0Mwq_qPg5WeLbrXqC_M9X2XgXpk5OQ",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
