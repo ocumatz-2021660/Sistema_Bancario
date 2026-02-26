@@ -36,6 +36,12 @@ user2 -("name": "Sebas","surname": "lopez","username": "ElSebastianPro","email":
 user1("emailOrUsername": "ocumatz","password": "Password123!")
 user2("emailOrUsername": "ElSebastianPro","password": "Password123!")
 
+4. Listar todos los usuarios existentes del sistema (solo administradores pueden ver)
+-- (AUTH -> USERS -> GET_ALL_USERS )
+
+5. Acutalizar datos de usuario, solo administradores pueden realizarlo, no se modifica el correo electronico ni la contraseña, solo datos generales
+-- (AUTH -> USERS -> UPDATE_USERS )
+
 • ((OPCIONAL) probar verificacion de contraseña)
 _________________________________________________
 1.agregar el correo electronico al que se desea cambiar la contraseña
