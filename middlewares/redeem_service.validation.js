@@ -1,9 +1,11 @@
-// verificar-puntos.middleware.js
+
 import Cuenta from '../src/account/account.model.js';
 import Service from '../src/services/service.model.js';
 
 export const verificarPuntos = async (request, response, next) => {
     try {
+        const currentUserId = request.userId; 
+
         const { cuenta_canje, servicio_canje } = request.body;
 
         if (!cuenta_canje || !servicio_canje) {
@@ -26,7 +28,12 @@ export const verificarPuntos = async (request, response, next) => {
                 message: 'La cuenta se encuentra inactiva o pendiente de aprobación'
             });
         }
-
+        if (cuenta.usuario_cuenta !== currentUserId) {
+            return response.status(403).json({ 
+                success: false,
+                message: 'Acceso denegado. No eres el propietario de esta cuenta.',
+            });
+        }
         const servicio = await Service.findById(servicio_canje);
         if (!servicio) {
             return response.status(404).json({
@@ -43,15 +50,15 @@ export const verificarPuntos = async (request, response, next) => {
         if (cuenta.puntos_cuenta < servicio.puntos_requeridos) {
             return response.status(400).json({
                 success: false,
-                message: `Puntos insuficientes para canjear este servicio`,
+                message: 'Puntos insuficientes para canjear este servicio',
                 data: {
-                    puntos_cuenta:    cuenta.puntos_cuenta,
+                    puntos_cuenta: cuenta.puntos_cuenta,
                     puntos_requeridos: servicio.puntos_requeridos,
                     puntos_faltantes: servicio.puntos_requeridos - cuenta.puntos_cuenta
                 }
             });
         }
-        request.cuenta   = cuenta;
+        request.cuenta = cuenta;
         request.servicio = servicio;
 
         next();
