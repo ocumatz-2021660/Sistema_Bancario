@@ -5,6 +5,8 @@ import {
   updateUserRole,
   getUserRoles,
   getUsersByRole,
+  getUsers,
+  updateUser,
 } from './user.controller.js';
 import {
   updateAccountStatus,
@@ -17,7 +19,9 @@ router.put('/:userId/role', validateJWT, isAdmin, updateUserRole);
 router.get('/:userId/roles', validateJWT, getUserRoles);
 router.get('/by-role/:roleName', validateJWT, isAdmin, getUsersByRole);
 
-//ver estados de cuenta (verificar cuentas a futuro)
+router.get('/', validateJWT, isAdmin, getUsers);
+router.put('/:userId',       validateJWT, isAdmin, updateUser);
+
 router.put('/:userId/status', validateJWT, isAdmin, updateAccountStatus);
 router.get('/:userId/status', validateJWT, isAdmin, getAccountStatus);
 
