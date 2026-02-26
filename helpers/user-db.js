@@ -390,3 +390,35 @@ export const getAllUsers = async () => {
     throw new Error('Error al obtener usuarios');
   }
 };
+
+export const findAllUsers = async ({ limit, offset, accountStatus } = {}) => {
+  try {
+    const where = {};
+
+    if (accountStatus) {
+      where.AccountStatus = accountStatus;
+    }
+
+    const { rows: users, count: total } = await User.findAndCountAll({
+      where,
+      include: [
+        { model: UserProfile, as: 'UserProfile' },
+        { model: UserEmail, as: 'UserEmail' },
+        {
+          model: UserRole,
+          as: 'UserRoles',
+          include: [{ model: Role, as: 'Role' }],
+        },
+      ],
+      order: [['CreatedAt', 'DESC']],
+      limit,
+      offset,
+      distinct: true, // evita count duplicado por los JOINs
+    });
+
+    return { users, total };
+  } catch (error) {
+    console.error('Error obteniendo usuarios:', error);
+    throw new Error('Error al obtener usuarios');
+  }
+};
