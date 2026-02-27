@@ -331,3 +331,34 @@ export const deleteCuenta = async (request, response) => {
         });
     }
 };
+export const hardDeleteCuenta = async (request, response) => {
+    try {
+        const { id } = request.params;
+
+        // 1. Verificar si la cuenta existe
+        const cuenta = await Cuenta.findById(id);
+        if (!cuenta) {
+            return response.status(404).json({
+                success: false,
+                message: 'La cuenta que intenta eliminar no existe'
+            });
+        }
+
+        // Eliminar solicitudes asociadas 
+        await Solicitud.deleteMany({ cuenta: id });
+        await Cuenta.findByIdAndDelete(id);
+
+        return response.status(200).json({
+            success: true,
+            message: 'Cuenta y solicitudes asociadas eliminadas permanentemente del sistema.'
+        });
+
+    } catch (error) {
+        console.error('Error en hardDeleteCuenta:', error);
+        return response.status(500).json({
+            success: false,
+            message: 'Error al eliminar físicamente la cuenta',
+            error: error.message
+        });
+    }
+};

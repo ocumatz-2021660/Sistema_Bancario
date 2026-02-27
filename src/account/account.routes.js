@@ -9,6 +9,7 @@ import {
     getFavoritos,
     updateSaldo,
     deleteCuenta,
+    hardDeleteCuenta,
 } from "./account.controller.js";
 
 const router = Router();
@@ -26,5 +27,7 @@ router.get('/:id', getCuentaById);
 router.put('/:id/saldo',validateJWT, isAdmin, updateSaldo);
 
 router.put('/:id/deactivate', validateJWT, isAdmin, deleteCuenta);
+
+router.delete('/:id/delete', validateJWT, isAdmin, hardDeleteCuenta);
 
 export default router;
