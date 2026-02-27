@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "ea9e830b-61c4-44c8-9dbe-5b7ae0238121",
+    "_postman_id": "46be2685-ee79-4a80-846c-4fbb6a507855",
     "name": "Sistema_Bancario",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "48332499",
-    "_collection_link": "https://go.postman.co/collection/48332499-ea9e830b-61c4-44c8-9dbe-5b7ae0238121?source=collection_link"
+    "_exporter_id": "48332462",
+    "_collection_link": "https://go.postman.co/collection/48332462-46be2685-ee79-4a80-846c-4fbb6a507855?source=collection_link"
   },
   "item": [
     {
@@ -161,7 +161,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQ0VVZmpEbXY5QndpIiwianRpIjoiMGU5YjM1OGEtN2YzYS00N2Q3LWE2ZTYtYzExMWRiZmU1NDI5IiwiaWF0IjoxNzcyMDY0Nzg4LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjA2NjU4OCwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.wXBx5pvR9UuxT-2vWOYlsWnERvbBcLYLOPY48GXlmow",
+                  "value": "{{vault:authorization-secret}}",
                   "type": "string"
                 }
               ]
@@ -647,7 +647,7 @@
                   "bearer": [
                     {
                       "key": "token",
-                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQ0VVZmpEbXY5QndpIiwianRpIjoiODBiZDMwZjQtODRiYS00NjU5LThlOTItZGJjZTM4NzA4ODFhIiwiaWF0IjoxNzcyMDY3Mjc1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjA2OTA3NSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.mheogTW9jwKNaVlo1sPKXUoTJy3cPG6LNXFa9xw5wzg",
+                      "value": "{{vault:authorization-secret}}",
                       "type": "string"
                     }
                   ]
@@ -885,7 +885,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQ0VVZmpEbXY5QndpIiwianRpIjoiNjI0ZDdhNWUtZmJlOS00YWIwLWEwMTAtOWIzMGFiNTZjZTU5IiwiaWF0IjoxNzcyMDY0Njc1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjA2NjQ3NSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.MMjsqCLA-XRJuoWVMT7t3U8xdaWOGtMBwtvJq2SyfRo",
+                  "value": "{{vault:authorization-secret}}",
                   "type": "string"
                 }
               ]
@@ -1004,6 +1004,14 @@
                 "favoritos"
               ]
             }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE_ACCOUNT(ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": []
           },
           "response": []
         }
@@ -1157,7 +1165,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfYXBrRUJrNGk4dnBKIiwianRpIjoiYzUyZjI0MjEtMDk0Mi00OWI0LWJlZGQtYTI0MzM4NzFlOWM0IiwiaWF0IjoxNzcyMDY2MjAxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjA2ODAwMSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.F9NbimuJ7ugjK0Mwq_qPg5WeLbrXqC_M9X2XgXpk5OQ",
+                  "value": "{{vault:authorization-secret}}",
                   "type": "string"
                 }
               ]
