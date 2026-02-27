@@ -5,6 +5,14 @@ import {
   authRateLimit,
   requestLimit,
 } from '../../middlewares/request-limit.js';
+import {
+  uploadProfileImage,
+  handleCloudinaryUploadError,
+} from '../../middlewares/cloudinary-uploader.js';
+import {
+  cleanUploaderFileOnFinish,
+  deleteFileOnError,
+} from '../../middlewares/delete-file-on-error.js';
 import { upload, handleUploadError } from '../../helpers/file-upload.js';
 import {
   validateRegister,
@@ -13,6 +21,7 @@ import {
   validateResendVerification,
   validateForgotPassword,
   validateResetPassword,
+  validateUpdateProfile,
 } from '../../middlewares/validation.js';
 
 const router = Router();
@@ -307,5 +316,22 @@ router.post('/profile/by-id', requestLimit, authController.getProfileById);
  *         description: No autorizado (solo admin)
  */
 router.get('/users', authController.getAllUsers);
+
+/**
+ * PUT /api/v1/auth/profile
+ * Actualiza el perfil del usuario autenticado.
+ * Requiere JWT. La foto de perfil es opcional.
+ */
+router.put(
+  '/profile',
+  validateJWT,                                    // Debe estar autenticado
+  uploadProfileImage.single('profilePicture'),    // Foto opcional → sube a Cloudinary
+  handleCloudinaryUploadError,                    // Maneja errores de tipo/tamaño
+  cleanUploaderFileOnFinish,                      // Limpia Cloudinary si el request falla
+  validateUpdateProfile,                          // Valida los campos del body
+  authController.updateProfile,                   // Controlador
+  deleteFileOnError                               // Limpia si explota un error
+);
+
 
 export default router;

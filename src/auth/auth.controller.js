@@ -218,3 +218,26 @@ export const getAllUsers = asyncHandler(async (req, res) => {
     total: usersResponse.length,
   });
 });
+import { updateProfileHelper } from '../../helpers/profile-update.js';
+
+export const updateProfile = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const updateData = {
+      ...req.body,
+      profilePicture: req.file ? req.file.path : undefined,
+    };
+
+    const result = await updateProfileHelper(userId, updateData);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error('Error en updateProfile controller:', error);
+    const statusCode = error.status || 400;
+    return res.status(statusCode).json({
+      success: false,
+      message: error.message || 'Error al actualizar el perfil',
+      error: error.message,
+    });
+  }
+});
