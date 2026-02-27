@@ -21,6 +21,7 @@ export const handleValidationErrors = (req, res, next) => {
 
 /**
  * Validaciones para el registro de usuario
+ * NUEVO: confirmPassword debe coincidir con password
  */
 export const validateRegister = [
   body('name')
@@ -45,8 +46,12 @@ export const validateRegister = [
     .trim()
     .notEmpty()
     .withMessage('El nombre de usuario es obligatorio')
-    .isLength({ max: 50 })
-    .withMessage('El nombre de usuario no puede tener más de 50 caracteres'),
+    .isLength({ min: 3, max: 50 })
+    .withMessage('El nombre de usuario debe tener entre 3 y 50 caracteres')
+    .matches(/^[a-zA-Z0-9_.-]+$/)
+    .withMessage(
+      'El nombre de usuario solo puede contener letras, números, puntos, guiones y guión bajo'
+    ),
 
   body('email')
     .trim()
@@ -62,6 +67,17 @@ export const validateRegister = [
     .withMessage('La contraseña es obligatoria')
     .isLength({ min: 8, max: 255 })
     .withMessage('La contraseña debe tener entre 8 y 255 caracteres'),
+
+  // ✅ NUEVO: Confirmación de contraseña
+  body('confirmPassword')
+    .notEmpty()
+    .withMessage('La confirmación de contraseña es obligatoria')
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('Las contraseñas no coinciden');
+      }
+      return true;
+    }),
 
   body('phone')
     .notEmpty()
@@ -125,6 +141,7 @@ export const validateForgotPassword = [
 
 /**
  * Validaciones para reset password
+ * NUEVO: confirmPassword debe coincidir con newPassword
  */
 export const validateResetPassword = [
   body('token').notEmpty().withMessage('El token de recuperación es requerido'),
@@ -132,8 +149,64 @@ export const validateResetPassword = [
   body('newPassword')
     .notEmpty()
     .withMessage('La nueva contraseña es obligatoria')
-    .isLength({ min: 8 })
-    .withMessage('La nueva contraseña debe tener al menos 8 caracteres'),
+    .isLength({ min: 8, max: 255 })
+    .withMessage('La nueva contraseña debe tener entre 8 y 255 caracteres'),
+
+  // ✅ NUEVO: Confirmación de contraseña en reset
+  body('confirmPassword')
+    .notEmpty()
+    .withMessage('La confirmación de contraseña es obligatoria')
+    .custom((value, { req }) => {
+      if (value !== req.body.newPassword) {
+        throw new Error('Las contraseñas no coinciden');
+      }
+      return true;
+    }),
+
+  handleValidationErrors,
+];
+
+/**
+ * ✅ NUEVO: Validaciones para actualizar perfil
+ * Todos los campos son opcionales, pero al menos uno debe estar presente.
+ */
+export const validateUpdateProfile = [
+  body('name')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('El nombre no puede estar vacío')
+    .isLength({ max: 25 })
+    .withMessage('El nombre no puede tener más de 25 caracteres')
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)
+    .withMessage('El nombre solo puede contener letras y espacios'),
+
+  body('surname')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('El apellido no puede estar vacío')
+    .isLength({ max: 25 })
+    .withMessage('El apellido no puede tener más de 25 caracteres')
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)
+    .withMessage('El apellido solo puede contener letras y espacios'),
+
+  body('phone')
+    .optional()
+    .matches(/^\d{8}$/)
+    .withMessage('El número de teléfono debe tener exactamente 8 dígitos'),
+
+  // Validar que al menos un campo esté presente (si no hay archivo tampoco)
+  body().custom((_, { req }) => {
+    const hasBody = req.body.name || req.body.surname || req.body.phone;
+    const hasFile = req.file;
+    if (!hasBody && !hasFile) {
+      throw new Error(
+        'Debes enviar al menos un campo para actualizar (nombre, apellido, teléfono o foto)'
+      );
+    }
+    return true;
+  }),
 
   handleValidationErrors,
 ];
