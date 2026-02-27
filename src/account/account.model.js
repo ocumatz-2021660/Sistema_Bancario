@@ -40,6 +40,12 @@ const cuentaSchema = mongoose.Schema(
             ref: 'Usuario',
             required: [true, 'El usuario es obligatorio']
         },
+        //Agregar atributo de alias para manejo de favoritos
+        alias:{
+            type: String,
+            trim: true,
+            default: null
+        },
         isActive: {
             type: Boolean,
             default: true
