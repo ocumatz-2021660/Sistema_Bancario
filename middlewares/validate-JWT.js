@@ -49,20 +49,16 @@ export const validateJWT = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Error validating JWT:', error);
+    const messages = {
+      TokenExpiredError: 'Token expirado',
+      JsonWebTokenError: 'Token inválido',
+    };
 
-    let message = 'Error al verificar el token';
-
-    if (error.name === 'TokenExpiredError') {
-      message = 'Token expirado';
-    } else if (error.name === 'JsonWebTokenError') {
-      message = 'Token inválido';
-    }
+    console.warn(messages[error.name] || `!!!ALERTA¡¡¡ -- JWT Error: ${error.message} --`);
 
     return res.status(401).json({
       success: false,
-      message,
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      message: messages[error.name] || 'Error al verificar el token',
     });
   }
 };

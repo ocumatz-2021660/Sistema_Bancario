@@ -33,7 +33,7 @@ export const verifyJWT = (token) => {
   return new Promise((resolve, reject) => {
     jwt.verify(token, config.jwt.secret, (err, decoded) => {
       if (err) {
-        console.error('Error verifying JWT:', err);
+        console.error('Error al validar TOKEN');
         reject(err);
       } else {
         resolve(decoded);
