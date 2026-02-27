@@ -80,7 +80,8 @@ ___________________________________________________________________________
 1. Crear una cuenta con mínimo de 100Q, seleccionar los tipos existentes a un usuario activo, no puede tener 2 cuentas del mismo tipo (MONETARIA, AHORRO)
 -- (ACCOUNT -> ADD_ACOUNT)
 user1(  "saldo": 500,"tipo_cuenta": "AHORRO","usuario_cuenta": "usr_apkEBk4i8vpJ")
-user2(  "saldo": 401,"tipo_cuenta": "MONETARIA", "usuario_cuenta": "usr_bZXirH3qSpNB")
+user2(  "saldo": 401,"tipo_cuenta": "MONETARIA", "usuario_cuenta": "usr_bZXirH3qSpNB", "alias": "Ahorros para mi futura casa") 
+-- el alias es para un filtro de busqueda (Favoritos)(opcional)
 
 Si la cuenta es de tipo AHORRO, esta generara intereses con el tiempo (1 minuto = +1 en el saldo de la cuenta) por medio de node-cron
 
@@ -100,8 +101,11 @@ realizara la acción
 5. Actualizar Salgo (Solo administradors), solo administradores pueden cambiar el saldo de las cuentas, si no es administrador no se realizara la accion (agregar token)
 -- (ACCOUNT -> UPDATE_SALDO(ADMIN))
 
-6.Desacrivar cuenta (Solo administradores) , cambia el estado de las cuentas y evita que realizen acciones y su uso, solo puede ser desactivada por administradores
+6. Desacrivar cuenta (Solo administradores) , cambia el estado de las cuentas y evita que realizen acciones y su uso, solo puede ser desactivada por administradores
 -- (ACCOUNT -> DESACTIVE_ACCOUNTS(ADMIN))
+
+7. Eliminar cuenta (solo administradores) elimina cada registro de la cuenta del sistema (cuenta y solicitudes asociadas)
+-- (ACCOUNT -> DELETE_ACCOUNTS(ADMIN))
 
 • Realizar Transacciones (TRANSFERENCIA', 'DEPOSITO) 
 ____________________________________________________
@@ -161,9 +165,10 @@ ____________________
 4. Eliminar o cancelar un canje solo despues de 1 minuto de su operacion, de lo contrario no se elmiinara (requiere el di del canjeo)(las canceladas se mantienen para guardar registro de sus operaciones canceladas)(se regresan los puntos al cancelar)
 --(REEDEM_SERVICES -> DELETE_REDEEM_SERVICE)
 
-crear servicios fijos
-
-canjear servicios por medio de puntos (entidad canjear servicios)(validar puntos nesearios)
+• Buscar Favoritos 
+____________________
+1. Buscar la solicitud para buscar usuarios con alias (proposito de la cuenta y recibir informacion acerca de ella)
+-- (ACCOUNT -> FAVORITE_ACOUNT)
 
 --extras
 recuperacion de cuenta: Verificacion por token para restablecer la contraseña predeterminada
