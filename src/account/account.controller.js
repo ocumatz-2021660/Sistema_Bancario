@@ -7,7 +7,7 @@ import { enrichWithUser } from '../../helpers/enrich-with-user.js';
 //cuenta inactiva y genera solicitud pendiente
 export const createCuenta = async (request, response) => {
     try {
-        const { saldo, tipo_cuenta, usuario_cuenta } = request.body;
+        const { saldo, tipo_cuenta, usuario_cuenta, alias } = request.body; //Agregar alias en los parámetros de entrada    
 
         // Validar que el usuario existe en PostgreSQL
         const usuarioExiste = await User.findByPk(usuario_cuenta, {
@@ -45,6 +45,7 @@ export const createCuenta = async (request, response) => {
             saldo: saldo ?? 100,
             tipo_cuenta: tipo_cuenta.toUpperCase(),
             usuario_cuenta,
+            alias: alias || null, //Asignamos el alias si viene en la petición ,
             puntos_cuenta: 0,
             isActive: false
         });
