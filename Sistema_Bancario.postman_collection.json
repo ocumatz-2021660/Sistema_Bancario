@@ -315,7 +315,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{vault:authorization-secret}}",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfUnpBZWVQQlRwTUtQIiwianRpIjoiNDI3YTkyOGEtNDFiYS00NDk2LWE2M2UtYjY1MjJmZmRhZjQ2IiwiaWF0IjoxNzcyMjEyMDkwLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMzg5MCwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.XNqw5UUC04TRdCZWjsYLX6r4ajK7SpohA8gQA620tTs",
                   "type": "string"
                 }
               ]
@@ -388,7 +388,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{vault:authorization-secret}}",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfUnpBZWVQQlRwTUtQIiwianRpIjoiNDI3YTkyOGEtNDFiYS00NDk2LWE2M2UtYjY1MjJmZmRhZjQ2IiwiaWF0IjoxNzcyMjEyMDkwLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMzg5MCwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.XNqw5UUC04TRdCZWjsYLX6r4ajK7SpohA8gQA620tTs",
                   "type": "string"
                 }
               ]
@@ -457,7 +457,7 @@
                   "bearer": [
                     {
                       "key": "token",
-                      "value": "{{vault:authorization-secret}}",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfY2JGTTM2Rm1NSnZZIiwianRpIjoiN2NjZDliNTYtMzAzMi00MWFhLTkwMTAtNTg4ZTI5N2ZkZjY2IiwiaWF0IjoxNzcyMjEwMjUzLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMjA1MywiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.gkp5blHTeRGZYq3rbznDXvOl5s1XFIYQdvfB77VT3-o",
                       "type": "string"
                     }
                   ]
@@ -474,7 +474,7 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:3005/api/v1/users/usr_apkEBk4i8vpJ/role",
+                  "raw": "http://localhost:3005/api/v1/users/usr_RzAeePBTpMKP/role",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -484,7 +484,7 @@
                     "api",
                     "v1",
                     "users",
-                    "usr_apkEBk4i8vpJ",
+                    "usr_RzAeePBTpMKP",
                     "role"
                   ]
                 }
@@ -583,7 +583,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"Cumatz\",\r\n    \"surname\": \"Lopez\",\r\n    \"username\": \"ocumatz\",\r\n    \"email\": \"ocumatz-2021660@kinal.edu.gt\",\r\n    \"password\": \"Password123!\",\r\n    \"confirmPassword\": \"Password123!\",\r\n    \"phone\": \"55895932\"\r\n}",
+                  "raw": "{\r\n    \"name\": \"Cumatz\",\r\n    \"surname\": \"Lopez\",\r\n    \"username\": \"iver\",\r\n    \"email\": \"iperez-2024003@kinal.edu.gt\",\r\n    \"password\": \"Password123!\",\r\n    \"confirmPassword\": \"Password123!\",\r\n    \"phone\": \"55895732\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -615,7 +615,7 @@
                   "bearer": [
                     {
                       "key": "token",
-                      "value": "{{vault:authorization-secret}}",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfY2JGTTM2Rm1NSnZZIiwianRpIjoiNDg1YjQ3MjAtYzA3MC00ZDc3LWI2MTQtMDQyZDU2NzU2NDdlIiwiaWF0IjoxNzcyMjA4NzI1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMDUyNSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.26XXRCghNS4D5GTkYFzVG49nw3cU7639rYY96jo83Fo",
                       "type": "string"
                     }
                   ]
@@ -702,7 +702,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"emailOrUsername\": \"admin\",\r\n  \"password\": \"Admin1234!\"\r\n}",
+                  "raw": "{\r\n  \"emailOrUsername\": \"iver\",\r\n  \"password\": \"Password123!\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -738,7 +738,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"token\": \"OkbTfpkYxcXnApgbBpnURmaWH-3CQtY1MHZakXpr5-I\"\r\n}",
+                  "raw": "{\r\n    \"token\": \"T8yPJ3kGdv5Kk3PU0reBDmDU80Y-DOfcLbcGJOQxuLk\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -805,7 +805,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"token\": \"FUsttZrZfpPo-bVh1XV9tYbzZD_G3SnYfA7hV5c0DkM\",\r\n  \"newPassword\": \"24489607\",\r\n  \"confirmPassword\": \"24489607\"\r\n}",
+                  "raw": "{\r\n  \"token\": \"tOgKA5r5MjtF8D8UihhgLmBTIsTGUOs-vT1XSeF6E98\",\r\n  \"newPassword\": \"24489607\",\r\n  \"confirmPassword\": \"24489607\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -853,7 +853,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"saldo\": 401,\r\n  \"tipo_cuenta\": \"MONETARIA\",\r\n  \"usuario_cuenta\": \"usr_bZXirH3qSpNB\"\r\n}",
+              "raw": "{\r\n  \"saldo\": 451,\r\n  \"tipo_cuenta\": \"AHORRO\",\r\n  \"usuario_cuenta\": \"usr_spGdiX3grwWV\",\r\n  \"alias\": \"Ahorros para mi futura casa\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -885,7 +885,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{vault:authorization-secret}}",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfY2JGTTM2Rm1NSnZZIiwianRpIjoiNDg1YjQ3MjAtYzA3MC00ZDc3LWI2MTQtMDQyZDU2NzU2NDdlIiwiaWF0IjoxNzcyMjA4NzI1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMDUyNSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.26XXRCghNS4D5GTkYFzVG49nw3cU7639rYY96jo83Fo",
                   "type": "string"
                 }
               ]
@@ -959,7 +959,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{vault:authorization-secret}}",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfY2JGTTM2Rm1NSnZZIiwianRpIjoiNDg1YjQ3MjAtYzA3MC00ZDc3LWI2MTQtMDQyZDU2NzU2NDdlIiwiaWF0IjoxNzcyMjA4NzI1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMDUyNSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.26XXRCghNS4D5GTkYFzVG49nw3cU7639rYY96jo83Fo",
                   "type": "string"
                 }
               ]
@@ -967,7 +967,7 @@
             "method": "PUT",
             "header": [],
             "url": {
-              "raw": "http://localhost:3005/api/v1/cuentas/699a1b64f30a8c1354b09d68/deactivate",
+              "raw": "http://localhost:3005/api/v1/cuentas/69a1b52fc516ac89366d10f0/deactivate",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -977,7 +977,7 @@
                 "api",
                 "v1",
                 "cuentas",
-                "699a1b64f30a8c1354b09d68",
+                "69a1b52fc516ac89366d10f0",
                 "deactivate"
               ]
             }
@@ -1010,8 +1010,33 @@
         {
           "name": "DELETE_ACCOUNT(ADMIN)",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfY2JGTTM2Rm1NSnZZIiwianRpIjoiNDg1YjQ3MjAtYzA3MC00ZDc3LWI2MTQtMDQyZDU2NzU2NDdlIiwiaWF0IjoxNzcyMjA4NzI1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMDUyNSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.26XXRCghNS4D5GTkYFzVG49nw3cU7639rYY96jo83Fo",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "DELETE",
-            "header": []
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/cuentas/69a1b52fc516ac89366d10f0/delete",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "cuentas",
+                "69a1b52fc516ac89366d10f0",
+                "delete"
+              ]
+            }
           },
           "response": []
         }
@@ -1028,7 +1053,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{vault:authorization-secret}}",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfY2JGTTM2Rm1NSnZZIiwianRpIjoiNDg1YjQ3MjAtYzA3MC00ZDc3LWI2MTQtMDQyZDU2NzU2NDdlIiwiaWF0IjoxNzcyMjA4NzI1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMDUyNSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.26XXRCghNS4D5GTkYFzVG49nw3cU7639rYY96jo83Fo",
                   "type": "string"
                 }
               ]
@@ -1060,7 +1085,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{vault:authorization-secret}}",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfY2JGTTM2Rm1NSnZZIiwianRpIjoiNDg1YjQ3MjAtYzA3MC00ZDc3LWI2MTQtMDQyZDU2NzU2NDdlIiwiaWF0IjoxNzcyMjA4NzI1LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjIxMDUyNSwiYXVkIjoiQXV0aFNlcnZpY2UiLCJpc3MiOiJBdXRoU2VydmljZSJ9.26XXRCghNS4D5GTkYFzVG49nw3cU7639rYY96jo83Fo",
                   "type": "string"
                 }
               ]
@@ -1068,7 +1093,7 @@
             "method": "PUT",
             "header": [],
             "url": {
-              "raw": "http://localhost:3005/api/v1/request_accounts/699bc2a1fd5f72c0a9a0fd91/aprobar",
+              "raw": "http://localhost:3005/api/v1/request_accounts/69a1c4e1b29d6ed8038e9801/aprobar",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1078,7 +1103,7 @@
                 "api",
                 "v1",
                 "request_accounts",
-                "699bc2a1fd5f72c0a9a0fd91",
+                "69a1c4e1b29d6ed8038e9801",
                 "aprobar"
               ]
             }
