@@ -61,7 +61,9 @@ export const validateAccountsAndFunds = async (req, res, next) => {
       if (!cuentaOrigen) {
         return res.status(404).json({ success: false, message: 'Cuenta origen no existe' });
       }
-
+      if(cuentaOrigen.no_cuenta === cuentaDestino.no_cuenta) {
+        return res.status(400).json({ success: false, message: 'La cuenta origen y destinatoria no pueden ser la misma' });
+      }
       // Validar fondos suficientes
       if (Number(cuentaOrigen.saldo) < Number(monto)) {
         return res.status(400).json({ success: false, message: 'Fondos insuficientes en la cuenta origen' });
