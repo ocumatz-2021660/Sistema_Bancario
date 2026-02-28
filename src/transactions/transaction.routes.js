@@ -22,7 +22,7 @@ router.post('/',validateJWT, isAccountOwnerTransaction, validateTransactionInput
 router.get('/', validateJWT, isAdmin, getTransacciones);
  
 // Historial por número de cuenta (últimas 5)
-router.get('/account/:no_cuenta', getTransaccionesByCuenta);
+router.get('/account/:id_cuenta', getTransaccionesByCuenta);
  
 //eliminar solo si a pasado 1 minuto (si se elimina se devuelve el dinero)
 router.delete('/cancelar/:id', validateJWT, isAdmin,canCancelTransaction, deleteTransaccion);
