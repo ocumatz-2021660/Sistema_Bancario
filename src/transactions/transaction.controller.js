@@ -88,10 +88,10 @@ export const getTransacciones = async (req, res) => {
 // Obtener historial de una cuenta (últimas 5 transacciones)
 export const getTransaccionesByCuenta = async (req, res) => {
   try {
-    const { no_cuenta } = req.params;
+    const { id_cuenta } = req.params;
     const { currency } = req.query; // Para permitir conversión de moneda en el historial
 
-    const cuenta = await Cuenta.findOne({ no_cuenta, isActive: true });
+    const cuenta = await Cuenta.findOne({ _id: id_cuenta, isActive: true });
     if (!cuenta) {
       return res.status(404).json({ success: false, message: 'Cuenta no encontrada' });
     }
