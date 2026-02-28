@@ -1,3 +1,6 @@
+import { Router } from "express";
+import {validateJWT} from "../../middlewares/validate-JWT.js";
+import {isAdmin} from "../../middlewares/is.admin.js";
 import {
     createCuenta,
     getCuentas,
