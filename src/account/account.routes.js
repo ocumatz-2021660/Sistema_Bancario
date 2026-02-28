@@ -1,6 +1,3 @@
-import { Router } from "express";
-import {validateJWT} from "../../middlewares/validate-JWT.js";
-import {isAdmin} from "../../middlewares/is.admin.js";
 import {
     createCuenta,
     getCuentas,
@@ -10,6 +7,7 @@ import {
     updateSaldo,
     deleteCuenta,
     hardDeleteCuenta,
+    activateCuenta,
 } from "./account.controller.js";
 
 const router = Router();
@@ -26,7 +24,8 @@ router.get('/:id', getCuentaById);
 
 router.put('/:id/saldo',validateJWT, isAdmin, updateSaldo);
 
-router.put('/:id/deactivate', validateJWT, isAdmin, deleteCuenta);
+router.put('/:id/desactivate', validateJWT, isAdmin, deleteCuenta);
+router.put('/:id/activate', validateJWT, isAdmin, activateCuenta);
 
 router.delete('/:id/delete', validateJWT, isAdmin, hardDeleteCuenta);
 
