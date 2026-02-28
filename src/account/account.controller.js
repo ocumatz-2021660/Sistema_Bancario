@@ -1,4 +1,4 @@
-// cuenta.controller.js
+
 import Cuenta from './account.model.js';
 import Solicitud from '../request_accounts/request_accounts.model.js';
 import { User } from '../users/user.model.js';
@@ -331,6 +331,49 @@ export const deleteCuenta = async (request, response) => {
         });
     }
 };
+export const activateCuenta = async (request, response) => {
+try {
+        const { id } = request.params;
+
+        const cuenta = await Cuenta.findById(id);
+        if (!cuenta) {
+            return response.status(404).json({
+                success: false,
+                message: 'Cuenta no encontrada'
+            });
+        }
+
+        if (cuenta.isActive == true) {
+            return response.status(400).json({
+                success: false,
+                message: 'La cuenta ya se encuentra activa'
+            });
+        }
+
+        cuenta.isActive = true;
+        await cuenta.save();
+
+        return response.status(200).json({
+            success: true,
+            message: 'Cuenta activada exitosamente',
+            data: {
+                _id: cuenta._id,
+                no_cuenta: cuenta.no_cuenta,
+                tipo_cuenta: cuenta.tipo_cuenta,
+                isActive: cuenta.isActive
+            }
+        });
+
+    } catch (error) {
+        console.error('Error en activateCuenta:', error);
+        return response.status(500).json({
+            success: false,
+            message: 'Error al activar la cuenta',
+            error: error.message
+        });
+    }
+};
+
 export const hardDeleteCuenta = async (request, response) => {
     try {
         const { id } = request.params;
