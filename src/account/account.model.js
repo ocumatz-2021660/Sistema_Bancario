@@ -18,8 +18,7 @@ const cuentaSchema = mongoose.Schema(
         saldo: {
             type: Number,
             required: [true, 'El saldo es obligatorio'],
-            default: 0,
-            min: [100, 'El saldo mínimo debe ser de 100Q'],          
+            default: 0,       
         },
         tipo_cuenta: {
             type: String,
