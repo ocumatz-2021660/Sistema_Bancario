@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { validateAccountInput } from "../../middlewares/account-validation.js";
 import {validateJWT} from "../../middlewares/validate-JWT.js";
 import {isAdmin} from "../../middlewares/is.admin.js";
 import {
@@ -15,7 +16,7 @@ import {
 
 const router = Router();
 
-router.post('/create', createCuenta);
+router.post('/create', validateAccountInput, createCuenta);
 
 router.get('/',validateJWT, isAdmin, getCuentas);
 
