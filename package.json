@@ -41,6 +41,7 @@
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.17",
     "nodemon": "^3.1.10",
+    "pdfkit": "^0.17.2",
     "pg": "^8.13.1",
     "sequelize": "^6.35.0",
     "uuid": "^11.1.0"
