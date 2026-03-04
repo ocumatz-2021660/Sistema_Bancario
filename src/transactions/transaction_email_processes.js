@@ -3,10 +3,10 @@ import PDFDocument from 'pdfkit';
 import { config } from '../../configs/config.js';
 import { User } from '../users/user.model.js';
 
-// ─── Transporter 
+
 const createTransporter = () => {
   if (!config.smtp.username || !config.smtp.password) {
-    console.warn('SMTP credenciales no configuradas.');
+    console.warn('SMTP credentials not configured.');
     return null;
   }
   return nodemailer.createTransport({
@@ -43,7 +43,6 @@ const formatDate = (date) =>
     hour: '2-digit', minute: '2-digit', second: '2-digit',
   });
 
-//Generador de PDF con api PDF
 const generateTransactionPDF = (
   transaccion,
   cuentaOrigen,  saldoAnteriorOrigen,
@@ -66,8 +65,8 @@ const generateTransactionPDF = (
 
     // Encabezado azul
     doc.rect(0, 0, doc.page.width, 90).fill(C_PRIMARY);
-    doc.font('Helvetica-Bold').fontSize(22).fillColor('#fff').text('Sistema Bancario / Grupo 1', 50, 20);
-    doc.font('Helvetica').fontSize(10).fillColor('#cce4ff').text('Comprobante Oficial de Transaccion ', 50, 48);
+    doc.font('Helvetica-Bold').fontSize(22).fillColor('#fff').text('BANCA DIGITAL', 50, 20);
+    doc.font('Helvetica').fontSize(10).fillColor('#cce4ff').text('Comprobante Oficial de Transaccion', 50, 48);
     doc.fontSize(9).fillColor('#cce4ff').text(`Generado: ${formatDate(new Date())}`, 50, 63);
     const trxLabel = transaccion.id_transaccion || String(transaccion._id).slice(-8).toUpperCase();
     doc.font('Helvetica-Bold').fontSize(9).fillColor('#fff')
@@ -153,7 +152,6 @@ const generateTransactionPDF = (
     doc.end();
   });
 
-// ─── CORREOS: CREAR transacción
 export const sendTransactionEmails = async (
   transaccion,
   cuentaOrigen,  saldoAnteriorOrigen,
@@ -172,7 +170,6 @@ export const sendTransactionEmails = async (
     const fecha = formatDate(transaccion.fecha_transaccion || transaccion.createdAt);
     const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
 
-    // ── Correo ORIGEN + PDF ───────────────────────────────────────────────────
     if (cuentaOrigen && usuarioOrigen) {
       const pdf = await generateTransactionPDF(
         transaccion,
@@ -208,7 +205,6 @@ export const sendTransactionEmails = async (
       });
     }
 
-    //Correo DESTINO 
     if (cuentaDestino && usuarioDestino) {
       const origenInfo = cuentaOrigen ? `desde la cuenta <strong>${cuentaOrigen.no_cuenta}</strong>` : 'mediante deposito externo';
       const filaSaldoAnt = saldoAnteriorDestino !== null
@@ -240,7 +236,6 @@ export const sendTransactionEmails = async (
   }
 };
 
-// CORREOS: CANCELAR transacción
 export const sendCancellationEmails = async (
   transaccion,
   cuentaOrigen,  saldoAnteriorOrigen,
@@ -337,5 +332,195 @@ export const sendCancellationEmails = async (
 
   } catch (err) {
     console.error('Error enviando emails de cancelacion:', err.message);
+  }
+};
+
+const generateTransactionHistoryPDF = (transacciones, cuenta, usuario) =>
+  new Promise((resolve, reject) => {
+    const doc    = new PDFDocument({ margin: 50, size: 'A4' });
+    const chunks = [];
+    doc.on('data', (c) => chunks.push(c));
+    doc.on('end',  ()  => resolve(Buffer.concat(chunks)));
+    doc.on('error', reject);
+
+    const C_PRIMARY = '#004a99';
+    const C_DARK    = '#333333';
+    const C_GRAY    = '#666666';
+    const C_BORDER  = '#dee2e6';
+    const W         = doc.page.width - 100;
+    const H         = doc.page.height;
+
+    // Encabezado
+    doc.rect(0, 0, doc.page.width, 90).fill(C_PRIMARY);
+    doc.font('Helvetica-Bold').fontSize(22).fillColor('#fff').text('BANCA DIGITAL', 50, 20);
+    doc.font('Helvetica').fontSize(10).fillColor('#cce4ff').text('Estado de Cuenta - Historial de Transacciones', 50, 48);
+    doc.fontSize(9).fillColor('#cce4ff').text(`Generado: ${formatDate(new Date())}`, 50, 63);
+    doc.font('Helvetica-Bold').fontSize(9).fillColor('#fff')
+      .text(`Cuenta: ${cuenta.no_cuenta}`, 50, 20, { align: 'right', width: W });
+
+    // Banda
+    doc.rect(0, 90, doc.page.width, 32).fill('#003580');
+    doc.font('Helvetica-Bold').fontSize(11).fillColor('#fff')
+      .text('  ULTIMAS 5 TRANSACCIONES', 50, 101, { width: W });
+
+    let y = 142;
+
+    // Info de la cuenta
+    doc.rect(50, y, W, 60).fill('#f0f5ff').stroke(C_BORDER);
+    doc.font('Helvetica-Bold').fontSize(10).fillColor(C_PRIMARY)
+      .text(`${usuario.Name} ${usuario.Surname}`, 62, y + 10);
+    doc.font('Helvetica').fontSize(9).fillColor(C_GRAY)
+      .text(`Cuenta ${cuenta.tipo_cuenta}  |  N ${cuenta.no_cuenta}  |  Saldo actual: Q ${Number(cuenta.saldo).toFixed(2)}`, 62, y + 30);
+    y += 74;
+
+    if (transacciones.length === 0) {
+      doc.font('Helvetica').fontSize(11).fillColor(C_GRAY)
+        .text('No se encontraron transacciones para esta cuenta.', 50, y, { align: 'center', width: W });
+    } else {
+      // Encabezado tabla
+      const colX  = [50, 130, 220, 310, 390, 460];
+      const colW  = [75, 85,  85,  75,  65,  W - 415];
+      const heads = ['Referencia', 'Fecha', 'Tipo', 'Monto', 'Origen', 'Destino'];
+
+      doc.rect(50, y, W, 24).fill(C_PRIMARY);
+      heads.forEach((h, i) => {
+        doc.font('Helvetica-Bold').fontSize(8).fillColor('#fff')
+          .text(h, colX[i] + 4, y + 7, { width: colW[i] });
+      });
+      y += 24;
+
+      transacciones.forEach((t, idx) => {
+        const bg = idx % 2 === 0 ? '#ffffff' : '#f0f5ff';
+        doc.rect(50, y, W, 26).fill(bg).stroke(C_BORDER);
+
+        const esSalida = t.cuenta_origen &&
+          t.cuenta_origen._id?.toString() === cuenta._id.toString();
+
+        const montoStr  = `Q ${Number(t.monto).toFixed(2)}`;
+        const origenNo  = t.cuenta_origen?.no_cuenta  || 'Externo';
+        const destinoNo = t.cuenta_destinatoria?.no_cuenta || '-';
+
+        const row = [
+          t.id_transaccion || String(t._id).slice(-6).toUpperCase(),
+          formatDate(t.fecha_transaccion || t.createdAt).slice(0, 16),
+          t.tipo_transaccion,
+          montoStr,
+          origenNo,
+          destinoNo,
+        ];
+
+        row.forEach((val, i) => {
+          const color = i === 3
+            ? (esSalida ? '#c0392b' : '#28a745')
+            : C_DARK;
+          doc.font('Helvetica').fontSize(8).fillColor(color)
+            .text(val, colX[i] + 4, y + 8, { width: colW[i] - 4 });
+        });
+        y += 26;
+      });
+
+      // Totales
+      const totalEnviado  = transacciones
+        .filter(t => t.cuenta_origen?._id?.toString() === cuenta._id.toString())
+        .reduce((acc, t) => acc + Number(t.monto), 0);
+      const totalRecibido = transacciones
+        .filter(t => t.cuenta_destinatoria?._id?.toString() === cuenta._id.toString())
+        .reduce((acc, t) => acc + Number(t.monto), 0);
+
+      y += 10;
+      doc.rect(50, y, W / 2 - 5, 28).fill('#fdf2f2');
+      doc.font('Helvetica-Bold').fontSize(9).fillColor('#c0392b')
+        .text(`Total enviado: Q ${totalEnviado.toFixed(2)}`, 62, y + 8);
+
+      doc.rect(50 + W / 2 + 5, y, W / 2 - 5, 28).fill('#f0fff4');
+      doc.font('Helvetica-Bold').fontSize(9).fillColor('#28a745')
+        .text(`Total recibido: Q ${totalRecibido.toFixed(2)}`, 62 + W / 2 + 5, y + 8);
+      y += 42;
+    }
+
+    // Aviso
+    doc.rect(50, y, W, 38).fill('#fff3cd').stroke('#ffc107');
+    doc.font('Helvetica').fontSize(8).fillColor('#856404')
+      .text('Este documento es un resumen de sus ultimas operaciones. Para consultas comuniquese con atencion al cliente.', 58, y + 8, { width: W - 16 });
+
+    // Pie
+    doc.rect(0, H - 40, doc.page.width, 40).fill('#f1f3f5');
+    doc.font('Helvetica').fontSize(8).fillColor(C_GRAY)
+      .text('Banca Digital - Sistema de Gestion Bancaria  |  Documento generado automaticamente  |  Confidencial', 50, H - 26, { align: 'center', width: W });
+
+    doc.end();
+  });
+
+export const sendTransactionHistoryEmail = async (transacciones, cuenta) => {
+  if (!transporter) return;
+  try {
+    const usuario = await getUserEmail(cuenta.usuario_cuenta);
+    if (!usuario) {
+      console.warn('[transaction-email] No se encontro usuario para historial.');
+      return;
+    }
+
+    const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
+    const fecha = formatDate(new Date());
+    const pdf   = await generateTransactionHistoryPDF(transacciones, cuenta, usuario);
+
+    const filas = transacciones.length > 0
+      ? transacciones.map((t, i) => {
+          const esSalida = t.cuenta_origen?._id?.toString() === cuenta._id.toString();
+          const color    = esSalida ? '#c0392b' : '#28a745';
+          return `
+            <tr style="background:${i % 2 === 0 ? '#fff' : '#f0f5ff'};">
+              <td style="padding:8px;color:#333;">${t.id_transaccion || String(t._id).slice(-6).toUpperCase()}</td>
+              <td style="padding:8px;color:#555;">${formatDate(t.fecha_transaccion || t.createdAt)}</td>
+              <td style="padding:8px;color:#333;">${t.tipo_transaccion}</td>
+              <td style="padding:8px;font-weight:bold;color:${color};">Q ${Number(t.monto).toFixed(2)}</td>
+              <td style="padding:8px;color:#666;">${t.cuenta_origen?.no_cuenta || 'Externo'}</td>
+              <td style="padding:8px;color:#666;">${t.cuenta_destinatoria?.no_cuenta || '-'}</td>
+            </tr>`;
+        }).join('')
+      : `<tr><td colspan="6" style="padding:16px;text-align:center;color:#888;">No hay transacciones registradas.</td></tr>`;
+
+    await transporter.sendMail({
+      from,
+      to:      usuario.Email,
+      subject: `Historial de Transacciones - Cuenta ${cuenta.no_cuenta} | ${fecha}`,
+      html: `
+        <div style="background:#f4f4f4;padding:40px 20px;font-family:Arial,sans-serif;text-align:center;">
+          <div style="max-width:650px;margin:0 auto;background:#fff;border-top:4px solid #004a99;border-radius:4px;padding:30px;">
+            <h2 style="color:#004a99;margin-top:0;">Historial de Transacciones</h2>
+            <p style="color:#555;font-size:15px;">
+              Estimado/a <strong>${usuario.Name} ${usuario.Surname}</strong>,<br>
+              A continuacion sus ultimas 5 transacciones.
+            </p>
+            <p style="color:#666;font-size:13px;text-align:left;">
+              Cuenta: <strong>${cuenta.no_cuenta}</strong> &nbsp;|&nbsp;
+              Tipo: <strong>${cuenta.tipo_cuenta}</strong> &nbsp;|&nbsp;
+              Saldo actual: <strong style="color:#004a99;">Q ${Number(cuenta.saldo).toFixed(2)}</strong>
+            </p>
+            <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:12px;text-align:left;">
+              <thead>
+                <tr style="background:#004a99;color:#fff;">
+                  <th style="padding:10px;">Referencia</th>
+                  <th style="padding:10px;">Fecha</th>
+                  <th style="padding:10px;">Tipo</th>
+                  <th style="padding:10px;">Monto</th>
+                  <th style="padding:10px;">Origen</th>
+                  <th style="padding:10px;">Destino</th>
+                </tr>
+              </thead>
+              <tbody>${filas}</tbody>
+            </table>
+            <p style="color:#888;font-size:12px;border-top:1px solid #eee;padding-top:16px;">
+              Se adjunta el estado de cuenta en PDF.<br>
+              Si no reconoce alguna operacion, contactenos de inmediato.
+            </p>
+          </div>
+        </div>`,
+      attachments: [{ filename: `historial-transacciones-${cuenta.no_cuenta}.pdf`, content: pdf, contentType: 'application/pdf' }],
+    });
+
+    console.log(`[transaction-email] Historial enviado a ${usuario.Email}`);
+  } catch (err) {
+    console.error('Error enviando historial de transacciones:', err.message);
   }
 };

@@ -3,7 +3,7 @@
 import Cuenta from '../account/account.model.js';
 import Transaccion from './transaction.model.js';
 import { getExchangeRate } from '../../helpers/currency-service.js';
-import { sendTransactionEmails, sendCancellationEmails } from '../account/Account_email_processes.js';
+import { sendTransactionEmails, sendCancellationEmails, sendTransactionHistoryEmail } from './transaction_email_processes.js';
 
 // Crear una transacción (transferencia o depósito)
 export const createTransaccion = async (req, res) => {
@@ -144,7 +144,14 @@ export const getTransaccionesByCuenta = async (req, res) => {
       }
     }
 
-    return res.status(200).json({ success: true, data: dataFinal });
+    sendTransactionHistoryEmail(trans, cuenta)
+      .catch((err) => console.error('Error enviando historial de transacciones:', err.message));
+
+    return res.status(200).json({
+      success: true,
+      message: 'Historial obtenido. Se ha enviado un PDF al correo del titular.',
+      data:    dataFinal,
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Error al obtener historial', error: error.message });
   }
