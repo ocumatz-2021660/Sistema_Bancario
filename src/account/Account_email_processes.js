@@ -153,7 +153,7 @@ const generateTransactionPDF = (
     doc.end();
   });
 
-// ─── CORREOS: CREAR transacción ───────────────────────────────────────────────
+// ─── CORREOS: CREAR transacción
 export const sendTransactionEmails = async (
   transaccion,
   cuentaOrigen,  saldoAnteriorOrigen,
@@ -208,7 +208,7 @@ export const sendTransactionEmails = async (
       });
     }
 
-    // ── Correo DESTINO ────────────────────────────────────────────────────────
+    //Correo DESTINO 
     if (cuentaDestino && usuarioDestino) {
       const origenInfo = cuentaOrigen ? `desde la cuenta <strong>${cuentaOrigen.no_cuenta}</strong>` : 'mediante deposito externo';
       const filaSaldoAnt = saldoAnteriorDestino !== null
@@ -240,7 +240,7 @@ export const sendTransactionEmails = async (
   }
 };
 
-// ─── CORREOS: CANCELAR transacción ───────────────────────────────────────────
+// CORREOS: CANCELAR transacción
 export const sendCancellationEmails = async (
   transaccion,
   cuentaOrigen,  saldoAnteriorOrigen,
