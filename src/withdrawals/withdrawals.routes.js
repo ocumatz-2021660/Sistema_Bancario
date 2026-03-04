@@ -18,6 +18,6 @@ router.post('/', validateJWT, isAccountOwnerWithdrawal, validateWithdrawalInput,
 router.get('/', validateJWT, isAdmin, getRetiros);
 
 // Historial de retiros de una cuenta
-router.get('/cuenta/:id_cuenta', validateJWT, getRetirosByCuenta);
+router.get('/cuenta/:id_cuenta', getRetirosByCuenta);
 
 export default router;
