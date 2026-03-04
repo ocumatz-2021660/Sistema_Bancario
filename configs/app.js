@@ -26,6 +26,7 @@ import requestAccountsRoutes from '../src/request_accounts/request_accounts.rout
 import transactionRoutes from '../src/transactions/transaction.routes.js';
 import reddemServicesRoutes from '../src/redeem_service/redeem_service.routes.js';
 import withdrawalsRoutes from '../src/withdrawals/withdrawals.routes.js';
+import depositRoutes from '../src/deposit/deposit.routes.js';
 
 const BASE_PATH = '/api/v1';
 
@@ -47,6 +48,7 @@ const routes = (app) => {
   app.use(`${BASE_PATH}/request_accounts`, requestAccountsRoutes);
   app.use(`${BASE_PATH}/transactions`, transactionRoutes);
   app.use(`${BASE_PATH}/withdrawals`, withdrawalsRoutes);
+  app.use(`${BASE_PATH}/deposits`,depositRoutes);
 
 
   app.get(`${BASE_PATH}/health`, (req, res) => {
