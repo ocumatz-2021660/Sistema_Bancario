@@ -14,7 +14,8 @@ const transaccionSchema = mongoose.Schema(
     monto: {
       type: Number,
       required: [true, 'El monto es requerido'],
-      min: [0.01, 'El monto debe ser mayor que 0']
+      min: [0.01, 'El monto debe ser mayor que 0'],
+      max: [2000, 'El monto no puede exceder los 2000']
     },
  
     fecha_transaccion: {

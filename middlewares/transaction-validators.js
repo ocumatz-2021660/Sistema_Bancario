@@ -10,6 +10,9 @@ export const validateTransactionInput = (req, res, next) => {
   if (monto === undefined || monto === null) {
     return res.status(400).json({ success: false, message: 'Monto requerido' });
   }
+  if (monto > 2000){
+    return res.status(400).json({ success: false, message: 'El monto no puede exceder los 2000' });
+  }
 
   const montoStr = String(monto).trim();
   const numeroValido = /^\d+(\.\d+)?$/.test(montoStr);

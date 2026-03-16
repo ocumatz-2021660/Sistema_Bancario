@@ -1,13 +1,15 @@
 'use strict';
 
 import Transaccion from '../src/transactions/transaction.model.js'; 
-import Cuenta from '../src/account/account.model.js';
+import Deposito from '../src/deposit/deposit.model.js';
+import Retiro from '../src/withdrawals/withdrawals.model.js';
+//import Cuenta from '../src/account/account.model.js';
 
 export const validateDailyLimit = async (req, res, next) => {
     try {
         const { monto } = req.body;
         const cuentaOrigen = req.cuentaOrigen; 
-        const LIMITE_DIARIO = 2000;
+        const LIMITE_DIARIO = 10000;
 
         // solo depositos externos saltan el proceso (recibe dinero)
         if (!cuentaOrigen) return next();

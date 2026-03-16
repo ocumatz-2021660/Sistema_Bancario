@@ -4,7 +4,8 @@ import { Router } from 'express';
 import { validateJWT } from '../../middlewares/validate-JWT.js';
 import { isAdmin } from '../../middlewares/is.admin.js';
 import { isAccountOwnerWithdrawal } from '../../middlewares/is_account_owner.js';
-import { validateWithdrawalInput } from '../../middlewares/withdrawals-validation.js';
+import { validateWithdrawalInput,  
+        validateDailyLimit, } from '../../middlewares/withdrawals-validation.js';
 import {
   createRetiro,
   getRetiros,
@@ -12,7 +13,7 @@ import {
 } from './withdrawals.controller.js';
 
 const router = Router();
-router.post('/', validateJWT, isAccountOwnerWithdrawal, validateWithdrawalInput, createRetiro);
+router.post('/', validateJWT, isAccountOwnerWithdrawal, validateWithdrawalInput, validateDailyLimit, createRetiro);
 
 // Listar todos los retiros (solo admin)
 router.get('/', validateJWT, isAdmin, getRetiros);
