@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { initServer } from './auth-service/configs/app.js';
+import { initServer } from './configs/app.js';
 
 // Configurar variables de entorno
 dotenv.config();
