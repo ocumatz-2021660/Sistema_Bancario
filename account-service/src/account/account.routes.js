@@ -16,7 +16,7 @@ import {
 
 const router = Router();
 
-router.post('/create', validateAccountInput, createCuenta);
+router.post('/create',validateJWT, validateAccountInput, createCuenta);
 
 router.get('/',validateJWT, isAdmin, getCuentas);
 
