@@ -52,6 +52,7 @@ export const seedAdminUser = async () => {
           Email:    adminEmail.toLowerCase(),
           Password: hashedPassword,
           Status:   true, //  (sin requerir verificación)
+          IsProtected: true,
         },
         { transaction }
       );

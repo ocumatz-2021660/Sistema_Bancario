@@ -4,7 +4,7 @@ import { generateUserId } from '../../helpers/uuid-generator.js';
 import { ACCOUNT_STATUS, ACCOUNT_STATUS_VALUES } from '../../helpers/account-status-constants.js';
 
 // Modelo User principal
-export const User = sequelize.define(  
+export const User = sequelize.define(
   'User',
   {
     Id: {
@@ -82,12 +82,18 @@ export const User = sequelize.define(
       allowNull: false,
       field: 'status',
     },
-    
+
     AccountStatus: {
       type: DataTypes.ENUM(...ACCOUNT_STATUS_VALUES),
       allowNull: false,
       defaultValue: ACCOUNT_STATUS.INACTIVE, // Por defecto: inactivo hasta verificar email
       field: 'account_status',
+    },
+    IsProtected: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+      field: 'is_protected',
     },
 
     CreatedAt: {

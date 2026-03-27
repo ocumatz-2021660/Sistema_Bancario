@@ -13,7 +13,6 @@ export const updateUserRole = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   const { roleName } = req.body || {};
 
-  // Validar que se envió un rol
   if (!roleName) {
     return res.status(400).json({
       success: false,
@@ -32,6 +31,14 @@ export const updateUserRole = asyncHandler(async (req, res) => {
   }
 
   const user = await findUserById(userId);
+  
+  if (user.IsProtected) {
+    return res.status(403).json({
+      success: false,
+      message: 'Este usuario está protegido y no puede ser modificado.',
+    });
+  }
+
   if (!user) {
     return res.status(404).json({
       success: false,
@@ -39,7 +46,6 @@ export const updateUserRole = asyncHandler(async (req, res) => {
     });
   }
 
-  // Evitar que un admin se cambie el rol a sí mismo por error
   if (userId === req.userId) {
     return res.status(400).json({
       success: false,
@@ -103,9 +109,9 @@ export const getUsers = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, accountStatus } = req.query;
 
   const { users, total } = await findAllUsers({
-    limit:  Number(limit),
+    limit: Number(limit),
     offset: (Number(page) - 1) * Number(limit),
-    accountStatus, 
+    accountStatus,
   });
 
   return res.status(200).json({
@@ -113,10 +119,10 @@ export const getUsers = asyncHandler(async (req, res) => {
     message: 'Usuarios obtenidos exitosamente.',
     data: users.map(buildUserResponse),
     pagination: {
-      currentPage:  parseInt(page),
-      totalPages:   Math.ceil(total / limit),
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
       totalRecords: total,
-      limit:        parseInt(limit),
+      limit: parseInt(limit),
     },
   });
 });
@@ -141,8 +147,8 @@ export const updateUser = asyncHandler(async (req, res) => {
     });
   }
   //solo el body
-  if (name)     user.Name    = name.trim();
-  if (surname)  user.Surname = surname.trim();
+  if (name) user.Name = name.trim();
+  if (surname) user.Surname = surname.trim();
   if (username) user.Username = username.trim().toLowerCase();
 
   await user.save();
