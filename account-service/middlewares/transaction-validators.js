@@ -1,16 +1,15 @@
 'use strict';
 
 import Cuenta from '../src/account/account.model.js';
+import Favorito from '../src/favorite_account/favorite_account.model.js';
 
-// Validar datos de entrada de transacción
 export const validateTransactionInput = (req, res, next) => {
   const { monto, tipo_transaccion, cuenta_origen, cuenta_destinatoria } = req.body;
 
-  // Validar que monto es un número válido (enteros o decimales)
   if (monto === undefined || monto === null) {
     return res.status(400).json({ success: false, message: 'Monto requerido' });
   }
-  if (monto > 2000){
+  if (monto > 2000) {
     return res.status(400).json({ success: false, message: 'El monto no puede exceder los 2000' });
   }
 
@@ -30,7 +29,6 @@ export const validateTransactionInput = (req, res, next) => {
   }
 
   const tipo = tipo_transaccion.toUpperCase();
-
   if (!['TRANSFERENCIA', 'DEPOSITO'].includes(tipo)) {
     return res.status(400).json({ success: false, message: 'Tipo de transacción no válido' });
   }
@@ -46,35 +44,55 @@ export const validateTransactionInput = (req, res, next) => {
   next();
 };
 
-// Validar existencia de cuentas y fondos
 export const validateAccountsAndFunds = async (req, res, next) => {
   try {
     const { monto, tipo_transaccion, cuenta_origen, cuenta_destinatoria } = req.body;
+    const userId = req.userId;
 
-    // Buscar cuenta destinatoria
-    const cuentaDestino = await Cuenta.findOne({ no_cuenta: cuenta_destinatoria, isActive: true });
-    if (!cuentaDestino) {
-      return res.status(404).json({ success: false, message: 'Cuenta destinataria no existe' });
+    // Resolver alias o número de cuenta destino
+    let no_cuenta_destino = cuenta_destinatoria;
+    const esAlias = !/^\d{10}$/.test(cuenta_destinatoria);
+
+    if (esAlias) {
+      const favorito = await Favorito.findOne({
+        dueno_favorito: userId,                          // ← sin ñ, igual que tu modelo corregido
+        alias_favorito: { $regex: `^${cuenta_destinatoria.trim()}$`, $options: 'i' }
+      });
+
+      if (!favorito) {
+        return res.status(404).json({
+          success: false,
+          message: `No se encontró el alias "${cuenta_destinatoria}" en tus favoritos`
+        });
+      }
+
+      no_cuenta_destino = favorito.no_cuenta; // ← ahora sí tiene el número real
     }
 
-    // Si hay cuenta_origen, buscarla y validar fondos
+    // Buscar cuenta destinataria usando no_cuenta_destino (ya sea directo o resuelto del alias)
+    const cuentaDestino = await Cuenta.findOne({ no_cuenta: no_cuenta_destino, isActive: true });
+    if (!cuentaDestino) {
+      return res.status(404).json({ success: false, message: 'Cuenta destinataria no existe o está inactiva' });
+    }
+
+    // Resolver cuenta origen si aplica
     let cuentaOrigen = null;
     if (cuenta_origen) {
       cuentaOrigen = await Cuenta.findOne({ no_cuenta: cuenta_origen, isActive: true });
       if (!cuentaOrigen) {
-        return res.status(404).json({ success: false, message: 'Cuenta origen no existe' });
+        return res.status(404).json({ success: false, message: 'Cuenta origen no existe o está inactiva' });
       }
-      if(cuentaOrigen.no_cuenta === cuentaDestino.no_cuenta) {
-        return res.status(400).json({ success: false, message: 'La cuenta origen y destinatoria no pueden ser la misma' });
+
+      if (cuentaOrigen.no_cuenta === cuentaDestino.no_cuenta) {
+        return res.status(400).json({ success: false, message: 'La cuenta origen y destinataria no pueden ser la misma' });
       }
-      // Validar fondos suficientes
+
       if (Number(cuentaOrigen.saldo) < Number(monto)) {
         return res.status(400).json({ success: false, message: 'Fondos insuficientes en la cuenta origen' });
       }
     }
 
-    // Guardar cuentas en el request para usarlas en el controlador
-    req.cuentaOrigen = cuentaOrigen;
+    req.cuentaOrigen  = cuentaOrigen;
     req.cuentaDestino = cuentaDestino;
 
     next();

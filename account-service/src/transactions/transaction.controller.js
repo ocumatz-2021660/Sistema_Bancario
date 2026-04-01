@@ -123,6 +123,7 @@ export const getTransaccionesByCuenta = async (req, res) => {
     const trans = await Transaccion.find({
       $or: [{ cuenta_origen: cuenta._id }, { cuenta_destinatoria: cuenta._id }],
     })
+    //
       .populate('cuenta_origen')
       .populate('cuenta_destinatoria')
       .limit(5)
