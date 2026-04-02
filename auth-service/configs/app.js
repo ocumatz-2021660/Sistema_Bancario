@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import { initInteresJob } from '../../account-service/jobs/interest.job.js';
 import { dbConnection } from '../configs/db.js';
 import { dbConnection as dbMongoConnection } from './dbMongo.js';
+import { setupSwagger } from './swagger.js';
 // Ensure models are registered before DB sync
 import '../src/users/user.model.js';
 import '../../auth-service/src/auth/role.model.js';
@@ -61,6 +62,7 @@ const routes = (app) => {
     });
   });
   // 404 handler (standardized)
+  setupSwagger(app);
   app.use(notFound);
 };
 
