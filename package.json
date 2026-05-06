@@ -21,7 +21,7 @@
     "jwt",
     "api"
   ],
-  "author": "Braulio Echeverria",
+  "author": "GRUPO 1 IN6BM",
   "license": "MIT",
   "dependencies": {
     "argon2": "^0.44.0",
@@ -41,8 +41,11 @@
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.17",
     "nodemon": "^3.1.10",
+    "pdfkit": "^0.17.2",
     "pg": "^8.13.1",
     "sequelize": "^6.35.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
