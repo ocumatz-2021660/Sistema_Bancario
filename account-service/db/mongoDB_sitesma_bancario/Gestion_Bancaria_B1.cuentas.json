@@ -1,0 +1,34 @@
+[{
+  "_id": {
+    "$oid": "699bbd7bfd5f72c0a9a0fd6e"
+  },
+  "saldo": 1900,
+  "tipo_cuenta": "AHORRO",
+  "puntos_cuenta": 1,
+  "usuario_cuenta": "usr_apkEBk4i8vpJ",
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-02-23T02:37:47.485Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T03:11:21.910Z"
+  },
+  "no_cuenta": "8150512524"
+},
+{
+  "_id": {
+    "$oid": "699bc2a1fd5f72c0a9a0fd8f"
+  },
+  "saldo": 401,
+  "tipo_cuenta": "MONETARIA",
+  "puntos_cuenta": 1,
+  "usuario_cuenta": "usr_bZXirH3qSpNB",
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-02-23T02:59:45.347Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T03:11:21.911Z"
+  },
+  "no_cuenta": "6805726024"
+}]

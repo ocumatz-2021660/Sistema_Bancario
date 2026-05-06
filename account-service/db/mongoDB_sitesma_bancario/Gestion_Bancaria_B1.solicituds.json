@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "699bbd7bfd5f72c0a9a0fd70"
+  },
+  "estado_solicitud": "APROBADA",
+  "cuenta": {
+    "$oid": "699bbd7bfd5f72c0a9a0fd6e"
+  },
+  "isActive": true,
+  "fecha_solicitud": {
+    "$date": "2026-02-23T02:37:47.496Z"
+  },
+  "createdAt": {
+    "$date": "2026-02-23T02:37:47.497Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T02:46:15.773Z"
+  },
+  "id_solicitud": "SOL-000001"
+},
+{
+  "_id": {
+    "$oid": "699bc19dfd5f72c0a9a0fd80"
+  },
+  "estado_solicitud": "RECHAZADA",
+  "cuenta": {
+    "$oid": "699bc19dfd5f72c0a9a0fd7e"
+  },
+  "isActive": true,
+  "fecha_solicitud": {
+    "$date": "2026-02-23T02:55:25.538Z"
+  },
+  "createdAt": {
+    "$date": "2026-02-23T02:55:25.538Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T02:58:47.699Z"
+  },
+  "id_solicitud": "SOL-000002"
+},
+{
+  "_id": {
+    "$oid": "699bc2a1fd5f72c0a9a0fd91"
+  },
+  "estado_solicitud": "APROBADA",
+  "cuenta": {
+    "$oid": "699bc2a1fd5f72c0a9a0fd8f"
+  },
+  "isActive": true,
+  "fecha_solicitud": {
+    "$date": "2026-02-23T02:59:45.348Z"
+  },
+  "createdAt": {
+    "$date": "2026-02-23T02:59:45.349Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T03:01:23.361Z"
+  },
+  "id_solicitud": "SOL-000003"
+}]

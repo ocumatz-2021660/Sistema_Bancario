@@ -1,0 +1,48 @@
+[{
+  "_id": {
+    "$oid": "699bc43bfd5f72c0a9a0fda2"
+  },
+  "monto": 500,
+  "tipo_transaccion": "TRANSFERENCIA",
+  "cuenta_origen": {
+    "$oid": "699bbd7bfd5f72c0a9a0fd6e"
+  },
+  "cuenta_destinatoria": {
+    "$oid": "699bc2a1fd5f72c0a9a0fd8f"
+  },
+  "isActive": true,
+  "fecha_transaccion": {
+    "$date": "2026-02-23T03:06:35.698Z"
+  },
+  "createdAt": {
+    "$date": "2026-02-23T03:06:35.699Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T03:06:35.699Z"
+  },
+  "id_transaccion": "TRX-000001"
+},
+{
+  "_id": {
+    "$oid": "699bc559fd5f72c0a9a0fdae"
+  },
+  "monto": 500,
+  "tipo_transaccion": "TRANSFERENCIA",
+  "cuenta_origen": {
+    "$oid": "699bc2a1fd5f72c0a9a0fd8f"
+  },
+  "cuenta_destinatoria": {
+    "$oid": "699bbd7bfd5f72c0a9a0fd6e"
+  },
+  "isActive": true,
+  "fecha_transaccion": {
+    "$date": "2026-02-23T03:11:21.913Z"
+  },
+  "createdAt": {
+    "$date": "2026-02-23T03:11:21.913Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T03:11:21.913Z"
+  },
+  "id_transaccion": "TRX-000002"
+}]

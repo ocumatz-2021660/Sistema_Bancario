@@ -1,0 +1,1628 @@
+{
+  "info": {
+    "_postman_id": "e14b74d8-8a58-42da-b3b1-e039382f1fbd",
+    "name": "Sistema_Bancario",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48332462",
+    "_collection_link": "https://go.postman.co/collection/48332462-e14b74d8-8a58-42da-b3b1-e039382f1fbd?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "SERVICES",
+      "item": [
+        {
+          "name": "• ADMIN",
+          "item": [
+            {
+              "name": "ADD_SERVICE(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"nombre_servicio\":\"40 en el proyecto\",\r\n    \"descripcion_servicio\": \"el grupo saco 40 pts netos (waos).\",\r\n    \"puntos_requeridos\": 300\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/services/create",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "services",
+                    "create"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "UPDATE_SERVICE(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"nombre_servicio\":\"Viaje a Venezulea 2026\",\r\n    \"descripcion_servicio\": \"Un viaje de 4 voletos para ospedaje de 2 dias en Venezuela.\",\r\n    \"puntos_requeridos\": 150\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/services/update/69a7a8a32e7c7f1de7e7c088",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "services",
+                    "update",
+                    "69a7a8a32e7c7f1de7e7c088"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DESACTIVE_SERVICE(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/services/delete/69a7a8a32e7c7f1de7e7c088",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "services",
+                    "delete",
+                    "69a7a8a32e7c7f1de7e7c088"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "• USER",
+          "item": [
+            {
+              "name": "GET_SERVICES",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/services/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "services",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PERFIL",
+      "item": [
+        {
+          "name": "• USER",
+          "item": [
+            {
+              "name": "GET_PERFIL",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/profile",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "profile"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET_PERFIL_BY_IID",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n     \"userId\": \"usr_TDvq1DCeKAH3\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/api/v1/auth/profile/by-id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3000",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "profile",
+                    "by-id"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "UPDATE_PERFIL",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "Sebastian",
+                      "type": "text",
+                      "uuid": "1d647d3d-6808-48dc-85cf-e97349fed5e2"
+                    },
+                    {
+                      "key": "surname",
+                      "value": "Lopez",
+                      "type": "text",
+                      "uuid": "67b89dbb-798a-41ca-997f-0c5a5731ff85"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "66602221",
+                      "type": "text",
+                      "uuid": "a0b58fc2-b70e-48b2-8517-1f6a241a9120"
+                    },
+                    {
+                      "key": "profilePicture",
+                      "type": "file",
+                      "uuid": "9faf6cdc-53f9-46cd-887c-02956242b9da",
+                      "src": "/C:/Users/Clara Lopez/Desktop/sebas/perro waos.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/profile",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "profile"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ADMIN",
+      "item": [
+        {
+          "name": "ADMIN_ROLES",
+          "item": [
+            {
+              "name": "UPDATE_ROLE",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"roleName\": \"ADMIN_ROLE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/usr_RzAeePBTpMKP/role",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "usr_RzAeePBTpMKP",
+                    "role"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET_ALL_USERS",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/by-role/USER_ROLE",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "by-role",
+                    "USER_ROLE"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DESABILITI_USER",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"accountStatus\": \"deshabilitado\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/users/usr_bZXirH3qSpNB/status",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "usr_bZXirH3qSpNB",
+                    "status"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AUTH",
+      "item": [
+        {
+          "name": "USERS",
+          "item": [
+            {
+              "name": "• ADMIN",
+              "item": [
+                {
+                  "name": "GET_ALL_USERS(ADMIN)",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/users/",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        ""
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "UPDATE_USERS(ADMIN)",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"name\": \"Carlos\",\r\n  \"surname\": \"cac\",\r\n  \"username\": \"CarlitosCac\",\r\n  \"phone\": \"55895932\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/users/usr_bZXirH3qSpNB",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "users",
+                        "usr_bZXirH3qSpNB"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "• USER",
+              "item": [
+                {
+                  "name": "ADD_USER",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\"name\": \"Sebas\",\"surname\": \"lopez\",\"username\": \"ElSebastianPro\",\"email\": \"elsebastian259@gmail.com\",\"password\": \"Password123!\",\"confirmPassword\": \"Password123!\",\"phone\": \"55895933\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/auth/register",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "auth",
+                        "register"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "INICIAR_SESION",
+          "item": [
+            {
+              "name": "LOGIN",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"emailOrUsername\": \"ocumatz\",\r\n  \"password\": \"Password123!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "VERIFY_EMAIL",
+          "item": [
+            {
+              "name": "VERIFY_EMAIL",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"token\": \"ajG0IZIAjqtL7ze8PkQCXq4z0biGZWBt4HGshRqyYF4\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/verify-email",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "verify-email"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "FORGOTE_PASSWORD",
+          "item": [
+            {
+              "name": "VERIFI_ACOUNT",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"ocumatz-2021660@kinal.edu.gt\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/forgot-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "NEW_PASSWORD",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"token\": \"tOgKA5r5MjtF8D8UihhgLmBTIsTGUOs-vT1XSeF6E98\",\r\n  \"newPassword\": \"24489607\",\r\n  \"confirmPassword\": \"24489607\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/auth/reset-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ACCOUNT",
+      "item": [
+        {
+          "name": "• ADMIN",
+          "item": [
+            {
+              "name": "GET_ACCOUNT(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/cuentas/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "cuentas",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "UPDATE_SALDO(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"saldo\": 3900\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/cuentas/699bbd7bfd5f72c0a9a0fd6e/saldo",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "cuentas",
+                    "699bbd7bfd5f72c0a9a0fd6e",
+                    "saldo"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DESACTIVE_ACCOUNT(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/cuentas/69a7a39f2e7c7f1de7e7c000/desactivate",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "cuentas",
+                    "69a7a39f2e7c7f1de7e7c000",
+                    "desactivate"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DELETE_ACCOUNT(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/cuentas/69a1b52fc516ac89366d10f0/delete",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "cuentas",
+                    "69a1b52fc516ac89366d10f0",
+                    "delete"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "FAVORITE_ACCOUNT",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/cuentas/buscar/favoritos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "cuentas",
+                    "buscar",
+                    "favoritos"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "• USER",
+          "item": [
+            {
+              "name": "ADD_ACOUNT",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"saldo\": 500,\r\n  \"tipo_cuenta\": \"MONETARIA\",\r\n  \"usuario_cuenta\": \"usr_AnpBbDru4t9q\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/cuentas/create",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "cuentas",
+                    "create"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "REQUEST_ACCOUNTS",
+      "item": [
+        {
+          "name": "GET_REQUEST_ACCOUNTS(ADMIN)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/request_accounts/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "request_accounts",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "APROVED_REQUEST",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/request_accounts/69a7a5442e7c7f1de7e7c025/aprobar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "request_accounts",
+                "69a7a5442e7c7f1de7e7c025",
+                "aprobar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DENIED_REQUEST",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{vault:authorization-secret}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3005/api/v1/request_accounts/69a7a3e62e7c7f1de7e7c009/rechazar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "api",
+                "v1",
+                "request_accounts",
+                "69a7a3e62e7c7f1de7e7c009",
+                "rechazar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{vault:authorization-secret}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "REDEEM_SERVICE",
+      "item": [
+        {
+          "name": "• ADMIN",
+          "item": [
+            {
+              "name": "GET_ALL_REDEEM_SERVICE(ADMIN)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/redeem_services/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "redeem_services",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "• USER",
+          "item": [
+            {
+              "name": "GET_REDEEM_SERVICE",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/redeem_services/699bbd7bfd5f72c0a9a0fd6e",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "redeem_services",
+                    "699bbd7bfd5f72c0a9a0fd6e"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DELETE_REDEEM_SERVICE",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/redeem_services/cancel/699e472f702285e13a9183b1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "redeem_services",
+                    "cancel",
+                    "699e472f702285e13a9183b1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ADD_REDEEM_SERVICE",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{vault:authorization-secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"cuenta_canje\":\"69a7a5442e7c7f1de7e7c023\",\r\n    \"servicio_canje\":\"69a7a9692e7c7f1de7e7c094\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3005/api/v1/redeem_services/redeem",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3005",
+                  "path": [
+                    "api",
+                    "v1",
+                    "redeem_services",
+                    "redeem"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OPERATIONS",
+      "item": [
+        {
+          "name": "TRANSFER",
+          "item": [
+            {
+              "name": "• ADMIN",
+              "item": [
+                {
+                  "name": "GET_TRANSFER(ADMIN)",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\"monto\": 50,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"0123456789\",\r\n\"cuenta_destinatoria\": \"9876543210\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/transactions?currency=USD",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "transactions"
+                      ],
+                      "query": [
+                        {
+                          "key": "currency",
+                          "value": "USD"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "CANCEL_TRANSFER(ADMIN)",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/transactions/cancelar/69a7a71e2e7c7f1de7e7c052",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "transactions",
+                        "cancelar",
+                        "69a7a71e2e7c7f1de7e7c052"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "• USER",
+              "item": [
+                {
+                  "name": "ADD_TRANSFER",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\"monto\": 1,\r\n\"tipo_transaccion\": \"TRANSFERENCIA\",\r\n\"cuenta_origen\": \"5451670042\",\r\n\"cuenta_destinatoria\": \"8849074035\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/transactions",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "transactions"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "GET_HISTORY_BY_ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/transactions/account/69a7a39f2e7c7f1de7e7c000?currency=MXN",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "transactions",
+                        "account",
+                        "69a7a39f2e7c7f1de7e7c000"
+                      ],
+                      "query": [
+                        {
+                          "key": "currency",
+                          "value": "MXN"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "WITHDRAWALS",
+          "item": [
+            {
+              "name": "• ADMIN",
+              "item": [
+                {
+                  "name": "GET_ALL_WITHDRAWALS",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/withdrawals",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "withdrawals"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "• USER",
+              "item": [
+                {
+                  "name": "ADD_WITHDRAWALS",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"no_cuenta\": \"8849074035\",\r\n  \"monto\": 1000\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/withdrawals",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "withdrawals"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "GET_HISTORY_BY_ID",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/withdrawals/cuenta/69a7a5442e7c7f1de7e7c023",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "withdrawals",
+                        "cuenta",
+                        "69a7a5442e7c7f1de7e7c023"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DEPOSIT",
+          "item": [
+            {
+              "name": "• ADMIN",
+              "item": [
+                {
+                  "name": "GET_ALL_DEPOSIT(ADMIN)",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/deposits",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "deposits"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "• USER",
+              "item": [
+                {
+                  "name": "ADD_DEPOSIT",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{vault:authorization-secret}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"no_cuenta\": \"5451670042\",\r\n  \"monto\": 500\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/deposits",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "deposits"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "GET_HISTORY_BY_ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "http://localhost:3005/api/v1/deposits/cuenta/69a7a5442e7c7f1de7e7c023",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "3005",
+                      "path": [
+                        "api",
+                        "v1",
+                        "deposits",
+                        "cuenta",
+                        "69a7a5442e7c7f1de7e7c023"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{vault:authorization-secret}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
