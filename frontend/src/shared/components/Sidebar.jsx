@@ -25,6 +25,7 @@ export const Sidebar = () => {
     { to: '/dashboard/transfer', label: 'Transferir', icon: Send },
     { to: '/dashboard/withdrawals', label: 'Retiros', icon: ArrowDownCircle },
     { to: '/dashboard/deposits', label: 'Depósitos', icon: ArrowUpCircle },
+    { to: '/dashboard/history', label: 'Historial', icon: History },
     { to: '/dashboard/services', label: 'Servicios', icon: Gift },
     { to: '/dashboard/redeems', label: 'Mis Canjes', icon: History },
     { to: '/dashboard/favorites', label: 'Favoritos', icon: Star },

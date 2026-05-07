@@ -1,0 +1,185 @@
+import { useEffect, useState } from 'react';
+import { useAccountStore } from '../../accounts/store/useAccountStore';
+import { useTransactionStore } from '../store/useTransactionStore';
+import { 
+  History, 
+  Wallet, 
+  ArrowUpRight, 
+  ArrowDownLeft, 
+  Calendar, 
+  Search,
+  Loader2,
+  FileText,
+  Filter
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+
+export const TransactionHistoryPage = () => {
+  const { accounts, getAccounts } = useAccountStore();
+  const { history, getHistory, isLoading } = useTransactionStore();
+  const [selectedAccountId, setSelectedAccountId] = useState('');
+
+  useEffect(() => {
+    getAccounts();
+  }, [getAccounts]);
+
+  useEffect(() => {
+    if (selectedAccountId) {
+      getHistory(selectedAccountId);
+    }
+  }, [selectedAccountId, getHistory]);
+
+  const selectedAccount = accounts.find(acc => acc._id === selectedAccountId);
+
+  return (
+    <div className="space-y-10">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h1 className="text-4xl font-black text-text-primary tracking-tighter">
+            Historial de <span className="text-primary">Movimientos</span> 📜
+          </h1>
+          <p className="text-text-secondary font-medium mt-2">Consulta el rastro de tus finanzas en tiempo real.</p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="relative group min-w-[280px]">
+            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+              <Wallet className="w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
+            </div>
+            <select
+              value={selectedAccountId}
+              onChange={(e) => setSelectedAccountId(e.target.value)}
+              className="input-field pl-12 cursor-pointer appearance-none"
+            >
+              <option value="">Seleccione una cuenta...</option>
+              {accounts.map(acc => (
+                <option key={acc._id} value={acc._id}>
+                  {acc.accountNumber} - {acc.type}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-text-secondary">
+              <Filter className="w-4 h-4" />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {!selectedAccountId ? (
+        <div className="py-32 flex flex-col items-center justify-center text-center bank-card border-dashed bg-transparent border-2">
+          <div className="w-20 h-20 bg-surface rounded-full flex items-center justify-center mb-6">
+            <History className="w-10 h-10 text-text-secondary/20" />
+          </div>
+          <h3 className="text-xl font-bold text-text-primary mb-2">Seleccione una cuenta para comenzar</h3>
+          <p className="text-text-secondary text-sm max-w-sm">
+            Para visualizar los movimientos, debe elegir una de sus cuentas activas desde el menú superior.
+          </p>
+        </div>
+      ) : isLoading ? (
+        <div className="py-32 flex flex-col items-center justify-center">
+          <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+          <p className="text-text-secondary font-bold uppercase tracking-widest text-xs">Sincronizando movimientos...</p>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          {/* Resumen de la Cuenta */}
+          <div className="bank-card bg-primary-dark text-white border-none flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+              <p className="text-[10px] font-black uppercase text-white/50 tracking-widest mb-1">Cuenta Seleccionada</p>
+              <h3 className="text-2xl font-black tracking-tighter">No. {selectedAccount?.accountNumber}</h3>
+              <p className="text-sm text-white/70 font-medium mt-1">{selectedAccount?.alias || 'Cuenta Personal'}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] font-black uppercase text-white/50 tracking-widest mb-1">Saldo Disponible</p>
+              <h3 className="text-4xl font-black tracking-tighter text-primary-light">Q {selectedAccount?.balance?.toLocaleString()}</h3>
+            </div>
+          </div>
+
+          {/* Tabla de Movimientos */}
+          <div className="bank-card p-0 overflow-hidden shadow-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-surface border-b border-border">
+                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Fecha y Hora</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Tipo</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Descripción</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest text-right">Monto</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {history.map((tx) => (
+                    <tr key={tx._id} className="hover:bg-primary/5 transition-colors group">
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-background border border-border rounded-lg text-text-secondary">
+                            <Calendar className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-text-primary">
+                              {format(new Date(tx.createdAt), "dd 'de' MMMM", { locale: es })}
+                            </p>
+                            <p className="text-[10px] text-text-secondary font-medium">
+                              {format(new Date(tx.createdAt), "hh:mm a")}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                          tx.type === 'DEPOSITO' || (tx.type === 'TRANSFERENCIA' && tx.destinationAccount === selectedAccount.accountNumber)
+                          ? 'bg-green-500/10 text-green-500'
+                          : 'bg-red-500/10 text-red-500'
+                        }`}>
+                          {tx.type === 'DEPOSITO' || (tx.type === 'TRANSFERENCIA' && tx.destinationAccount === selectedAccount.accountNumber) 
+                            ? <ArrowDownLeft className="w-3 h-3" /> 
+                            : <ArrowUpRight className="w-3 h-3" />
+                          }
+                          {tx.type}
+                        </span>
+                      </td>
+                      <td className="px-6 py-5">
+                        <p className="text-sm font-medium text-text-primary max-w-[300px] truncate">
+                          {tx.description || 'Sin descripción'}
+                        </p>
+                        {tx.type === 'TRANSFERENCIA' && (
+                          <p className="text-[10px] text-text-secondary mt-1">
+                            {tx.sourceAccount === selectedAccount.accountNumber 
+                              ? `A: ${tx.destinationAccount}` 
+                              : `De: ${tx.sourceAccount}`}
+                          </p>
+                        )}
+                      </td>
+                      <td className="px-6 py-5 text-right font-black tracking-tighter">
+                        <span className={
+                          tx.type === 'DEPOSITO' || (tx.type === 'TRANSFERENCIA' && tx.destinationAccount === selectedAccount.accountNumber)
+                          ? 'text-green-500'
+                          : 'text-text-primary'
+                        }>
+                          {tx.type === 'DEPOSITO' || (tx.type === 'TRANSFERENCIA' && tx.destinationAccount === selectedAccount.accountNumber) ? '+' : '-'}
+                          Q {tx.amount?.toLocaleString()}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+
+                  {history.length === 0 && (
+                    <tr>
+                      <td colSpan="4" className="px-6 py-20 text-center">
+                        <div className="flex flex-col items-center">
+                          <FileText className="w-12 h-12 text-text-secondary/20 mb-4" />
+                          <p className="text-sm font-bold text-text-secondary uppercase tracking-widest">No hay movimientos registrados</p>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

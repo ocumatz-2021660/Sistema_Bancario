@@ -13,6 +13,12 @@ import { ResetPasswordPage } from '../../features/auth/pages/ResetPasswordPage';
 import { DashboardIndex } from '../../features/accounts/pages/DashboardIndex';
 import { MyAccountsPage } from '../../features/accounts/pages/MyAccountsPage';
 import { CreateAccountPage } from '../../features/accounts/pages/CreateAccountPage';
+
+// Transactions Pages
+import { TransferPage } from '../../features/transactions/pages/TransferPage';
+import { DepositWithdrawalPage } from '../../features/transactions/pages/DepositWithdrawalPage';
+import { TransactionHistoryPage } from '../../features/transactions/pages/TransactionHistoryPage';
+
 const Placeholder = ({ name }) => (
   <div className="bank-card">
     <h2 className="text-2xl mb-4">{name}</h2>
@@ -39,9 +45,11 @@ export const router = createBrowserRouter([
       { path: 'profile', element: <Placeholder name="Profile Page" /> },
       { path: 'accounts', element: <MyAccountsPage /> },
       { path: 'accounts/new', element: <CreateAccountPage /> },
-      { path: 'transfer', element: <Placeholder name="Transfer Page" /> },
-      { path: 'withdrawals', element: <Placeholder name="Withdrawals Page" /> },
-      { path: 'deposits', element: <Placeholder name="Deposits Page" /> },
+      { path: 'transfer', element: <TransferPage /> },
+      { path: 'withdrawals', element: <DepositWithdrawalPage /> },
+      { path: 'deposits', element: <DepositWithdrawalPage /> },
+      { path: 'history', element: <TransactionHistoryPage /> },
+      { path: 'history/:accountId', element: <TransactionHistoryPage /> },
       { path: 'services', element: <Placeholder name="Services Page" /> },
       { path: 'redeems', element: <Placeholder name="My Redeems" /> },
       { path: 'favorites', element: <Placeholder name="Favorites" /> },
