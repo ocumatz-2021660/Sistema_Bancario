@@ -44,7 +44,7 @@ export const DashboardLayout = () => {
                   {user?.name} {user?.surname}
                 </p>
                 <p className="text-[10px] font-black text-primary uppercase tracking-widest">
-                  {role === 'ADMIN_ROLE' ? 'Administrador' : 'Cliente Platinum'}
+                  {role === 'ADMIN_ROLE' ? 'Administrador' : `@${user?.username}`}
                 </p>
               </div>
               <UserAvatar src={user?.profilePicture} className="w-10 h-10 border border-primary/20" />

@@ -12,9 +12,7 @@ import {
   PieChart, 
   Pie, 
   Cell,
-  Legend,
-  LineChart,
-  Line
+  Legend
 } from 'recharts';
 import { 
   TrendingUp, 
@@ -35,8 +33,11 @@ export const AdminReportsPage = () => {
   useEffect(() => {
     getAllUsers();
     getAccountRequests();
-    // En el futuro getAllAccounts si el admin tiene acceso global
-  }, [getAllUsers, getAccountRequests]);
+    getAllAccounts();
+  }, [getAllUsers, getAccountRequests, getAllAccounts]);
+
+  // Cuentas activas reales desde la API
+  const cuentasActivas = accounts.filter(a => a.status === true || a.isActive === true).length;
 
   // Datos para gráfico de roles
   const rolesData = [
@@ -48,9 +49,9 @@ export const AdminReportsPage = () => {
 
   // Datos para solicitudes
   const requestsData = [
-    { name: 'Pendientes', value: requests.filter(r => r.status === 'PENDIENTE').length },
-    { name: 'Aprobadas', value: requests.filter(r => r.status === 'APROBADA').length },
-    { name: 'Rechazadas', value: requests.filter(r => r.status === 'RECHAZADA').length },
+    { name: 'Pendientes',  value: requests.filter(r => r.status === 'PENDIENTE').length },
+    { name: 'Aprobadas',   value: requests.filter(r => r.status === 'APROBADA').length },
+    { name: 'Rechazadas',  value: requests.filter(r => r.status === 'RECHAZADA').length },
   ];
 
   const StatCard = ({ title, value, icon: Icon, trend, color }) => (
@@ -72,8 +73,11 @@ export const AdminReportsPage = () => {
   return (
     <div className="space-y-10">
       <header>
-        <h1 className="text-4xl font-black text-text-primary tracking-tighter">
-          Panel de <span className="text-primary">Analíticas</span> 📈
+        <h1 className="text-4xl font-black text-text-primary tracking-tighter flex items-center gap-3">
+          Panel de <span className="text-primary">Analíticas</span>
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+            <TrendingUp className="w-6 h-6 text-primary" />
+          </span>
         </h1>
         <p className="text-text-secondary font-medium mt-2">Visión global del rendimiento y crecimiento institucional.</p>
       </header>
@@ -85,7 +89,7 @@ export const AdminReportsPage = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <StatCard 
               title="Total Usuarios" 
               value={users.length} 
@@ -102,17 +106,10 @@ export const AdminReportsPage = () => {
             />
             <StatCard 
               title="Cuentas Activas" 
-              value="156" 
+              value={cuentasActivas} 
               icon={Wallet} 
               trend={24} 
               color="bg-[#40916c]" 
-            />
-            <StatCard 
-              title="Capital Global" 
-              value="Q 1.2M" 
-              icon={TrendingUp} 
-              trend={8} 
-              color="bg-[#52b788]" 
             />
           </div>
 
@@ -150,7 +147,7 @@ export const AdminReportsPage = () => {
               </div>
             </div>
 
-            {/* Estado de Solicitudes */}
+            {/* Flujo de Solicitudes */}
             <div className="bank-card">
               <div className="flex items-center gap-3 mb-10">
                 <div className="p-2 bg-primary/10 text-primary rounded-lg">

@@ -39,8 +39,11 @@ export const AccountRequestsPage = () => {
   return (
     <div className="space-y-10">
       <header>
-        <h1 className="text-4xl font-black text-text-primary tracking-tighter">
-          Solicitudes de <span className="text-primary">Cuenta</span> 📋
+        <h1 className="text-4xl font-black text-text-primary tracking-tighter flex items-center gap-3">
+          Solicitudes de <span className="text-primary">Cuenta</span>
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+            <FileText className="w-6 h-6 text-primary" />
+          </span>
         </h1>
         <p className="text-text-secondary font-medium mt-2">Revisa y autoriza las nuevas solicitudes de productos financieros.</p>
       </header>
