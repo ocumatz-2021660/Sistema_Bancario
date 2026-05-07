@@ -6,22 +6,24 @@ export const useAdminStore = create((set) => ({
   requests: [],
   isLoading: false,
 
-  // --- GESTIÓN DE USUARIOS ---
-  getAllUsers: async () => {
+  // ── USUARIOS ──────────────────────────────────────────────────────────
+  getAllUsers: async (page = 1, limit = 50) => {
     set({ isLoading: true });
     try {
-      const response = await api.get('/users');
-      set({ users: response.data.data || response.data, isLoading: false });
+      const response = await api.get('/users', { params: { page, limit } });
+      const raw = response.data.data || response.data;
+      set({ users: Array.isArray(raw) ? raw : [], isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       console.error('Error fetching users:', error);
     }
   },
 
-  updateUserStatus: async (userId, status) => {
+  // PUT /users/:userId/status  → body: { isActive: boolean }
+  updateUserStatus: async (userId, isActive) => {
     set({ isLoading: true });
     try {
-      const response = await api.put(`/users/${userId}/status`, { status });
+      const response = await api.put(`/users/${userId}/status`, { isActive });
       set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
@@ -30,6 +32,7 @@ export const useAdminStore = create((set) => ({
     }
   },
 
+  // PUT /users/:userId/role  → body: { roleName: 'ADMIN_ROLE' | 'USER_ROLE' }
   updateUserRole: async (userId, roleName) => {
     set({ isLoading: true });
     try {
@@ -42,12 +45,14 @@ export const useAdminStore = create((set) => ({
     }
   },
 
-  // --- SOLICITUDES DE CUENTA ---
-  getAccountRequests: async () => {
+  // ── SOLICITUDES DE CUENTA ─────────────────────────────────────────────
+  getAccountRequests: async (estado = '') => {
     set({ isLoading: true });
     try {
-      const response = await api.get('/request_accounts');
-      set({ requests: response.data.data || response.data, isLoading: false });
+      const params = estado ? { estado_solicitud: estado } : {};
+      const response = await api.get('/request_accounts', { params });
+      const raw = response.data.data || response.data;
+      set({ requests: Array.isArray(raw) ? raw : [], isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       console.error('Error fetching requests:', error);
@@ -76,5 +81,5 @@ export const useAdminStore = create((set) => ({
       set({ isLoading: false });
       return { success: false, error: error.response?.data?.message || 'Error al rechazar' };
     }
-  }
+  },
 }));

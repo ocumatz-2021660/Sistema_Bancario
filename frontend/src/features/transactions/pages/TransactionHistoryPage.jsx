@@ -8,10 +8,10 @@ import {
   ArrowUpRight, 
   ArrowDownLeft, 
   Calendar, 
-  Search,
   Loader2,
   FileText,
-  Filter
+  Filter,
+  RefreshCw
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -36,17 +36,29 @@ export const TransactionHistoryPage = () => {
 
   const selectedAccount = accounts.find(acc => acc._id === selectedAccountId);
 
+  const isIncoming = (tx) => {
+    if (tx.type === 'DEPOSITO') return true;
+    if (tx.type === 'TRANSFERENCIA') {
+      // destinationAccount es el no_cuenta del destino
+      return tx.destinationAccount === selectedAccount?.accountNumber;
+    }
+    return false;
+  };
+
   return (
     <div className="space-y-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black text-text-primary tracking-tighter">
-            Historial de <span className="text-primary">Movimientos</span> 📜
+            Historial de <span className="text-primary">Movimientos</span>
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 ml-3">
+              <History className="w-6 h-6 text-primary" />
+            </span>
           </h1>
           <p className="text-text-secondary font-medium mt-2">Consulta el rastro de tus finanzas en tiempo real.</p>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <div className="relative group min-w-[280px]">
             <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
               <Wallet className="w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
@@ -59,7 +71,7 @@ export const TransactionHistoryPage = () => {
               <option value="">Seleccione una cuenta...</option>
               {accounts.map(acc => (
                 <option key={acc._id} value={acc._id}>
-                  {acc.accountNumber} - {acc.type}
+                  {acc.accountNumber} — {acc.type}
                 </option>
               ))}
             </select>
@@ -67,6 +79,15 @@ export const TransactionHistoryPage = () => {
               <Filter className="w-4 h-4" />
             </div>
           </div>
+          {selectedAccountId && (
+            <button
+              onClick={() => getHistory(selectedAccountId)}
+              className="p-3 bg-surface border border-border rounded-xl text-text-secondary hover:text-primary hover:border-primary transition-all"
+              title="Actualizar"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </header>
 
@@ -77,7 +98,7 @@ export const TransactionHistoryPage = () => {
           </div>
           <h3 className="text-xl font-bold text-text-primary mb-2">Seleccione una cuenta para comenzar</h3>
           <p className="text-text-secondary text-sm max-w-sm">
-            Para visualizar los movimientos, debe elegir una de sus cuentas activas desde el menú superior.
+            Para visualizar los movimientos, elija una de sus cuentas activas desde el menú superior.
           </p>
         </div>
       ) : isLoading ? (
@@ -92,13 +113,22 @@ export const TransactionHistoryPage = () => {
             <div>
               <p className="text-[10px] font-black uppercase text-white/50 tracking-widest mb-1">Cuenta Seleccionada</p>
               <h3 className="text-2xl font-black tracking-tighter">No. {selectedAccount?.accountNumber}</h3>
-              <p className="text-sm text-white/70 font-medium mt-1">{selectedAccount?.alias || 'Cuenta Personal'}</p>
+              <p className="text-sm text-white/70 font-medium mt-1">{selectedAccount?.alias || selectedAccount?.type || 'Cuenta Personal'}</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-black uppercase text-white/50 tracking-widest mb-1">Saldo Disponible</p>
-              <h3 className="text-4xl font-black tracking-tighter text-primary-light">Q {selectedAccount?.balance?.toLocaleString()}</h3>
+              <h3 className="text-4xl font-black tracking-tighter text-primary-light">
+                Q {selectedAccount?.balance?.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+              </h3>
             </div>
           </div>
+
+          {/* Nota: el backend devuelve las últimas 5 transacciones */}
+          {history.length > 0 && (
+            <p className="text-[10px] font-bold text-text-secondary uppercase tracking-widest text-right">
+              Mostrando los últimos {history.length} movimiento{history.length !== 1 ? 's' : ''}
+            </p>
+          )}
 
           {/* Tabla de Movimientos */}
           <div className="bank-card p-0 overflow-hidden shadow-xl">
@@ -108,65 +138,61 @@ export const TransactionHistoryPage = () => {
                   <tr className="bg-surface border-b border-border">
                     <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Fecha y Hora</th>
                     <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Tipo</th>
-                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Descripción</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Detalle</th>
                     <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest text-right">Monto</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {history.map((tx) => (
-                    <tr key={tx._id} className="hover:bg-primary/5 transition-colors group">
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-background border border-border rounded-lg text-text-secondary">
-                            <Calendar className="w-4 h-4" />
+                  {history.map((tx) => {
+                    const incoming = isIncoming(tx);
+                    return (
+                      <tr key={tx._id} className="hover:bg-primary/5 transition-colors group">
+                        <td className="px-6 py-5">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-background border border-border rounded-lg text-text-secondary">
+                              <Calendar className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-text-primary">
+                                {format(new Date(tx.createdAt), "dd 'de' MMMM", { locale: es })}
+                              </p>
+                              <p className="text-[10px] text-text-secondary font-medium">
+                                {format(new Date(tx.createdAt), "hh:mm a")}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-sm font-bold text-text-primary">
-                              {format(new Date(tx.createdAt), "dd 'de' MMMM", { locale: es })}
+                        </td>
+                        <td className="px-6 py-5">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                            incoming ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'
+                          }`}>
+                            {incoming ? <ArrowDownLeft className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
+                            {tx.type}
+                          </span>
+                        </td>
+                        <td className="px-6 py-5">
+                          {tx.type === 'TRANSFERENCIA' && (
+                            <p className="text-xs font-medium text-text-secondary">
+                              {incoming
+                                ? `Desde: ${tx.sourceAccount || '—'}`
+                                : `Hacia: ${tx.destinationAccount || '—'}`}
                             </p>
-                            <p className="text-[10px] text-text-secondary font-medium">
-                              {format(new Date(tx.createdAt), "hh:mm a")}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-5">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                          tx.type === 'DEPOSITO' || (tx.type === 'TRANSFERENCIA' && tx.destinationAccount === selectedAccount.accountNumber)
-                          ? 'bg-green-500/10 text-green-500'
-                          : 'bg-red-500/10 text-red-500'
-                        }`}>
-                          {tx.type === 'DEPOSITO' || (tx.type === 'TRANSFERENCIA' && tx.destinationAccount === selectedAccount.accountNumber) 
-                            ? <ArrowDownLeft className="w-3 h-3" /> 
-                            : <ArrowUpRight className="w-3 h-3" />
-                          }
-                          {tx.type}
-                        </span>
-                      </td>
-                      <td className="px-6 py-5">
-                        <p className="text-sm font-medium text-text-primary max-w-[300px] truncate">
-                          {tx.description || 'Sin descripción'}
-                        </p>
-                        {tx.type === 'TRANSFERENCIA' && (
-                          <p className="text-[10px] text-text-secondary mt-1">
-                            {tx.sourceAccount === selectedAccount.accountNumber 
-                              ? `A: ${tx.destinationAccount}` 
-                              : `De: ${tx.sourceAccount}`}
-                          </p>
-                        )}
-                      </td>
-                      <td className="px-6 py-5 text-right font-black tracking-tighter">
-                        <span className={
-                          tx.type === 'DEPOSITO' || (tx.type === 'TRANSFERENCIA' && tx.destinationAccount === selectedAccount.accountNumber)
-                          ? 'text-green-500'
-                          : 'text-text-primary'
-                        }>
-                          {tx.type === 'DEPOSITO' || (tx.type === 'TRANSFERENCIA' && tx.destinationAccount === selectedAccount.accountNumber) ? '+' : '-'}
-                          Q {tx.amount?.toLocaleString()}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                          )}
+                          {tx.type === 'DEPOSITO' && (
+                            <p className="text-xs font-medium text-text-secondary">Depósito en efectivo</p>
+                          )}
+                          {tx.description && (
+                            <p className="text-xs text-text-secondary/60 mt-0.5 truncate max-w-[220px]">{tx.description}</p>
+                          )}
+                        </td>
+                        <td className="px-6 py-5 text-right font-black tracking-tighter">
+                          <span className={incoming ? 'text-green-500' : 'text-red-500'}>
+                            {incoming ? '+' : '-'}Q {tx.amount?.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
 
                   {history.length === 0 && (
                     <tr>

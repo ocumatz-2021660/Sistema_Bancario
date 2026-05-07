@@ -1,84 +1,110 @@
 import { create } from 'zustand';
 import api from '../../../shared/api/axios';
 
-export const useTransactionStore = create((set, get) => ({
+const mapTransaction = (tx) => ({
+  ...tx,
+  type: tx.tipo_transaccion,
+  amount: tx.monto,
+  // cuenta_origen y cuenta_destinataria pueden ser objetos (populados) o strings
+  sourceAccount: tx.cuenta_origen?.no_cuenta || tx.cuenta_origen || null,
+  destinationAccount: tx.cuenta_destinatoria?.no_cuenta || tx.cuenta_destinatoria || null,
+  description: tx.descripcion || null,
+});
+
+export const useTransactionStore = create((set) => ({
   history: [],
+  deposits: [],
+  withdrawals: [],
   isLoading: false,
 
-  // Realizar Transferencia
+  // ── TRANSFERENCIA: POST /transactions ─────────────────────────────────
   transfer: async (data) => {
     set({ isLoading: true });
     try {
       const payload = {
         monto: parseFloat(data.amount),
         tipo_transaccion: 'TRANSFERENCIA',
-        cuenta_origen: data.sourceAccountNumber, // Necesitamos el número, no el ID
+        cuenta_origen: data.sourceAccountNumber,
         cuenta_destinatoria: data.destinationAccount,
-        descripcion: data.description || 'Transferencia desde banca en línea'
       };
       const response = await api.post('/transactions', payload);
       set({ isLoading: false });
-      return { success: true, message: response.data.message };
+      return { success: true, message: response.data.message, data: response.data.data };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error en transferencia' };
+      return { success: false, error: error.response?.data?.message || 'Error en la transferencia' };
     }
   },
 
-  // Realizar Depósito
+  // ── DEPÓSITO: POST /deposits ───────────────────────────────────────────
   deposit: async (data) => {
     set({ isLoading: true });
     try {
       const payload = {
         no_cuenta: data.accountNumber,
-        monto: parseFloat(data.amount)
+        monto: parseFloat(data.amount),
       };
       const response = await api.post('/deposits', payload);
       set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error en depósito' };
+      return { success: false, error: error.response?.data?.message || 'Error en el depósito' };
     }
   },
 
-  // Realizar Retiro
+  // ── RETIRO: POST /withdrawals ──────────────────────────────────────────
   withdraw: async (data) => {
     set({ isLoading: true });
     try {
       const payload = {
         no_cuenta: data.accountNumber,
-        monto: parseFloat(data.amount)
+        monto: parseFloat(data.amount),
       };
       const response = await api.post('/withdrawals', payload);
       set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error en retiro' };
+      return { success: false, error: error.response?.data?.message || 'Error en el retiro' };
     }
   },
 
-  // Obtener Historial de una cuenta (Últimas 5 según backend)
+  // ── HISTORIAL DE TRANSACCIONES: GET /transactions/account/:id ─────────
   getHistory: async (accountId) => {
     set({ isLoading: true });
     try {
       const response = await api.get(`/transactions/account/${accountId}`);
-      const rawHistory = response.data.data || response.data;
-      
-      const mappedHistory = (Array.isArray(rawHistory) ? rawHistory : []).map(tx => ({
-        ...tx,
-        type: tx.tipo_transaccion,
-        amount: tx.monto,
-        description: tx.descripcion || (tx.tipo_transaccion === 'TRANSFERENCIA' ? 'Transferencia Bancaria' : 'Depósito en Efectivo'),
-        sourceAccount: tx.cuenta_origen?.accountNumber,
-        destinationAccount: tx.cuenta_destinatoria?.accountNumber
-      }));
-
-      set({ history: mappedHistory, isLoading: false });
+      const raw = response.data.data || response.data;
+      const mapped = (Array.isArray(raw) ? raw : []).map(mapTransaction);
+      set({ history: mapped, isLoading: false });
     } catch (error) {
-      set({ isLoading: false });
-      console.error('Error fetching history:', error);
+      set({ isLoading: false, history: [] });
+      console.error('Error fetching transaction history:', error);
     }
-  }
+  },
+
+  // ── HISTORIAL DE DEPÓSITOS: GET /deposits/cuenta/:id ──────────────────
+  getDepositHistory: async (accountId) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.get(`/deposits/cuenta/${accountId}`);
+      const raw = response.data.data || response.data;
+      set({ deposits: Array.isArray(raw) ? raw : [], isLoading: false });
+    } catch (error) {
+      set({ isLoading: false, deposits: [] });
+    }
+  },
+
+  // ── HISTORIAL DE RETIROS: GET /withdrawals/cuenta/:id ─────────────────
+  getWithdrawalHistory: async (accountId) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.get(`/withdrawals/cuenta/${accountId}`);
+      const raw = response.data.data || response.data;
+      set({ withdrawals: Array.isArray(raw) ? raw : [], isLoading: false });
+    } catch (error) {
+      set({ isLoading: false, withdrawals: [] });
+    }
+  },
 }));

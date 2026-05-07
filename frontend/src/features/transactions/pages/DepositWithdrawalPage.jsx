@@ -10,7 +10,8 @@ import {
   Wallet, 
   Loader2, 
   AlertCircle,
-  Landmark
+  Landmark,
+  Banknote
 } from 'lucide-react';
 
 export const DepositWithdrawalPage = () => {
@@ -49,7 +50,8 @@ export const DepositWithdrawalPage = () => {
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black text-text-primary tracking-tighter">
-            Depósitos y <span className="text-primary">Retiros</span> 🏧
+            Depósitos y <span className="text-primary">Retiros</span>
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10"><Banknote className="w-6 h-6 text-primary" /></span>
           </h1>
           <p className="text-text-secondary font-medium mt-2">Gestiona el efectivo de tus cuentas institucionales.</p>
         </div>

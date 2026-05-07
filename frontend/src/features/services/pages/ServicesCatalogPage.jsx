@@ -14,7 +14,8 @@ import {
   CheckCircle2, 
   X,
   CreditCard,
-  AlertCircle
+  AlertCircle,
+  ShoppingBag
 } from 'lucide-react';
 
 export const ServicesCatalogPage = () => {
@@ -74,7 +75,8 @@ export const ServicesCatalogPage = () => {
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black text-text-primary tracking-tighter">
-            Pagos y <span className="text-primary">Servicios</span> ⚡
+            Pagos y <span className="text-primary">Servicios</span>
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10"><ShoppingBag className="w-6 h-6 text-primary" /></span>
           </h1>
           <p className="text-text-secondary font-medium mt-2">Paga tus facturas y canjea beneficios institucionales.</p>
         </div>

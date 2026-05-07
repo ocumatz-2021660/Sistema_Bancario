@@ -12,7 +12,8 @@ import {
   MessageSquare, 
   Loader2, 
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  ArrowLeftRight
 } from 'lucide-react';
 
 export const TransferPage = () => {
@@ -52,7 +53,8 @@ export const TransferPage = () => {
     <div className="max-w-[1000px] mx-auto space-y-10">
       <header>
         <h1 className="text-4xl font-black text-text-primary tracking-tighter">
-          Transferir <span className="text-primary">Fondos</span> 💸
+          Transferir <span className="text-primary">Fondos</span>
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10"><ArrowLeftRight className="w-6 h-6 text-primary" /></span>
         </h1>
         <p className="text-text-secondary font-medium mt-2">Mueve dinero de forma segura a cualquier cuenta.</p>
       </header>
