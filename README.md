@@ -114,10 +114,10 @@ Sistema_Bancario/
 - [x] Fase 1: Arquitectura Base y Diseño de Identidad.
 - [x] Fase 2: Auth Flow completo (Registro/Login/Verificación).
 - [x] Fase 3: Dashboard y Gestión de Cuentas.
-- [ ] Fase 4: Operaciones Bancarias (Transferencias y Saldo).
-- [ ] Fase 5: Servicios y Sistema de Canjes.
-- [ ] Fase 6: Panel Administrativo y Reportes.
-- [ ] Fase 7: Optimización y Pulido Final.
+- [x] Fase 4: Operaciones Bancarias (Transferencias y Saldo).
+- [x] Fase 5: Servicios y Sistema de Canjes.
+- [x] Fase 6: Panel Administrativo y Reportes.
+- [x] Fase 7: Optimización y Pulido Final.
 
 ---
 

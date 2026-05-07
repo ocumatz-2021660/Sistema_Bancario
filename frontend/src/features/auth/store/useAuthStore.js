@@ -51,6 +51,33 @@ export const useAuthStore = create(
         }
       },
 
+      // Profile methods
+      getProfile: async () => {
+        set({ isLoading: true });
+        try {
+          const response = await api.get('/auth/profile');
+          set({ user: response.data.data || response.data, isLoading: false });
+          return { success: true };
+        } catch (error) {
+          set({ isLoading: false });
+          return { success: false, error: error.response?.data?.message };
+        }
+      },
+
+      updateProfile: async (formData) => {
+        set({ isLoading: true });
+        try {
+          const response = await api.put('/auth/profile', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          });
+          set({ user: response.data.data || response.data, isLoading: false });
+          return { success: true, message: response.data.message };
+        } catch (error) {
+          set({ isLoading: false });
+          return { success: false, error: error.response?.data?.message };
+        }
+      },
+
       logout: () => {
         set({ user: null, token: null, role: null, isAuthenticated: false });
         localStorage.removeItem('auth-storage');

@@ -19,6 +19,18 @@ import { TransferPage } from '../../features/transactions/pages/TransferPage';
 import { DepositWithdrawalPage } from '../../features/transactions/pages/DepositWithdrawalPage';
 import { TransactionHistoryPage } from '../../features/transactions/pages/TransactionHistoryPage';
 
+// Services Pages
+import { ServicesCatalogPage } from '../../features/services/pages/ServicesCatalogPage';
+import { MyRedeemsPage } from '../../features/services/pages/MyRedeemsPage';
+
+// Admin Pages
+import { UsersManagementPage } from '../../features/admin/pages/UsersManagementPage';
+import { AccountRequestsPage } from '../../features/admin/pages/AccountRequestsPage';
+import { AdminReportsPage } from '../../features/admin/pages/AdminReportsPage';
+
+// Profile Page
+import { ProfilePage } from '../../features/profile/pages/ProfilePage';
+
 const Placeholder = ({ name }) => (
   <div className="bank-card">
     <h2 className="text-2xl mb-4">{name}</h2>
@@ -42,7 +54,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <DashboardIndex /> },
-      { path: 'profile', element: <Placeholder name="Profile Page" /> },
+      { path: 'profile', element: <ProfilePage /> },
       { path: 'accounts', element: <MyAccountsPage /> },
       { path: 'accounts/new', element: <CreateAccountPage /> },
       { path: 'transfer', element: <TransferPage /> },
@@ -50,8 +62,8 @@ export const router = createBrowserRouter([
       { path: 'deposits', element: <DepositWithdrawalPage /> },
       { path: 'history', element: <TransactionHistoryPage /> },
       { path: 'history/:accountId', element: <TransactionHistoryPage /> },
-      { path: 'services', element: <Placeholder name="Services Page" /> },
-      { path: 'redeems', element: <Placeholder name="My Redeems" /> },
+      { path: 'services', element: <ServicesCatalogPage /> },
+      { path: 'redeems', element: <MyRedeemsPage /> },
       { path: 'favorites', element: <Placeholder name="Favorites" /> },
       
       // Admin only routes
@@ -59,7 +71,7 @@ export const router = createBrowserRouter([
         path: 'admin/users', 
         element: (
           <ProtectedRoute allowedRoles={['ADMIN_ROLE']}>
-            <Placeholder name="Users Management" />
+            <UsersManagementPage />
           </ProtectedRoute>
         ) 
       },
@@ -67,7 +79,7 @@ export const router = createBrowserRouter([
         path: 'admin/requests', 
         element: (
           <ProtectedRoute allowedRoles={['ADMIN_ROLE']}>
-            <Placeholder name="Account Requests" />
+            <AccountRequestsPage />
           </ProtectedRoute>
         ) 
       },
@@ -91,7 +103,7 @@ export const router = createBrowserRouter([
         path: 'admin/reports', 
         element: (
           <ProtectedRoute allowedRoles={['ADMIN_ROLE']}>
-            <Placeholder name="Reports" />
+            <AdminReportsPage />
           </ProtectedRoute>
         ) 
       },
