@@ -4,8 +4,6 @@ import api from '../../../shared/api/axios';
 export const useTransactionStore = create((set, get) => ({
   history: [],
   isLoading: false,
-  error: null,
-  lastFetch: {},
 
   // Realizar Transferencia
   transfer: async (data) => {
@@ -63,9 +61,7 @@ export const useTransactionStore = create((set, get) => ({
 
   // Obtener Historial de una cuenta (Últimas 5 según backend)
   getHistory: async (accountId) => {
-    const now = Date.now();
-    if (get().isLoading || get().error || (get().lastFetch.history && now - get().lastFetch.history < 5000)) return;
-    set({ isLoading: true, error: null });
+    set({ isLoading: true });
     try {
       const response = await api.get(`/transactions/account/${accountId}`);
       const rawHistory = response.data.data || response.data;
@@ -79,9 +75,9 @@ export const useTransactionStore = create((set, get) => ({
         destinationAccount: tx.cuenta_destinatoria?.accountNumber
       }));
 
-      set({ history: mappedHistory, isLoading: false, lastFetch: { ...get().lastFetch, history: Date.now() } });
+      set({ history: mappedHistory, isLoading: false });
     } catch (error) {
-      set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener historial' });
+      set({ isLoading: false });
       console.error('Error fetching history:', error);
     }
   }

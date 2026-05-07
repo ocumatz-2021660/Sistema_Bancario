@@ -143,7 +143,7 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
       try {
         const [usuariosRes, pendientesRes, transRes] = await Promise.allSettled([
-          api.get('/users?limit=1'),
+          api.get('/usuarios?limit=1'),
           api.get('/request_accounts?estado_solicitud=PENDIENTE&limit=1'),
           api.get('/transactions?limit=1'),
         ]);

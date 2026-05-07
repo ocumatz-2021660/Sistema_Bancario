@@ -1,23 +1,19 @@
 import { create } from 'zustand';
 import api from '../../../shared/api/axios';
 
-export const useAdminStore = create((set, get) => ({
+export const useAdminStore = create((set) => ({
   users: [],
   requests: [],
   isLoading: false,
-  error: null,
-  lastFetch: {},
 
   // --- GESTIÓN DE USUARIOS ---
   getAllUsers: async () => {
-    const now = Date.now();
-    if (get().isLoading || get().error || (get().lastFetch.users && now - get().lastFetch.users < 5000)) return;
-    set({ isLoading: true, error: null });
+    set({ isLoading: true });
     try {
       const response = await api.get('/users');
-      set({ users: response.data.data || response.data, isLoading: false, lastFetch: { ...get().lastFetch, users: Date.now() } });
+      set({ users: response.data.data || response.data, isLoading: false });
     } catch (error) {
-      set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener usuarios' });
+      set({ isLoading: false });
       console.error('Error fetching users:', error);
     }
   },
@@ -48,26 +44,12 @@ export const useAdminStore = create((set, get) => ({
 
   // --- SOLICITUDES DE CUENTA ---
   getAccountRequests: async () => {
-    const now = Date.now();
-    if (get().isLoading || get().error || (get().lastFetch.requests && now - get().lastFetch.requests < 5000)) return;
-    set({ isLoading: true, error: null });
+    set({ isLoading: true });
     try {
-      const response = await api.get('/request_accounts/');
-      const raw = response.data.data || response.data;
-      const mapped = (Array.isArray(raw) ? raw : []).map(req => ({
-        ...req,
-        status: req.estado_solicitud,
-        type: req.cuenta?.tipo_cuenta,
-        initialBalance: req.cuenta?.saldo,
-        user: req.cuenta?.usuario_cuenta ? {
-          name: req.cuenta.usuario_cuenta.Name,
-          surname: req.cuenta.usuario_cuenta.Surname,
-          username: req.cuenta.usuario_cuenta.Username
-        } : null
-      }));
-      set({ requests: mapped, isLoading: false, lastFetch: { ...get().lastFetch, requests: Date.now() } });
+      const response = await api.get('/request_accounts');
+      set({ requests: response.data.data || response.data, isLoading: false });
     } catch (error) {
-      set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener solicitudes' });
+      set({ isLoading: false });
       console.error('Error fetching requests:', error);
     }
   },

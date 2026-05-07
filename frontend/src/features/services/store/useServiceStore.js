@@ -1,17 +1,14 @@
 import { create } from 'zustand';
 import api from '../../../shared/api/axios';
 
-export const useServiceStore = create((set, get) => ({
+export const useServiceStore = create((set) => ({
   services: [],
   redeems: [],
   isLoading: false,
   error: null,
-  lastFetch: {},
 
   // Obtener catálogo de servicios
   getServices: async () => {
-    const now = Date.now();
-    if (get().isLoading || get().error || (get().lastFetch.services && now - get().lastFetch.services < 5000)) return;
     set({ isLoading: true, error: null });
     try {
       const response = await api.get('/services');
@@ -25,7 +22,7 @@ export const useServiceStore = create((set, get) => ({
         points: s.puntos_requeridos || s.points
       }));
 
-      set({ services: mappedServices, isLoading: false, lastFetch: { ...get().lastFetch, services: Date.now() } });
+      set({ services: mappedServices, isLoading: false });
     } catch (error) {
       set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener servicios' });
       console.error('Error fetching services:', error);
@@ -51,9 +48,7 @@ export const useServiceStore = create((set, get) => ({
 
   // Obtener historial de canjes de una cuenta
   getRedeems: async (accountId) => {
-    const now = Date.now();
-    if (get().isLoading || get().error || (get().lastFetch.redeems && now - get().lastFetch.redeems < 5000)) return;
-    set({ isLoading: true, error: null });
+    set({ isLoading: true });
     try {
       const response = await api.get(`/redeem_services/${accountId}`);
       const rawRedeems = response.data.data || response.data;
@@ -67,9 +62,9 @@ export const useServiceStore = create((set, get) => ({
         date: r.createdAt
       }));
 
-      set({ redeems: mappedRedeems, isLoading: false, lastFetch: { ...get().lastFetch, redeems: Date.now() } });
+      set({ redeems: mappedRedeems, isLoading: false });
     } catch (error) {
-      set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener canjes' });
+      set({ isLoading: false });
       console.error('Error fetching redeems:', error);
     }
   },

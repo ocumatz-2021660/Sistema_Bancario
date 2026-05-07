@@ -17,15 +17,13 @@ import {
 import { UserAvatar } from '../../../shared/components/UserAvatar';
 
 export const UsersManagementPage = () => {
-  const { users, getAllUsers, updateUserStatus, updateUserRole, isLoading, error } = useAdminStore();
+  const { users, getAllUsers, updateUserStatus, updateUserRole, isLoading } = useAdminStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('ALL');
 
   useEffect(() => {
-    if (users.length === 0 && !isLoading && !error) {
-      getAllUsers();
-    }
-  }, [getAllUsers, users.length, isLoading, error]);
+    getAllUsers();
+  }, [getAllUsers]);
 
   const handleStatusToggle = async (user) => {
     const newStatus = !user.status;

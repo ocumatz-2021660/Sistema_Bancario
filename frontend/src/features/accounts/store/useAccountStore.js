@@ -7,11 +7,8 @@ export const useAccountStore = create((set, get) => ({
   favorites: [],
   isLoading: false,
   error: null,
-  lastFetch: {},
 
   searchFavorites: async () => {
-    const now = Date.now();
-    if (get().isLoading || get().error || (get().lastFetch.favorites && now - get().lastFetch.favorites < 5000)) return;
     set({ isLoading: true, error: null });
     try {
       const response = await api.get('/cuentas/buscar/favoritos');
@@ -33,7 +30,7 @@ export const useAccountStore = create((set, get) => ({
           } : null
         };
       });
-      set({ favorites: mapped, isLoading: false, lastFetch: { ...get().lastFetch, favorites: Date.now() } });
+      set({ favorites: mapped, isLoading: false });
     } catch (error) {
       set({ isLoading: false, error: error.response?.data?.message || 'Error al buscar favoritos' });
     }
@@ -41,8 +38,7 @@ export const useAccountStore = create((set, get) => ({
 
   // Para usuarios normales: obtiene las cuentas del usuario autenticado
   getAccounts: async (userId) => {
-    const now = Date.now();
-    if (!userId || get().isLoading || get().error || (get().lastFetch.accounts && now - get().lastFetch.accounts < 5000)) return;
+    if (!userId) return;
     set({ isLoading: true, error: null });
     try {
       const response = await api.get(`/cuentas/usuario/${userId}`);
@@ -64,7 +60,7 @@ export const useAccountStore = create((set, get) => ({
           } : null
         };
       });
-      set({ accounts: mapped, isLoading: false, lastFetch: { ...get().lastFetch, accounts: Date.now() } });
+      set({ accounts: mapped, isLoading: false });
     } catch (error) {
       set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener cuentas' });
       console.error('Error fetching accounts:', error);
@@ -74,41 +70,22 @@ export const useAccountStore = create((set, get) => ({
   createAccountRequest: async (data) => {
     set({ isLoading: true });
     try {
-      const payload = {
-        tipo_cuenta: data.type,
-        saldo: parseFloat(data.balance),
-        alias: data.alias
-      };
-      const response = await api.post('/cuentas/create', payload);
+      const response = await api.post('/request_accounts', data);
       set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error al enviar solicitud' };
+      return { success: false, error: error.response?.data?.message };
     }
   },
 
   getAdminRequests: async () => {
-    const now = Date.now();
-    if (get().isLoading || get().error || (get().lastFetch.requests && now - get().lastFetch.requests < 5000)) return;
-    set({ isLoading: true, error: null });
+    set({ isLoading: true });
     try {
-      const response = await api.get('/request_accounts/');
-      const raw = response.data.data || response.data;
-      const mapped = (Array.isArray(raw) ? raw : []).map(req => ({
-        ...req,
-        status: req.estado_solicitud,
-        type: req.cuenta?.tipo_cuenta,
-        initialBalance: req.cuenta?.saldo,
-        user: req.cuenta?.usuario_cuenta ? {
-          name: req.cuenta.usuario_cuenta.Name,
-          surname: req.cuenta.usuario_cuenta.Surname,
-          username: req.cuenta.usuario_cuenta.Username
-        } : null
-      }));
-      set({ requests: mapped, isLoading: false, lastFetch: { ...get().lastFetch, requests: Date.now() } });
+      const response = await api.get('/request_accounts');
+      set({ requests: response.data.data || response.data, isLoading: false });
     } catch (error) {
-      set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener solicitudes' });
+      set({ isLoading: false });
     }
   },
 
@@ -134,9 +111,7 @@ export const useAccountStore = create((set, get) => ({
 
   // --- ADMIN METHODS ---
   getAllAccounts: async () => {
-    const now = Date.now();
-    if (get().isLoading || get().error || (get().lastFetch.allAccounts && now - get().lastFetch.allAccounts < 5000)) return;
-    set({ isLoading: true, error: null });
+    set({ isLoading: true });
     try {
       const response = await api.get('/cuentas'); // GET /cuentas/ - Admin only
       const raw = response.data.data || response.data;
@@ -157,9 +132,9 @@ export const useAccountStore = create((set, get) => ({
           } : null
         };
       });
-      set({ accounts: mapped, isLoading: false, lastFetch: { ...get().lastFetch, allAccounts: Date.now() } });
+      set({ accounts: mapped, isLoading: false });
     } catch (error) {
-      set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener todas las cuentas' });
+      set({ isLoading: false });
     }
   },
 

@@ -53,12 +53,12 @@ export const config = {
 
   // Rate Limiting (aligned with .NET AuthPolicy and ApiPolicy)
   rateLimit: {
-    // General API rate limiting (Increased to 250 for heavy testing and UI stability)
+    // General API rate limiting (Increased to 100 for better DX and UI stability)
     windowMs: 1 * 60 * 1000, // 1 minute
-    maxRequests: 250,
-    // Auth endpoints rate limiting (Increased to 50 for rapid dev cycles)
+    maxRequests: 100,
+    // Auth endpoints rate limiting (Increased to 20 for multiple tabs/retries)
     authWindowMs: 1 * 60 * 1000, // 1 minute
-    authMaxRequests: 50,
+    authMaxRequests: 20,
     // Email endpoints rate limiting (more restrictive for security)
     emailWindowMs: 15 * 60 * 1000, // 15 minutes
     emailMaxRequests: 3,

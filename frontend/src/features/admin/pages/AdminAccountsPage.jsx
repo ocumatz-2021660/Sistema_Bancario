@@ -16,16 +16,14 @@ import {
 } from 'lucide-react';
 
 export const AdminAccountsPage = () => {
-  const { accounts, getAllAccounts, updateSaldo, deactivateAccount, deleteAccount, isLoading, error } = useAccountStore();
+  const { accounts, getAllAccounts, updateSaldo, deactivateAccount, deleteAccount, isLoading } = useAccountStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [editingAccount, setEditingAccount] = useState(null);
   const [newBalance, setNewBalance] = useState('');
 
   useEffect(() => {
-    if (accounts.length === 0 && !isLoading && !error) {
-      getAllAccounts();
-    }
-  }, [getAllAccounts, accounts.length, isLoading, error]);
+    getAllAccounts();
+  }, [getAllAccounts]);
 
   const handleUpdateBalance = async () => {
     if (!newBalance || isNaN(newBalance)) return toast.error('Ingrese un monto válido');

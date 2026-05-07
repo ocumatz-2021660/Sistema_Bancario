@@ -16,13 +16,11 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export const AccountRequestsPage = () => {
-  const { requests, getAccountRequests, approveRequest, rejectRequest, isLoading, error } = useAdminStore();
+  const { requests, getAccountRequests, approveRequest, rejectRequest, isLoading } = useAdminStore();
 
   useEffect(() => {
-    if (requests.length === 0 && !isLoading && !error) {
-      getAccountRequests();
-    }
-  }, [getAccountRequests, requests.length, isLoading, error]);
+    getAccountRequests();
+  }, [getAccountRequests]);
 
   const handleAction = async (id, action, type) => {
     const operation = action === 'APPROVE' ? approveRequest : rejectRequest;
