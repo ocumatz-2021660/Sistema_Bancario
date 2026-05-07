@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import api from '../../../shared/api/axios';
+import { useAccountStore } from '../../accounts/store/useAccountStore';
 
 export const useAuthStore = create(
   persist(
@@ -79,6 +80,8 @@ export const useAuthStore = create(
       },
 
       logout: () => {
+        // Limpiar cuentas del usuario anterior antes de cerrar sesión
+        useAccountStore.getState().clearAccounts();
         set({ user: null, token: null, role: null, isAuthenticated: false });
         localStorage.removeItem('auth-storage');
       },

@@ -26,6 +26,8 @@ export const useAccountStore = create((set, get) => ({
   isLoading: false,
   error: null,
 
+  clearAccounts: () => set({ accounts: [], requests: [], favorites: [], error: null }),
+
   // ── USER: obtener cuentas activas del usuario autenticado ──────────────
   getAccounts: async (userId) => {
     if (!userId) return;
