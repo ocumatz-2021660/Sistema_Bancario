@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
 import { useTransactionStore } from '../store/useTransactionStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { 
@@ -18,24 +19,30 @@ export const TransferPage = () => {
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
   const { accounts, getAccounts } = useAccountStore();
   const { transfer, isLoading } = useTransactionStore();
+  const { user } = useAuthStore();
 
   const sourceAccount = watch('sourceAccount');
   const amount = watch('amount');
 
   useEffect(() => {
-    getAccounts();
-  }, [getAccounts]);
+    getAccounts(user?.id);
+  }, [getAccounts, user]);
 
   // Encontrar la cuenta seleccionada para mostrar su saldo disponible
   const selectedAccount = accounts.find(acc => acc._id === sourceAccount);
 
   const onSubmit = async (data) => {
-    const result = await transfer(data);
+    // Necesitamos el número de cuenta real, no el ID
+    const sourceAcc = accounts.find(acc => acc._id === data.sourceAccount);
+    const result = await transfer({
+      ...data,
+      sourceAccountNumber: sourceAcc?.accountNumber
+    });
     
     if (result.success) {
       toast.success('¡Transferencia exitosa!');
       reset();
-      getAccounts(); // Actualizar saldos
+      getAccounts(user?.id); // Actualizar saldos
     } else {
       toast.error(result.error);
     }

@@ -125,8 +125,8 @@ export const AdminReportsPage = () => {
                 </div>
                 <h3 className="text-lg font-black text-text-primary uppercase tracking-tight">Distribución de Roles</h3>
               </div>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%" key={isLoading ? 'loading' : 'ready'}>
                   <PieChart>
                     <Pie
                       data={rolesData}
@@ -158,8 +158,8 @@ export const AdminReportsPage = () => {
                 </div>
                 <h3 className="text-lg font-black text-text-primary uppercase tracking-tight">Flujo de Solicitudes</h3>
               </div>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%" key={isLoading ? 'loading-bar' : 'ready-bar'}>
                   <BarChart data={requestsData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                     <XAxis 

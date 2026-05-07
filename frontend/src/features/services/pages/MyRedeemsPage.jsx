@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useServiceStore } from '../store/useServiceStore';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { 
   History, 
   Wallet, 
@@ -18,9 +19,11 @@ export const MyRedeemsPage = () => {
   const { redeems, getRedeems, isLoading } = useServiceStore();
   const [selectedAccountId, setSelectedAccountId] = useState('');
 
+  const { user } = useAuthStore();
+
   useEffect(() => {
-    getAccounts();
-  }, [getAccounts]);
+    getAccounts(user?.id);
+  }, [getAccounts, user]);
 
   useEffect(() => {
     if (selectedAccountId) {
@@ -87,12 +90,12 @@ export const MyRedeemsPage = () => {
               
               <div className="flex-1 text-center md:text-left">
                 <h4 className="text-lg font-black text-text-primary tracking-tight">
-                  {redeem.service?.name || 'Servicio Desconocido'}
+                  {redeem.serviceName}
                 </h4>
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-2">
                   <div className="flex items-center gap-1.5 text-xs text-text-secondary font-medium">
                     <Calendar className="w-3.5 h-3.5" />
-                    {format(new Date(redeem.createdAt), "dd MMM yyyy, hh:mm a", { locale: es })}
+                    {format(new Date(redeem.date), "dd MMM yyyy, hh:mm a", { locale: es })}
                   </div>
                   <span className="text-[10px] font-black uppercase text-primary tracking-widest px-3 py-1 bg-primary/5 rounded-full">
                     Canje Exitoso
@@ -103,7 +106,7 @@ export const MyRedeemsPage = () => {
               <div className="flex items-center gap-8 pr-4">
                 <div className="text-right">
                   <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest mb-1">Monto Pagado</p>
-                  <p className="text-2xl font-black text-text-primary tracking-tighter">Q {redeem.points?.toLocaleString()}</p>
+                  <p className="text-2xl font-black text-text-primary tracking-tighter">Q {redeem.cost?.toLocaleString()}</p>
                 </div>
                 <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-text-secondary hover:text-primary hover:border-primary transition-colors cursor-pointer">
                   <ArrowRight className="w-5 h-5" />

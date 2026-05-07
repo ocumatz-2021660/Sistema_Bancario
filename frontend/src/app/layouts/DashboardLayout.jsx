@@ -2,7 +2,8 @@ import { Outlet } from 'react-router-dom';
 import { Sidebar } from '../../shared/components/Sidebar';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../../features/auth/store/useAuthStore';
-import { Bell, Search, User as UserIcon } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
+import { UserAvatar } from '../../shared/components/UserAvatar';
 
 export const DashboardLayout = () => {
   const { user, role } = useAuthStore();
@@ -46,13 +47,7 @@ export const DashboardLayout = () => {
                   {role === 'ADMIN_ROLE' ? 'Administrador' : 'Cliente Platinum'}
                 </p>
               </div>
-              <div className="w-10 h-10 bg-primary/10 border border-primary/20 rounded-full flex items-center justify-center text-primary overflow-hidden">
-                {user?.profilePicture ? (
-                  <img src={user.profilePicture} alt="Profile" className="w-full h-full object-cover" />
-                ) : (
-                  <UserIcon className="w-5 h-5" />
-                )}
-              </div>
+              <UserAvatar src={user?.profilePicture} className="w-10 h-10 border border-primary/20" />
             </div>
           </div>
         </header>

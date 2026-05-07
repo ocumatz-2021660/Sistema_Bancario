@@ -14,6 +14,7 @@ import {
   Mail,
   Phone
 } from 'lucide-react';
+import { UserAvatar } from '../../../shared/components/UserAvatar';
 
 export const UsersManagementPage = () => {
   const { users, getAllUsers, updateUserStatus, updateUserRole, isLoading } = useAdminStore();
@@ -113,13 +114,7 @@ export const UsersManagementPage = () => {
                   <tr key={user.id} className="hover:bg-primary/5 transition-colors group">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary overflow-hidden">
-                          {user.profilePicture ? (
-                            <img src={user.profilePicture} alt="Avatar" className="w-full h-full object-cover" />
-                          ) : (
-                            <User className="w-5 h-5" />
-                          )}
-                        </div>
+                        <UserAvatar src={user.profilePicture} className="w-10 h-10" />
                         <div>
                           <p className="text-sm font-bold text-text-primary">{user.name} {user.surname}</p>
                           <p className="text-[10px] text-text-secondary font-medium">@{user.username}</p>

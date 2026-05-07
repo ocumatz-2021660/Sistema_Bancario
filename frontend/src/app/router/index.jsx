@@ -13,6 +13,7 @@ import { ResetPasswordPage } from '../../features/auth/pages/ResetPasswordPage';
 import { DashboardIndex } from '../../features/accounts/pages/DashboardIndex';
 import { MyAccountsPage } from '../../features/accounts/pages/MyAccountsPage';
 import { CreateAccountPage } from '../../features/accounts/pages/CreateAccountPage';
+import { FavoritesPage } from '../../features/accounts/pages/FavoritesPage';
 
 // Transactions Pages
 import { TransferPage } from '../../features/transactions/pages/TransferPage';
@@ -27,6 +28,8 @@ import { MyRedeemsPage } from '../../features/services/pages/MyRedeemsPage';
 import { UsersManagementPage } from '../../features/admin/pages/UsersManagementPage';
 import { AccountRequestsPage } from '../../features/admin/pages/AccountRequestsPage';
 import { AdminReportsPage } from '../../features/admin/pages/AdminReportsPage';
+import { AdminAccountsPage } from '../../features/admin/pages/AdminAccountsPage';
+import { AdminServicesPage } from '../../features/admin/pages/AdminServicesPage';
 
 // Profile Page
 import { ProfilePage } from '../../features/profile/pages/ProfilePage';
@@ -64,7 +67,7 @@ export const router = createBrowserRouter([
       { path: 'history/:accountId', element: <TransactionHistoryPage /> },
       { path: 'services', element: <ServicesCatalogPage /> },
       { path: 'redeems', element: <MyRedeemsPage /> },
-      { path: 'favorites', element: <Placeholder name="Favorites" /> },
+      { path: 'favorites', element: <FavoritesPage /> },
       
       // Admin only routes
       { 
@@ -87,7 +90,7 @@ export const router = createBrowserRouter([
         path: 'admin/accounts', 
         element: (
           <ProtectedRoute allowedRoles={['ADMIN_ROLE']}>
-            <Placeholder name="All Accounts" />
+            <AdminAccountsPage />
           </ProtectedRoute>
         ) 
       },
@@ -95,7 +98,7 @@ export const router = createBrowserRouter([
         path: 'admin/services', 
         element: (
           <ProtectedRoute allowedRoles={['ADMIN_ROLE']}>
-            <Placeholder name="Services Management" />
+            <AdminServicesPage />
           </ProtectedRoute>
         ) 
       },

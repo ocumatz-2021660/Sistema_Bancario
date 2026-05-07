@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
 import { useAccountStore } from '../store/useAccountStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { Wallet, Plus, ArrowRight, Loader2, Landmark } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const MyAccountsPage = () => {
-  const { accounts, getAccounts, isLoading } = useAccountStore();
+  const { accounts, getAccounts, isLoading, error } = useAccountStore();
+  const { user } = useAuthStore();
 
   useEffect(() => {
-    getAccounts();
-  }, [getAccounts]);
+    if (accounts.length === 0 && !isLoading && !error) {
+      getAccounts(user?.id);
+    }
+  }, [getAccounts, user, accounts.length, isLoading, error]);
 
   return (
     <div className="space-y-10">

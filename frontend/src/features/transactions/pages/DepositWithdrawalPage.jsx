@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
 import { useTransactionStore } from '../store/useTransactionStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { 
@@ -17,22 +18,27 @@ export const DepositWithdrawalPage = () => {
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
   const { accounts, getAccounts } = useAccountStore();
   const { deposit, withdraw, isLoading } = useTransactionStore();
+  const { user } = useAuthStore();
 
   const selectedAccountId = watch('accountId');
   const selectedAccount = accounts.find(acc => acc._id === selectedAccountId);
 
   useEffect(() => {
-    getAccounts();
-  }, [getAccounts]);
+    getAccounts(user?.id);
+  }, [getAccounts, user]);
 
   const onSubmit = async (data) => {
+    const acc = accounts.find(a => a._id === data.accountId);
     const operation = activeTab === 'DEPOSIT' ? deposit : withdraw;
-    const result = await operation(data);
+    const result = await operation({
+      ...data,
+      accountNumber: acc?.accountNumber
+    });
     
     if (result.success) {
       toast.success(`${activeTab === 'DEPOSIT' ? 'Depósito' : 'Retiro'} realizado con éxito`);
       reset();
-      getAccounts();
+      getAccounts(user?.id);
     } else {
       toast.error(result.error);
     }

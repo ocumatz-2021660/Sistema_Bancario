@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useServiceStore } from '../store/useServiceStore';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { toast } from 'react-hot-toast';
 import { 
   Zap, 
@@ -17,16 +18,21 @@ import {
 } from 'lucide-react';
 
 export const ServicesCatalogPage = () => {
-  const { services, getServices, redeemService, isLoading: serviceLoading } = useServiceStore();
-  const { accounts, getAccounts } = useAccountStore();
+  const { services, getServices, redeemService, isLoading: serviceLoading, error: serviceError } = useServiceStore();
+  const { accounts, getAccounts, isLoading: accountsLoading, error: accountsError } = useAccountStore();
+  const { user } = useAuthStore();
   const [selectedService, setSelectedService] = useState(null);
   const [selectedAccountId, setSelectedAccountId] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    getServices();
-    getAccounts();
-  }, [getServices, getAccounts]);
+    if (services.length === 0 && !serviceLoading && !serviceError) {
+      getServices();
+    }
+    if (user?.id && accounts.length === 0 && !accountsLoading && !accountsError) {
+      getAccounts(user.id);
+    }
+  }, [getServices, getAccounts, user, services.length, serviceLoading, serviceError, accounts.length, accountsLoading, accountsError]);
 
   const handleRedeemClick = (service) => {
     setSelectedService(service);
@@ -47,7 +53,7 @@ export const ServicesCatalogPage = () => {
       toast.success('¡Pago realizado con éxito!');
       setIsModalOpen(false);
       setSelectedAccountId('');
-      getAccounts(); // Actualizar saldos
+      getAccounts(user?.id); // Actualizar saldos
     } else {
       toast.error(result.error);
     }

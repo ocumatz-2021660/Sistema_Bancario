@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
 import { useTransactionStore } from '../store/useTransactionStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { 
   History, 
   Wallet, 
@@ -16,13 +17,16 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export const TransactionHistoryPage = () => {
-  const { accounts, getAccounts } = useAccountStore();
+  const { accounts, getAccounts, isLoading: accountsLoading, error: accountsError } = useAccountStore();
   const { history, getHistory, isLoading } = useTransactionStore();
+  const { user } = useAuthStore();
   const [selectedAccountId, setSelectedAccountId] = useState('');
 
   useEffect(() => {
-    getAccounts();
-  }, [getAccounts]);
+    if (accounts.length === 0 && !accountsLoading && !accountsError) {
+      getAccounts(user?.id);
+    }
+  }, [getAccounts, user, accounts.length, accountsLoading, accountsError]);
 
   useEffect(() => {
     if (selectedAccountId) {

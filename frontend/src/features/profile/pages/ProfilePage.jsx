@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { UserAvatar } from '../../../shared/components/UserAvatar';
 
 export const ProfilePage = () => {
   const { user, updateProfile, isLoading } = useAuthStore();
@@ -68,15 +69,13 @@ export const ProfilePage = () => {
         {/* Lado Izquierdo: Foto y Resumen */}
         <div className="space-y-6">
           <div className="bank-card text-center p-10 flex flex-col items-center shadow-xl">
-            <div className="relative group mb-6">
-              <div className="w-32 h-32 rounded-full border-4 border-primary/20 p-1 relative overflow-hidden group-hover:border-primary transition-all duration-300">
-                <img 
-                  src={preview || 'https://via.placeholder.com/150'} 
-                  alt="Profile" 
-                  className="w-full h-full object-cover rounded-full"
+              <div className="relative group mb-6">
+                <UserAvatar 
+                  src={preview} 
+                  className="w-32 h-32 border-4 border-primary/20 group-hover:border-primary transition-all duration-300" 
+                  iconSize="w-12 h-12"
                 />
-              </div>
-              <label className="absolute bottom-1 right-1 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-dark transition-all scale-90 hover:scale-100">
+                <label className="absolute bottom-1 right-1 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-dark transition-all scale-90 hover:scale-100">
                 <Camera className="w-5 h-5" />
                 <input 
                   type="file" 

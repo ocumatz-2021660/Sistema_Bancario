@@ -13,13 +13,13 @@ import {
 
 export const DashboardIndex = () => {
   const { user, role } = useAuthStore();
-  const { accounts, getAccounts } = useAccountStore();
+  const { accounts, getAccounts, isLoading, error } = useAccountStore();
 
   useEffect(() => {
-    if (role === 'USER_ROLE') {
-      getAccounts();
+    if (role === 'USER_ROLE' && accounts.length === 0 && !isLoading && !error) {
+      getAccounts(user?.id);
     }
-  }, [role, getAccounts]);
+  }, [role, getAccounts, user, accounts.length, isLoading, error]);
 
   if (role === 'ADMIN_ROLE') {
     return <AdminDashboard />;
