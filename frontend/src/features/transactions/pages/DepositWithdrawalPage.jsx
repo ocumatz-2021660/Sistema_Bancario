@@ -9,7 +9,6 @@ import {
   ArrowDownCircle, 
   Wallet, 
   Loader2, 
-  AlertCircle,
   Landmark,
   Banknote
 } from 'lucide-react';
@@ -39,14 +38,14 @@ export const DepositWithdrawalPage = () => {
     if (result.success) {
       toast.success(`${activeTab === 'DEPOSIT' ? 'Depósito' : 'Retiro'} realizado con éxito`);
       reset();
-      getAccounts(user?.id);
+      getAccounts(user?.id, { force: true }); // forzar recarga de saldos
     } else {
       toast.error(result.error);
     }
   };
 
   return (
-    <div className="max-w-[800px] mx-auto space-y-10">
+    <div className="max-w-200 mx-auto space-y-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black text-text-primary tracking-tighter">
@@ -148,14 +147,7 @@ export const DepositWithdrawalPage = () => {
             </div>
           </div>
 
-          <div className="pt-6 border-t border-border flex items-center gap-4">
-            <div className="p-3 bg-amber-50 rounded-xl border border-amber-100 flex items-start gap-3 flex-1">
-              <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-              <p className="text-[10px] text-amber-700 font-medium leading-relaxed">
-                Esta es una operación de simulación digital. En un entorno real, debe presentarse en ventanilla con su DPI.
-              </p>
-            </div>
-            
+          <div className="pt-6 border-t border-border flex items-center justify-end gap-4">
             <button
               disabled={isLoading}
               type="submit"

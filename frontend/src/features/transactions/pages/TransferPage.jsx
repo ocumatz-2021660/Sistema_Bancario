@@ -6,13 +6,10 @@ import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { 
   Send, 
-  ArrowRight, 
   Wallet, 
   User, 
   MessageSquare, 
   Loader2, 
-  AlertCircle,
-  CheckCircle2,
   ArrowLeftRight
 } from 'lucide-react';
 
@@ -43,14 +40,14 @@ export const TransferPage = () => {
     if (result.success) {
       toast.success('¡Transferencia exitosa!');
       reset();
-      getAccounts(user?.id); // Actualizar saldos
+      getAccounts(user?.id, { force: true }); // forzar recarga de saldos
     } else {
       toast.error(result.error);
     }
   };
 
   return (
-    <div className="max-w-[1000px] mx-auto space-y-10">
+    <div className="max-w-250 mx-auto space-y-10">
       <header>
         <h1 className="text-4xl font-black text-text-primary tracking-tighter">
           Transferir <span className="text-primary">Fondos</span>
@@ -59,8 +56,8 @@ export const TransferPage = () => {
         <p className="text-text-secondary font-medium mt-2">Mueve dinero de forma segura a cualquier cuenta.</p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 gap-8">
+        <div>
           <div className="bank-card shadow-xl border-t-4 border-t-primary">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               {/* Cuenta Origen */}
@@ -174,41 +171,6 @@ export const TransferPage = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bank-card bg-primary-dark text-white border-none relative overflow-hidden">
-            <div className="absolute -bottom-6 -right-6 opacity-10">
-              <CheckCircle2 className="w-32 h-32" />
-            </div>
-            <h4 className="font-black text-sm uppercase tracking-widest mb-6">Consejos de Seguridad</h4>
-            <ul className="space-y-4 relative z-10">
-              <li className="flex gap-3">
-                <div className="w-1.5 h-1.5 bg-primary-light rounded-full mt-1.5 shrink-0" />
-                <p className="text-[11px] text-white/70 leading-relaxed">Verifique siempre el número de cuenta destino antes de confirmar.</p>
-              </li>
-              <li className="flex gap-3">
-                <div className="w-1.5 h-1.5 bg-primary-light rounded-full mt-1.5 shrink-0" />
-                <p className="text-[11px] text-white/70 leading-relaxed">Las transferencias a cuentas del mismo banco son inmediatas.</p>
-              </li>
-              <li className="flex gap-3">
-                <div className="w-1.5 h-1.5 bg-primary-light rounded-full mt-1.5 shrink-0" />
-                <p className="text-[11px] text-white/70 leading-relaxed">Nunca comparta su clave de seguridad por teléfono o correo.</p>
-              </li>
-            </ul>
-          </div>
-
-          <div className="bank-card border-blue-100 bg-blue-50/30">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-              <div>
-                <h4 className="text-sm font-black text-blue-700 uppercase tracking-tight mb-1">Favoritos</h4>
-                <p className="text-[10px] text-blue-600 leading-relaxed font-medium">
-                  Puede guardar esta cuenta en sus favoritos después de realizar la transferencia para agilizar futuros pagos.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -143,13 +143,18 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
       try {
         const [usuariosRes, pendientesRes, transRes] = await Promise.allSettled([
-          api.get('/usuarios?limit=1'),
+          api.get('/users', { params: { page: 1, limit: 200 } }),
           api.get('/request_accounts?estado_solicitud=PENDIENTE&limit=1'),
           api.get('/transactions?limit=1'),
         ]);
         setStats({
           usuarios: usuariosRes.status === 'fulfilled'
-            ? (usuariosRes.value.data.pagination?.totalRecords ?? '-').toLocaleString()
+            ? (() => {
+                const d = usuariosRes.value.data;
+                const arr = d.data || d;
+                if (Array.isArray(arr)) return arr.length.toLocaleString();
+                return d.pagination?.totalRecords?.toLocaleString() ?? '-';
+              })()
             : '-',
           pendientes: pendientesRes.status === 'fulfilled'
             ? (pendientesRes.value.data.pagination?.totalRecords ?? pendientesRes.value.data.total ?? '-').toLocaleString()
