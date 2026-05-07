@@ -13,14 +13,16 @@ import {
 } from 'lucide-react';
 
 export const AdminServicesPage = () => {
-  const { services, getServices, createService, updateService, deleteService, isLoading } = useServiceStore();
+  const { services, getServices, createService, updateService, deleteService, isLoading, error } = useServiceStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState(null);
   const [formData, setFormData] = useState({ name: '', description: '', points: '' });
 
   useEffect(() => {
-    getServices();
-  }, [getServices]);
+    if (services.length === 0 && !isLoading && !error) {
+      getServices();
+    }
+  }, [getServices, services.length, isLoading, error]);
 
   const handleOpenModal = (service = null) => {
     if (service) {

@@ -1,14 +1,17 @@
 import { create } from 'zustand';
 import api from '../../../shared/api/axios';
 
-export const useServiceStore = create((set) => ({
+export const useServiceStore = create((set, get) => ({
   services: [],
   redeems: [],
   isLoading: false,
   error: null,
+  lastFetch: {},
 
   // Obtener catálogo de servicios
   getServices: async () => {
+    const now = Date.now();
+    if (get().isLoading || get().error || (get().lastFetch.services && now - get().lastFetch.services < 5000)) return;
     set({ isLoading: true, error: null });
     try {
       const response = await api.get('/services');
@@ -22,7 +25,7 @@ export const useServiceStore = create((set) => ({
         points: s.puntos_requeridos || s.points
       }));
 
-      set({ services: mappedServices, isLoading: false });
+      set({ services: mappedServices, isLoading: false, lastFetch: { ...get().lastFetch, services: Date.now() } });
     } catch (error) {
       set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener servicios' });
       console.error('Error fetching services:', error);
@@ -48,7 +51,9 @@ export const useServiceStore = create((set) => ({
 
   // Obtener historial de canjes de una cuenta
   getRedeems: async (accountId) => {
-    set({ isLoading: true });
+    const now = Date.now();
+    if (get().isLoading || get().error || (get().lastFetch.redeems && now - get().lastFetch.redeems < 5000)) return;
+    set({ isLoading: true, error: null });
     try {
       const response = await api.get(`/redeem_services/${accountId}`);
       const rawRedeems = response.data.data || response.data;
@@ -62,9 +67,9 @@ export const useServiceStore = create((set) => ({
         date: r.createdAt
       }));
 
-      set({ redeems: mappedRedeems, isLoading: false });
+      set({ redeems: mappedRedeems, isLoading: false, lastFetch: { ...get().lastFetch, redeems: Date.now() } });
     } catch (error) {
-      set({ isLoading: false });
+      set({ isLoading: false, error: error.response?.data?.message || 'Error al obtener canjes' });
       console.error('Error fetching redeems:', error);
     }
   },

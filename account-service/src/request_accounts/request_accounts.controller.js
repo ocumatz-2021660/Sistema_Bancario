@@ -111,7 +111,7 @@ export const aprobarSolicitud = async (req, res) => {
         const cuenta = await Cuenta.findByIdAndUpdate(
             solicitud.cuenta,
             { isActive: true },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!cuenta) {
