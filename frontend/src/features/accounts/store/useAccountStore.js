@@ -28,7 +28,7 @@ export const useAccountStore = create((set, get) => ({
 
   clearAccounts: () => set({ accounts: [], requests: [], favorites: [], error: null }),
 
-  // ── USER: obtener cuentas activas del usuario autenticado ──────────────
+  // USER: obtener cuentas activas del usuario autenticado
   getAccounts: async (userId) => {
     if (!userId) return;
     set({ isLoading: true, error: null });
@@ -45,7 +45,7 @@ export const useAccountStore = create((set, get) => ({
     }
   },
 
-  // ── USER: solicitar nueva cuenta → POST /cuentas/create ───────────────
+  // USER: solicitar nueva cuenta → POST /cuentas/create
   createAccountRequest: async (data) => {
     set({ isLoading: true });
     try {
@@ -63,7 +63,7 @@ export const useAccountStore = create((set, get) => ({
     }
   },
 
-  // ── USER/ADMIN: favoritos reales del usuario autenticado (GET /favorite) ─
+  // USER/ADMIN: favoritos reales del usuario autenticado (GET /favorite)
   getFavorites: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -107,7 +107,7 @@ export const useAccountStore = create((set, get) => ({
     }
   },
 
-  // Buscar cuentas con alias para la vista de favoritos de búsqueda (admin/transfer)
+  // Buscar cuentas con alias para la vista de favoritos de búsqueda (admin/transfer) xd
   searchFavorites: async (search = '') => {
     set({ isLoading: true, error: null });
     try {
@@ -121,7 +121,7 @@ export const useAccountStore = create((set, get) => ({
     }
   },
 
-  // ── ADMIN: solicitudes de cuenta ───────────────────────────────────────
+  // ADMIN: solicitudes de cuenta 
   getAdminRequests: async (filter = '') => {
     set({ isLoading: true });
     try {
@@ -154,7 +154,7 @@ export const useAccountStore = create((set, get) => ({
     }
   },
 
-  // ── ADMIN: todas las cuentas ───────────────────────────────────────────
+  //ADMIN: todas las cuentas 
   getAllAccounts: async (filters = {}) => {
     set({ isLoading: true });
     try {
@@ -187,7 +187,7 @@ export const useAccountStore = create((set, get) => ({
       return { success: true };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error al activar' };
+      return { success: false, error: error.response?.data?.message || 'Error al activar la cuenta' };
     }
   },
 
@@ -199,7 +199,7 @@ export const useAccountStore = create((set, get) => ({
       return { success: true };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error al desactivar' };
+      return { success: false, error: error.response?.data?.message || 'Error al desactivar la cuenta' };
     }
   },
 
@@ -211,7 +211,7 @@ export const useAccountStore = create((set, get) => ({
       return { success: true };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error al eliminar' };
+      return { success: false, error: error.response?.data?.message || 'Error al eliminar la cuenta' };
     }
   }
 }));
