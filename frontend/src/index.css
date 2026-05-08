@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2d6a4f;
+  --color-primary-dark: #1a3a2a;
+  --color-primary-light: #40916c;
+  --color-background: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-border: #e2e8f0;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+  
+  --font-outfit: "Outfit", system-ui, sans-serif;
+  --font-inter: "Inter", system-ui, sans-serif;
+
+  --shadow-bank: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-bank-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text-primary font-inter antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-outfit font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .bank-card {
+    @apply bg-surface rounded-2xl shadow-bank border border-border p-6 transition-all hover:shadow-bank-lg;
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-dark text-white font-bold py-2.5 px-6 rounded-xl transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply bg-white border border-border hover:bg-background text-text-primary font-bold py-2.5 px-6 rounded-xl transition-all active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full bg-white border border-border rounded-xl px-4 py-3 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm;
+  }
+
+  .label-field {
+    @apply block text-xs font-bold text-text-secondary uppercase tracking-wider mb-1.5 ml-1;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full hover:bg-text-secondary/30;
+}
