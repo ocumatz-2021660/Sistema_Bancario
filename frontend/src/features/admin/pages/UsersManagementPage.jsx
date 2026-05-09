@@ -4,8 +4,6 @@ import { toast } from 'react-hot-toast';
 import {
     Users,
     Search,
-    Filter,
-    MoreVertical,
     Shield,
     User,
     Ban,
@@ -25,14 +23,21 @@ export const UsersManagementPage = () => {
         getAllUsers();
     }, [getAllUsers]);
 
-    const handleStatusToggle = async (user) => {
-        const newStatus = !user.status;
-        const result = await updateUserStatus(user.id, newStatus);
+    const handleActivate = async (user) => {
+        const result = await updateUserStatus(user.id, true);
         if (result.success) {
-            toast.success(`Usuario ${newStatus ? 'activado' : 'desactivado'}`);
-            getAllUsers();
+            toast.success('Usuario activado exitosamente');
         } else {
-            toast.error(result.error);
+            toast.error(result.error || 'No se pudo activar al usuario');
+        }
+    };
+
+    const handleDeactivate = async (user) => {
+        const result = await updateUserStatus(user.id, false);
+        if (result.success) {
+            toast.success('Usuario desactivado exitosamente');
+        } else {
+            toast.error(result.error || 'No se pudo desactivar al usuario');
         }
     };
 
@@ -40,10 +45,9 @@ export const UsersManagementPage = () => {
         const newRole = user.role === 'ADMIN_ROLE' ? 'USER_ROLE' : 'ADMIN_ROLE';
         const result = await updateUserRole(user.id, newRole);
         if (result.success) {
-            toast.success(`Rol actualizado a ${newRole}`);
-            getAllUsers();
+            toast.success(`Rol actualizado a ${newRole === 'ADMIN_ROLE' ? 'Administrador' : 'Cliente'}`);
         } else {
-            toast.error(result.error);
+            toast.error(result.error || 'No se pudo actualizar el rol');
         }
     };
 
@@ -151,6 +155,7 @@ export const UsersManagementPage = () => {
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             <div className="flex items-center justify-end gap-2">
+                                                {/* Cambiar rol */}
                                                 <button
                                                     onClick={() => handleRoleToggle(user)}
                                                     title="Cambiar Rol"
@@ -158,16 +163,28 @@ export const UsersManagementPage = () => {
                                                 >
                                                     <Shield className="w-4 h-4" />
                                                 </button>
-                                                <button
-                                                    onClick={() => handleStatusToggle(user)}
-                                                    title={user.status ? 'Desactivar' : 'Activar'}
-                                                    className={`p-2 rounded-lg transition-all ${user.status
-                                                            ? 'text-text-secondary hover:text-red-500 hover:bg-red-50'
-                                                            : 'text-text-secondary hover:text-green-500 hover:bg-green-50'
-                                                        }`}
-                                                >
-                                                    {user.status ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
-                                                </button>
+
+                                                {/* Activar cuenta — solo visible si el usuario está inactivo */}
+                                                {!user.status && (
+                                                    <button
+                                                        onClick={() => handleActivate(user)}
+                                                        title="Activar cuenta"
+                                                        className="p-2 text-text-secondary hover:text-green-500 hover:bg-green-50 rounded-lg transition-all"
+                                                    >
+                                                        <CheckCircle2 className="w-4 h-4" />
+                                                    </button>
+                                                )}
+
+                                                {/* Desactivar cuenta — solo visible si el usuario está activo */}
+                                                {user.status && (
+                                                    <button
+                                                        onClick={() => handleDeactivate(user)}
+                                                        title="Desactivar cuenta"
+                                                        className="p-2 text-text-secondary hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                                    >
+                                                        <Ban className="w-4 h-4" />
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>

@@ -179,11 +179,18 @@ export const useAccountStore = create((set, get) => ({
     }
   },
 
+  // ADMIN: activar cuenta → PUT /cuentas/:id/activate
   activateAccount: async (id) => {
     set({ isLoading: true });
     try {
       await api.put(`/cuentas/${id}/activate`);
-      set({ isLoading: false });
+      // Actualizar estado local inmediatamente
+      set((state) => ({
+        isLoading: false,
+        accounts: state.accounts.map((acc) =>
+          acc._id === id ? { ...acc, status: true } : acc
+        ),
+      }));
       return { success: true };
     } catch (error) {
       set({ isLoading: false });
@@ -191,11 +198,18 @@ export const useAccountStore = create((set, get) => ({
     }
   },
 
+  // ADMIN: desactivar cuenta → PUT /cuentas/:id/desactivate
   deactivateAccount: async (id) => {
     set({ isLoading: true });
     try {
       await api.put(`/cuentas/${id}/desactivate`);
-      set({ isLoading: false });
+      // Actualizar estado local inmediatamente
+      set((state) => ({
+        isLoading: false,
+        accounts: state.accounts.map((acc) =>
+          acc._id === id ? { ...acc, status: false } : acc
+        ),
+      }));
       return { success: true };
     } catch (error) {
       set({ isLoading: false });
@@ -207,7 +221,11 @@ export const useAccountStore = create((set, get) => ({
     set({ isLoading: true });
     try {
       await api.delete(`/cuentas/${id}/delete`);
-      set({ isLoading: false });
+      // Remover la cuenta del array local
+      set((state) => ({
+        isLoading: false,
+        accounts: state.accounts.filter((acc) => acc._id !== id),
+      }));
       return { success: true };
     } catch (error) {
       set({ isLoading: false });
