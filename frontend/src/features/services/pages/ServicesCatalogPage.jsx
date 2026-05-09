@@ -62,12 +62,14 @@ export const ServicesCatalogPage = () => {
 
   // Helper para iconos según descripción o nombre
   const getServiceIcon = (name) => {
+    /*
     const n = name.toLowerCase();
     if (n.includes('luz') || n.includes('energía')) return <Zap className="w-6 h-6" />;
     if (n.includes('agua')) return <Droplets className="w-6 h-6" />;
     if (n.includes('internet') || n.includes('wifi')) return <Wifi className="w-6 h-6" />;
     if (n.includes('teléfono') || n.includes('celular')) return <Phone className="w-6 h-6" />;
     return <Gift className="w-6 h-6" />;
+    */
   };
 
   return (

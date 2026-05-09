@@ -19,11 +19,12 @@ export const useAdminStore = create((set) => ({
     }
   },
 
-  // PUT /users/:userId/status  → body: { isActive: boolean }
+  // PUT /users/:userId/status  → body: { accountStatus: 'activo'|'inactivo' }
   updateUserStatus: async (userId, isActive) => {
     set({ isLoading: true });
     try {
-      const response = await api.put(`/users/${userId}/status`, { isActive });
+      const accountStatus = isActive ? 'activo' : 'inactivo';
+      const response = await api.put(`/users/${userId}/status`, { accountStatus });
       set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
