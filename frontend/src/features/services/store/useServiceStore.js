@@ -69,6 +69,29 @@ export const useServiceStore = create((set) => ({
     }
   },
 
+deleteRedeems: async (id_redeem_service, accountId) => {
+  try {
+    await api.delete(`/redeem_services/cancel/${id_redeem_service}`);
+    const response = await api.get(`/redeem_services/${accountId}`);
+    const rawRedeems = response.data.data || response.data;
+    const mappedRedeems = (Array.isArray(rawRedeems) ? rawRedeems : []).map(r => ({
+      ...r,
+      serviceName: r.servicio_canje?.nombre_servicio || 'Servicio Desconocido',
+      description: r.servicio_canje?.descripcion_servicio || '',
+      cost: r.servicio_canje?.puntos_requeridos || 0,
+      date: r.createdAt
+    }));
+    set({ redeems: mappedRedeems, isLoading: false });
+    return { success: true };
+  } catch (error) {
+    console.error("Error detallado en deleteRedeems:", error);
+    return { 
+      success: false, 
+      error: error.response?.data?.message || 'Error al procesar la cancelación' 
+    };
+  }
+},
+
   // --- ADMIN METHODS ---
   createService: async (data) => {
     set({ isLoading: true });
