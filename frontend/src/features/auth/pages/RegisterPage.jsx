@@ -71,7 +71,7 @@ export const RegisterPage = () => {
                             Afiliación <span className="text-primary">Digital</span>
                         </h1>
                         <p className="text-[10px] font-bold text-text-secondary uppercase tracking-widest mt-1">
-                            Complete el formulario para unirse a BanKinal
+                            Complete el formulario para unirse a CyberVault
                         </p>
                     </div>
                 </div>

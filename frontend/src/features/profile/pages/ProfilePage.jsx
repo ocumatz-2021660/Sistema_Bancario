@@ -62,7 +62,7 @@ export const ProfilePage = () => {
         <h1 className="text-4xl font-black text-text-primary tracking-tighter">
           Configuración de <span className="text-primary">Perfil</span> 👤
         </h1>
-        <p className="text-text-secondary font-medium mt-2">Gestiona tu identidad y seguridad dentro del ecosistema BanKinal.</p>
+        <p className="text-text-secondary font-medium mt-2">Gestiona tu identidad y seguridad dentro del ecosistema CyberVaul.</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -109,7 +109,7 @@ export const ProfilePage = () => {
           <div className="bank-card bg-primary-dark text-white border-none p-8">
             <div className="flex items-center gap-3 mb-4">
               <Building2 className="w-5 h-5 text-primary-light" />
-              <h4 className="font-black text-sm uppercase tracking-widest">BanKinal S.A.</h4>
+              <h4 className="font-black text-sm uppercase tracking-widest">CyberVaul S.A.</h4>
             </div>
             <p className="text-[11px] text-white/60 leading-relaxed font-medium">
               Miembro desde: <br />
