@@ -86,18 +86,6 @@ export const ServicesCatalogPage = () => {
     }
   };
 
-  // Helper para iconos según descripción o nombre
-  const getServiceIcon = (name) => {
-    /*
-    const n = name.toLowerCase();
-    if (n.includes('luz') || n.includes('energía')) return <Zap className="w-6 h-6" />;
-    if (n.includes('agua')) return <Droplets className="w-6 h-6" />;
-    if (n.includes('internet') || n.includes('wifi')) return <Wifi className="w-6 h-6" />;
-    if (n.includes('teléfono') || n.includes('celular')) return <Phone className="w-6 h-6" />;
-    return <Gift className="w-6 h-6" />;
-    */
-  };
-
   return (
     <div className="space-y-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -139,9 +127,6 @@ export const ServicesCatalogPage = () => {
             >
               <div>
                 <div className="flex justify-between items-start mb-6">
-                  <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                    {getServiceIcon(service.name)}
-                  </div>
                   <span
                     className={`text-[10px] font-black uppercase px-3 py-1 rounded-full ${
                       service.isActive
@@ -213,7 +198,7 @@ export const ServicesCatalogPage = () => {
                 Confirmar Pago
               </h3>
               <p className="text-white/60 text-xs font-medium uppercase tracking-widest">
-                {selectedService?.name}
+                {selectedService?.nombre_servicio}
               </p>
             </div>
 
@@ -223,41 +208,41 @@ export const ServicesCatalogPage = () => {
                   Costo Total
                 </span>
                 <span className="text-xl font-black text-primary tracking-tighter">
-                  Q {selectedService?.points}
+                  Q {selectedService?.puntos_requeridos}
                 </span>
               </div>
 
               <div>
                 <label className="label-field">Seleccione Cuenta de Pago</label>
                 <div className="space-y-3 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
-                  {accounts.map((acc) => (
+                  {accounts.map((account) => (
                     <label
-                      key={acc._id}
+                      key={account._id}
                       className={`
                       flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all
-                      ${selectedAccountId === acc._id ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/20'}
+                      ${selectedAccountId === account._id ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/20'}
                     `}
                     >
                       <input
                         type="radio"
-                        value={acc._id}
+                        value={account._id}
                         className="hidden"
                         onChange={(e) => setSelectedAccountId(e.target.value)}
-                        checked={selectedAccountId === acc._id}
+                        checked={selectedAccountId === account._id}
                       />
                       <CreditCard
-                        className={`w-5 h-5 ${selectedAccountId === acc._id ? 'text-primary' : 'text-text-secondary'}`}
+                        className={`w-5 h-5 ${selectedAccountId === account._id ? 'text-primary' : 'text-text-secondary'}`}
                       />
                       <div className="flex-1">
                         <p className="text-[10px] font-black uppercase text-text-secondary leading-none mb-1">
-                          {acc.type}
+                          {account.tipo_cuenta}
                         </p>
                         <p className="text-xs font-bold text-text-primary">
-                          {acc.accountNumber}
+                          {account.no_cuenta}
                         </p>
                       </div>
                       <p className="text-xs font-black text-text-primary">
-                        Q {acc.balance?.toLocaleString()}
+                        Q {account.puntos_cuenta?.toLocaleString()}
                       </p>
                     </label>
                   ))}
