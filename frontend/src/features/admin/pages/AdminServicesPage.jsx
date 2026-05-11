@@ -109,11 +109,11 @@ export const AdminServicesPage = () => {
                   </button>
                 </div>
               </div>
-              <h3 className="text-lg font-bold text-text-primary mb-1">{service.name}</h3>
-              <p className="text-xs text-text-secondary mb-6 line-clamp-2">{service.description}</p>
+              <h3 className="text-lg font-bold text-text-primary mb-1">{service.nombre_servicio}</h3>
+              <p className="text-xs text-text-secondary mb-6 line-clamp-2">{service.descripcion_servicio}</p>
               <div className="pt-4 border-t border-border">
                 <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest mb-1">Costo Configurado</p>
-                <p className="text-xl font-black text-primary tracking-tighter">Q {service.points?.toLocaleString()}</p>
+                <p className="text-xl font-black text-primary tracking-tighter">Q {service.puntos_requeridos?.toLocaleString()}</p>
               </div>
             </div>
           ))}
