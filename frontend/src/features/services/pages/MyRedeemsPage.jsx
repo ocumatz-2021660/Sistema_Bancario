@@ -10,17 +10,30 @@ import {
   Filter,
   Tag,
   Star,
-  CheckCircle2
+  CheckCircle2,
+  Trash2
 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export const MyRedeemsPage = () => {
   const { accounts, getAccounts } = useAccountStore();
-  const { redeems, getRedeems, isLoading } = useServiceStore();
+  const { redeems, getRedeems,deleteRedeems, isLoading } = useServiceStore();
   const [selectedAccountId, setSelectedAccountId] = useState('');
   const { user } = useAuthStore();
 
+const handleDelete = async (redeem) => {
+  if (!confirm('¿Deseas cancelar este pago de servicio?')) return;
+  const result = await deleteRedeems(redeem._id, selectedAccountId);
+  if (result.success) {
+    toast.success('Servicio cancelado y lista actualizada');
+    getAccounts(user?.id); 
+  } else {
+    toast.error(result.error);
+  }
+};
+  
   useEffect(() => {
     getAccounts(user?.id);
   }, [getAccounts, user]);
@@ -137,6 +150,13 @@ export const MyRedeemsPage = () => {
                   <p className="text-2xl font-black text-text-primary tracking-tighter">{redeem.cost?.toLocaleString() || '0'}</p>
                 </div>
               </div>
+                                      <button 
+                          onClick={() => handleDelete(redeem)}
+                          title="Eliminar cuenta permanentemente"
+                          className="p-2 text-text-secondary hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
             </div>
           ))}
 
