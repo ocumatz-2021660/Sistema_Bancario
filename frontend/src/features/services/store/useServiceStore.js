@@ -91,8 +91,8 @@ export const useServiceStore = create((set) => ({
     set({ isLoading: true });
     try {
       const payload = {
-        nombre: data.name,
-        descripcion: data.description,
+        nombre_servicio: data.name,
+        descripcion_servicio: data.description,
         puntos_requeridos: parseFloat(data.points)
       };
       const response = await api.put(`/services/update/${id}`, payload);
