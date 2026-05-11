@@ -2,23 +2,25 @@ import { useEffect, useState } from 'react';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
 import { useTransactionStore } from '../store/useTransactionStore';
 import { useAuthStore } from '../../auth/store/useAuthStore';
-import { 
-  History, 
-  Wallet, 
-  ArrowUpRight, 
-  ArrowDownLeft, 
-  Calendar, 
+import {
+  History,
+  Wallet,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Calendar,
   Loader2,
   FileText,
   Filter,
-  RefreshCw
+  RefreshCw,
+  Trash2
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { toast } from 'react-hot-toast';
 
 export const TransactionHistoryPage = () => {
   const { accounts, getAccounts, isLoading: accountsLoading, error: accountsError } = useAccountStore();
-  const { history, getHistory, isLoading } = useTransactionStore();
+  const { history, getHistory, isLoading, deleteTransaction } = useTransactionStore();
   const { user } = useAuthStore();
   const [selectedAccountId, setSelectedAccountId] = useState('');
 
@@ -43,6 +45,16 @@ export const TransactionHistoryPage = () => {
       return tx.destinationAccount === selectedAccount?.accountNumber;
     }
     return false;
+  };
+  const handleDelete = async (transacciones_id) => {
+    if (!confirm('¿Deseas cancelar este pago de servicio?')) return;
+    const result = await deleteTransaction(transacciones_id, selectedAccountId);
+    if (result.success) {
+      toast.success('Transacción cancelada y saldo actualizado');
+      getAccounts(user?.id);
+    } else {
+      toast.error(result.error);
+    }
   };
 
   return (
@@ -140,6 +152,7 @@ export const TransactionHistoryPage = () => {
                     <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Tipo</th>
                     <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Detalle</th>
                     <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest text-right">Monto</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest text-right">x</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -163,9 +176,8 @@ export const TransactionHistoryPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-5">
-                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                            incoming ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'
-                          }`}>
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${incoming ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'
+                            }`}>
                             {incoming ? <ArrowDownLeft className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
                             {tx.type}
                           </span>
@@ -189,6 +201,21 @@ export const TransactionHistoryPage = () => {
                           <span className={incoming ? 'text-green-500' : 'text-red-500'}>
                             {incoming ? '+' : '-'}Q {tx.amount?.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
                           </span>
+                        </td>
+                        <td className="px-6 py-5 text-right font-black tracking-tighter">
+                          {/* Solo mostrar el botón si NO es una transacción recibida (incoming) */}
+                          {!incoming && (
+                            <button
+                              onClick={() => handleDelete(tx._id)}
+                              className="p-2 text-text-secondary hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+
+                          {incoming && (
+                            <span className="text-[9px] text-text-secondary/40 italic">No cancelable</span>
+                          )}
                         </td>
                       </tr>
                     );
