@@ -111,9 +111,9 @@ export const ServicesCatalogPage = () => {
                     Disponible
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-text-primary mb-2">{service.name}</h3>
+                <h3 className="text-xl font-bold text-text-primary mb-2">{service.nombre_servicio}</h3>
                 <p className="text-sm text-text-secondary leading-relaxed mb-6">
-                  {service.description || 'Sin descripción disponible para este servicio.'}
+                  {service.descripcion_servicio || 'Sin descripción disponible para este servicio.'}
                 </p>
               </div>
 
@@ -121,7 +121,7 @@ export const ServicesCatalogPage = () => {
                 <div>
                   <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest mb-1">Costo / Puntos</p>
                   <p className="text-xl font-black text-primary tracking-tighter">
-                    Q {service.points || 0}
+                    Q {service.puntos_requeridos || 0}
                   </p>
                 </div>
                 <button 
