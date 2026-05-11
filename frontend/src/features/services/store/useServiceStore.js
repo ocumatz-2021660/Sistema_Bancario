@@ -13,7 +13,7 @@ export const useServiceStore = create((set) => ({
     try {
       const response = await api.get('/services');
       const rawServices = response.data.data || response.data;
-      
+
       // Mapear campos de backend a frontend para consistencia
       const mappedServices = (Array.isArray(rawServices) ? rawServices : []).map(s => ({
         ...s,
@@ -34,15 +34,15 @@ export const useServiceStore = create((set) => ({
     set({ isLoading: true });
     try {
       const payload = {
-        cuenta_id: data.accountId,
-        servicio_id: data.serviceId
+        cuenta_canje: data.accountId,
+        servicio_canje: data.serviceId
       };
       const response = await api.post('/redeem_services/redeem', payload);
       set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error al canjear servicio' };
+      return { success: false, error: error.response?.data?.message || 'Error al canjear' };
     }
   },
 
