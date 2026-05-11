@@ -167,6 +167,12 @@ export const deleteTransaccion = async (req, res) => {
     // Revertir saldo destino
     const cuentaDestino = await Cuenta.findById(cuenta_destinatoria);
     let saldoAnteriorDestino = null;
+    if (!transaccion.cuenta_origen) {
+        return res.status(403).json({ 
+            success: false, 
+            message: 'No se puede cancelar un depósito recibido.' 
+        });
+    }
     if (cuentaDestino) {
       saldoAnteriorDestino    = Number(cuentaDestino.saldo);
       cuentaDestino.saldo     = saldoAnteriorDestino - Number(monto);
