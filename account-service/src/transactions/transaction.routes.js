@@ -169,6 +169,6 @@ router.get('/account/:id_cuenta', getTransaccionesByCuenta);
  *       404:
  *         description: Transacción no encontrada
  */
-router.delete('/cancelar/:id', validateJWT, isAdmin, canCancelTransaction, deleteTransaccion);
+router.delete('/cancelar/:id', validateJWT, canCancelTransaction, deleteTransaccion);
 
 export default router;
