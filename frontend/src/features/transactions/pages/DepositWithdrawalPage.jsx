@@ -10,22 +10,34 @@ import {
   Wallet, 
   Loader2, 
   Landmark,
-  Banknote
+  Banknote,
+  Search,
+  X
 } from 'lucide-react';
 
 export const DepositWithdrawalPage = () => {
-  const [activeTab, setActiveTab] = useState('DEPOSIT'); // 'DEPOSIT' or 'WITHDRAW'
+  const [activeTab, setActiveTab] = useState('DEPOSIT');
+  const [accountSearch, setAccountSearch] = useState('');
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
-  const { accounts, getAccounts } = useAccountStore();
+  const { accounts, getAccounts, getAllAccounts } = useAccountStore();
   const { deposit, withdraw, isLoading } = useTransactionStore();
-  const { user } = useAuthStore();
+  const { user, role } = useAuthStore();
+  const isAdmin = role === 'ADMIN_ROLE';
 
   const selectedAccountId = watch('accountId');
   const selectedAccount = accounts.find(acc => acc._id === selectedAccountId);
 
   useEffect(() => {
-    getAccounts(user?.id);
-  }, [getAccounts, user]);
+    if (isAdmin) {
+      getAllAccounts();
+    } else {
+      getAccounts(user?.id);
+    }
+  }, [isAdmin, getAllAccounts, getAccounts, user]);
+
+  const filteredAccounts = isAdmin && accountSearch.trim()
+    ? accounts.filter(acc => acc.accountNumber?.includes(accountSearch.trim()))
+    : accounts;
 
   const onSubmit = async (data) => {
     const acc = accounts.find(a => a._id === data.accountId);
@@ -38,7 +50,12 @@ export const DepositWithdrawalPage = () => {
     if (result.success) {
       toast.success(`${activeTab === 'DEPOSIT' ? 'Depósito' : 'Retiro'} realizado con éxito`);
       reset();
-      getAccounts(user?.id, { force: true }); // forzar recarga de saldos
+      setAccountSearch('');
+      if (isAdmin) {
+        getAllAccounts();
+      } else {
+        getAccounts(user?.id, { force: true });
+      }
     } else {
       toast.error(result.error);
     }
@@ -52,7 +69,7 @@ export const DepositWithdrawalPage = () => {
             Depósitos y <span className="text-primary">Retiros</span>
             <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10"><Banknote className="w-6 h-6 text-primary" /></span>
           </h1>
-          <p className="text-text-secondary font-medium mt-2">Gestiona el efectivo de tus cuentas institucionales.</p>
+          <p className="text-text-secondary font-medium mt-2">{isAdmin ? 'Realiza depósitos a cualquier cuenta del sistema.' : 'Gestiona el efectivo de tus cuentas institucionales.'}</p>
         </div>
 
         <div className="inline-flex p-1 bg-surface border border-border rounded-2xl shadow-sm">
@@ -80,8 +97,34 @@ export const DepositWithdrawalPage = () => {
           {/* Selección de Cuenta */}
           <div>
             <label className="label-field">Seleccione la Cuenta</label>
+
+            {/* Search — solo admin */}
+            {isAdmin && (
+              <div className="relative mb-4">
+                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                  <Search className="w-4 h-4 text-text-secondary" />
+                </div>
+                <input
+                  type="text"
+                  value={accountSearch}
+                  onChange={(e) => setAccountSearch(e.target.value)}
+                  className="input-field pl-11 pr-10"
+                  placeholder="Buscar por número de cuenta..."
+                />
+                {accountSearch && (
+                  <button
+                    type="button"
+                    onClick={() => setAccountSearch('')}
+                    className="absolute inset-y-0 right-3 flex items-center text-text-secondary hover:text-text-primary transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {accounts.map((acc) => (
+              {filteredAccounts.map((acc) => (
                 <label key={acc._id} className={`
                   relative flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all
                   ${selectedAccountId === acc._id ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'}
@@ -104,6 +147,13 @@ export const DepositWithdrawalPage = () => {
                 </label>
               ))}
             </div>
+
+            {isAdmin && accountSearch && filteredAccounts.length === 0 && (
+              <p className="text-center text-sm text-text-secondary font-medium py-6">
+                No se encontró ninguna cuenta con el número <span className="font-black text-text-primary">"{accountSearch}"</span>
+              </p>
+            )}
+
             {errors.accountId && <span className="text-[10px] text-red-500 font-bold uppercase mt-2 block">{errors.accountId.message}</span>}
           </div>
 

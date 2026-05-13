@@ -11,6 +11,7 @@ import {
   Star, 
   User, 
   Users, 
+  CircleUserRound,
   FileText, 
   LayoutDashboard,
   LogOut
@@ -29,7 +30,7 @@ export const Sidebar = () => {
     { to: '/dashboard/services', label: 'Servicios', icon: Gift },
     { to: '/dashboard/redeems', label: 'Mis Canjes', icon: History },
     { to: '/dashboard/favorites', label: 'Favoritos', icon: Star },
-    { to: '/dashboard/profile', label: 'Mi Perfil', icon: User },
+    { to: '/dashboard/profile', label: 'Mi Perfil', icon: CircleUserRound },
   ];
 
   const adminLinks = [
@@ -38,8 +39,7 @@ export const Sidebar = () => {
     { to: '/dashboard/admin/requests', label: 'Solicitudes', icon: FileText },
     { to: '/dashboard/admin/accounts', label: 'Todas las Cuentas', icon: Wallet },
     { to: '/dashboard/admin/services', label: 'Servicios', icon: Gift },
-    { to: '/dashboard/admin/reports', label: 'Reportes', icon: History },
-    { to: '/dashboard/profile', label: 'Mi Perfil', icon: User },
+    { to: '/dashboard/profile', label: 'Mi Perfil', icon: CircleUserRound },
   ];
 
   const links = role === 'ADMIN_ROLE' ? adminLinks : userLinks;
