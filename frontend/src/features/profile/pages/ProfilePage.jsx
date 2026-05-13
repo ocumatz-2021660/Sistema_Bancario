@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { toast } from 'react-hot-toast';
 import { 
-  User, 
+  CircleUserRound, 
   Camera, 
   Mail, 
   Phone, 
@@ -11,23 +11,29 @@ import {
   CheckCircle2, 
   Loader2, 
   Save,
-  Building2,
-  Calendar
+  Building2
 } from 'lucide-react';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { UserAvatar } from '../../../shared/components/UserAvatar';
 
 export const ProfilePage = () => {
-  const { user, updateProfile, isLoading } = useAuthStore();
+  const { user, updateProfile, getProfile, isLoading } = useAuthStore();
   const [preview, setPreview] = useState(user?.profilePicture);
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-    defaultValues: {
-      name: user?.name,
-      surname: user?.surname,
-      phone: user?.phone
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user.name || '',
+        surname: user.surname || '',
+        phone: user.phone || '',
+      });
+      setPreview(user.profilePicture);
     }
-  });
+  }, [user, reset]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -60,7 +66,10 @@ export const ProfilePage = () => {
     <div className="max-w-[900px] mx-auto space-y-10">
       <header>
         <h1 className="text-4xl font-black text-text-primary tracking-tighter">
-          Configuración de <span className="text-primary">Perfil</span> 👤
+          Configuración de <span className="text-primary">Perfil</span>
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 ml-3">
+              <CircleUserRound className="w-6 h-6 text-primary" />
+            </span>
         </h1>
         <p className="text-text-secondary font-medium mt-2">Gestiona tu identidad y seguridad dentro del ecosistema CyberVaul.</p>
       </header>
@@ -107,14 +116,10 @@ export const ProfilePage = () => {
           </div>
 
           <div className="bank-card bg-primary-dark text-white border-none p-8">
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3">
               <Building2 className="w-5 h-5 text-primary-light" />
-              <h4 className="font-black text-sm uppercase tracking-widest">CyberVaul S.A.</h4>
+              <h4 className="font-black text-sm uppercase tracking-widest">CyberVaul</h4>
             </div>
-            <p className="text-[11px] text-white/60 leading-relaxed font-medium">
-              Miembro desde: <br />
-              <span className="text-white font-bold">{user?.createdAt ? format(new Date(user.createdAt), "dd 'de' MMMM, yyyy", { locale: es }) : 'N/A'}</span>
-            </p>
           </div>
         </div>
 
@@ -126,7 +131,7 @@ export const ProfilePage = () => {
                 <div>
                   <label className="label-field">Nombres</label>
                   <div className="relative group">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
+                    <CircleUserRound className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
                     <input 
                       {...register('name', { required: 'Requerido' })}
                       className="input-field pl-12"
@@ -137,7 +142,7 @@ export const ProfilePage = () => {
                 <div>
                   <label className="label-field">Apellidos</label>
                   <div className="relative group">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
+                    <CircleUserRound className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
                     <input 
                       {...register('surname', { required: 'Requerido' })}
                       className="input-field pl-12"
@@ -159,18 +164,17 @@ export const ProfilePage = () => {
                 </div>
               </div>
 
-              <div className="bg-background p-6 rounded-2xl border border-border space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-surface rounded-xl flex items-center justify-center text-primary shrink-0 border border-border">
-                    <Calendar className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-black text-text-primary uppercase tracking-tight mb-1">Actividad Reciente</h4>
-                    <p className="text-[11px] text-text-secondary leading-relaxed font-medium">
-                      Última actualización: {user?.updatedAt ? format(new Date(user.updatedAt), "dd/MM/yyyy HH:mm") : 'Nunca'}
-                    </p>
-                  </div>
+              <div>
+                <label className="label-field">Correo Electrónico</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
+                  <input
+                    value={user?.email || ''}
+                    readOnly
+                    className="input-field pl-12 opacity-60 cursor-not-allowed bg-surface"
+                  />
                 </div>
+                <p className="text-[10px] text-text-secondary font-medium mt-1">El correo no puede modificarse.</p>
               </div>
 
               <div className="pt-6 border-t border-border flex justify-end">
