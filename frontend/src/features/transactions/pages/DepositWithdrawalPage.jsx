@@ -16,13 +16,14 @@ import {
 } from 'lucide-react';
 
 export const DepositWithdrawalPage = () => {
-  const [activeTab, setActiveTab] = useState('DEPOSIT');
+  const { user, role } = useAuthStore();
+  const isAdmin = role === 'ADMIN_ROLE';
+
+  const [activeTab, setActiveTab] = useState(isAdmin ? 'DEPOSIT' : 'WITHDRAW');
   const [accountSearch, setAccountSearch] = useState('');
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
   const { accounts, getAccounts, getAllAccounts } = useAccountStore();
   const { deposit, withdraw, isLoading } = useTransactionStore();
-  const { user, role } = useAuthStore();
-  const isAdmin = role === 'ADMIN_ROLE';
 
   const selectedAccountId = watch('accountId');
   const selectedAccount = accounts.find(acc => acc._id === selectedAccountId);
@@ -66,30 +67,36 @@ export const DepositWithdrawalPage = () => {
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black text-text-primary tracking-tighter">
-            Depósitos y <span className="text-primary">Retiros</span>
+            {isAdmin ? (
+              <>Depósitos y <span className="text-primary">Retiros</span></>
+            ) : (
+              <span className="text-primary">Retiros</span>
+            )}
             <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10"><Banknote className="w-6 h-6 text-primary" /></span>
           </h1>
           <p className="text-text-secondary font-medium mt-2">{isAdmin ? 'Realiza depósitos a cualquier cuenta del sistema.' : 'Gestiona el efectivo de tus cuentas institucionales.'}</p>
         </div>
 
-        <div className="inline-flex p-1 bg-surface border border-border rounded-2xl shadow-sm">
-          <button
-            onClick={() => { setActiveTab('DEPOSIT'); reset(); }}
-            className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-              activeTab === 'DEPOSIT' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
-            }`}
-          >
-            Depósito
-          </button>
-          <button
-            onClick={() => { setActiveTab('WITHDRAW'); reset(); }}
-            className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-              activeTab === 'WITHDRAW' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
-            }`}
-          >
-            Retiro
-          </button>
-        </div>
+        {isAdmin && (
+          <div className="inline-flex p-1 bg-surface border border-border rounded-2xl shadow-sm">
+            <button
+              onClick={() => { setActiveTab('DEPOSIT'); reset(); }}
+              className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                activeTab === 'DEPOSIT' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
+              }`}
+            >
+              Depósito
+            </button>
+            <button
+              onClick={() => { setActiveTab('WITHDRAW'); reset(); }}
+              className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                activeTab === 'WITHDRAW' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
+              }`}
+            >
+              Retiro
+            </button>
+          </div>
+        )}
       </header>
 
       <div className="bank-card shadow-xl border-t-4 border-t-primary">
@@ -98,7 +105,7 @@ export const DepositWithdrawalPage = () => {
           <div>
             <label className="label-field">Seleccione la Cuenta</label>
 
-            {/* Search — solo admin */}
+            {/* Search */}
             {isAdmin && (
               <div className="relative mb-4">
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
@@ -180,7 +187,6 @@ export const DepositWithdrawalPage = () => {
               {errors.amount && <span className="text-[10px] text-red-500 font-bold uppercase mt-1 block">{errors.amount.message}</span>}
             </div>
 
-            {/* Ubicación / Referencia (Opcional) */}
             <div>
               <label className="label-field">Referencia de Caja / ATM</label>
               <div className="relative group">
