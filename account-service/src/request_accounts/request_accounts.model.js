@@ -48,10 +48,18 @@ const solicitudSchema = mongoose.Schema(
 solicitudSchema.index({ isActive: 1});
 solicitudSchema.index({ estado_solicitud: 1});
 solicitudSchema.index({ isActive: 1, estado_solicitud: 1});
-solicitudSchema.pre('save', async function(next) {
-    if (!this.id_solicitud) {
-        const count = await mongoose.model('Solicitud').countDocuments();
-        this.id_solicitud = `SOL-${String(count + 1).padStart(6, '0')}`;
+solicitudSchema.pre('save', async function() {
+    if (this.isNew && !this.id_solicitud) {
+        const last = await mongoose.model('Solicitud')
+            .findOne()
+            .sort({ createdAt: -1 })
+            .select('id_solicitud');
+        let nextNum = 1;
+        if (last?.id_solicitud) {
+            const num = parseInt(last.id_solicitud.replace('SOL-', ''), 10);
+            if (!isNaN(num)) nextNum = num + 1;
+        }
+        this.id_solicitud = `SOL-${String(nextNum).padStart(6, '0')}`;
     }
 });
 
