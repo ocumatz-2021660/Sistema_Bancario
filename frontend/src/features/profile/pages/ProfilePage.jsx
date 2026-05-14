@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { toast } from 'react-hot-toast';
-import { 
-  CircleUserRound, 
-  Camera, 
-  Mail, 
-  Phone, 
-  Shield, 
-  CheckCircle2, 
-  Loader2, 
+import {
+  CircleUserRound,
+  Camera,
+  Mail,
+  Phone,
+  Shield,
+  CheckCircle2,
+  Loader2,
   Save,
   Building2
 } from 'lucide-react';
@@ -49,7 +49,7 @@ export const ProfilePage = () => {
     formData.append('name', data.name);
     formData.append('surname', data.surname);
     formData.append('phone', data.phone);
-    
+
     if (data.profilePicture[0]) {
       formData.append('profilePicture', data.profilePicture[0]);
     }
@@ -67,9 +67,9 @@ export const ProfilePage = () => {
       <header>
         <h1 className="text-4xl font-black text-text-primary tracking-tighter">
           Configuración de <span className="text-primary">Perfil</span>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 ml-3">
-              <CircleUserRound className="w-6 h-6 text-primary" />
-            </span>
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 ml-3">
+            <CircleUserRound className="w-6 h-6 text-primary" />
+          </span>
         </h1>
         <p className="text-text-secondary font-medium mt-2">Gestiona tu identidad y seguridad dentro del ecosistema CyberVaul.</p>
       </header>
@@ -78,24 +78,25 @@ export const ProfilePage = () => {
         {/* Lado Izquierdo: Foto y Resumen */}
         <div className="space-y-6">
           <div className="bank-card text-center p-10 flex flex-col items-center shadow-xl">
-              <div className="relative group mb-6">
-                <UserAvatar 
-                  src={preview} 
-                  className="w-32 h-32 border-4 border-primary/20 group-hover:border-primary transition-all duration-300" 
-                  iconSize="w-12 h-12"
-                />
-                <label className="absolute bottom-1 right-1 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-dark transition-all scale-90 hover:scale-100">
+            <div className="relative group mb-6">
+              <UserAvatar
+                src={preview}
+                className="w-32 h-32 border-4 border-primary/20 group-hover:border-primary transition-all duration-300"
+                iconSize="w-12 h-12"
+              />
+              <label className="absolute bottom-1 right-1 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-dark transition-all scale-90 hover:scale-100">
                 <Camera className="w-5 h-5" />
-                <input 
-                  type="file" 
-                  className="hidden" 
-                  {...register('profilePicture')}
-                  onChange={handleImageChange}
+                <input
+                  type="file"
+                  className="hidden"
                   accept="image/*"
+                  {...register('profilePicture', {
+                    onChange: (e) => handleImageChange(e)
+                  })}
                 />
               </label>
             </div>
-            
+
             <h3 className="text-xl font-black text-text-primary tracking-tight">{user?.name} {user?.surname}</h3>
             <p className="text-xs font-bold text-primary uppercase tracking-[0.2em] mt-1">
               {user?.role === 'ADMIN_ROLE' ? 'Administrador del Sistema' : 'Cliente Institucional'}
@@ -132,7 +133,7 @@ export const ProfilePage = () => {
                   <label className="label-field">Nombres</label>
                   <div className="relative group">
                     <CircleUserRound className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
-                    <input 
+                    <input
                       {...register('name', { required: 'Requerido' })}
                       className="input-field pl-12"
                       placeholder="Tus nombres"
@@ -143,7 +144,7 @@ export const ProfilePage = () => {
                   <label className="label-field">Apellidos</label>
                   <div className="relative group">
                     <CircleUserRound className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
-                    <input 
+                    <input
                       {...register('surname', { required: 'Requerido' })}
                       className="input-field pl-12"
                       placeholder="Tus apellidos"
@@ -156,7 +157,7 @@ export const ProfilePage = () => {
                 <label className="label-field">Teléfono de Contacto</label>
                 <div className="relative group">
                   <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
-                  <input 
+                  <input
                     {...register('phone')}
                     className="input-field pl-12"
                     placeholder="+502 0000-0000"

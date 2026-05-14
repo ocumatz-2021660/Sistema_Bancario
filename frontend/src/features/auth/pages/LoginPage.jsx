@@ -119,7 +119,7 @@ export const LoginPage = () => {
 
                 <div className="mt-8 text-center">
                     <p className="text-[10px] font-bold text-text-secondary/50 uppercase tracking-[0.2em]">
-                        © 2026 BanKinal — Todos los derechos reservados
+                        © 2026 CyberVault — Todos los derechos reservados
                     </p>
                 </div>
             </div>
