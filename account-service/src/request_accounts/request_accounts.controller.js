@@ -169,7 +169,10 @@ export const rechazarSolicitud = async (req, res) => {
         const cuentaId = solicitud.cuenta;
         solicitud.estado_solicitud = 'RECHAZADA';
         await solicitud.save();
-        await Cuenta.findByIdAndDelete(cuentaId);
+        await Solicitud.findOneAndUpdate(//desactivar mejor 
+            { cuenta: cuentaId },
+            { isActive: false }
+        );
 
         return res.status(200).json({
             success: true,
