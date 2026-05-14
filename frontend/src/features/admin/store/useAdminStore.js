@@ -19,24 +19,12 @@ export const useAdminStore = create((set) => ({
     }
   },
 
-  // PUT /users/:userId/status  → body: { accountStatus: 'activo'|'deshabilitado' }
+  // PUT /users/:userId/status  → body: { isActive: boolean }
   updateUserStatus: async (userId, isActive) => {
     set({ isLoading: true });
     try {
-      // El backend acepta: 'activo' | 'inactivo' | 'deshabilitado'
-      // Para activar → 'activo', para desactivar → 'deshabilitado'
-      const accountStatus = isActive ? 'activo' : 'deshabilitado';
-      const response = await api.put(`/users/${userId}/status`, { accountStatus });
-
-      // Actualizar el usuario en el array local inmediatamente (sin esperar re-fetch)
-      // El backend devuelve status (boolean) según accountStatus === 'activo'
-      set((state) => ({
-        isLoading: false,
-        users: state.users.map((u) =>
-          u.id === userId ? { ...u, status: isActive } : u
-        ),
-      }));
-
+      const response = await api.put(`/users/${userId}/status`, { isActive });
+      set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });
@@ -52,13 +40,7 @@ export const useAdminStore = create((set) => ({
     set({ isLoading: true });
     try {
       const response = await api.put(`/users/${userId}/role`, { roleName });
-      // Actualizar el rol del usuario en el array local inmediatamente
-      set((state) => ({
-        isLoading: false,
-        users: state.users.map((u) =>
-          u.id === userId ? { ...u, role: roleName } : u
-        ),
-      }));
+      set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useMoney } from '../../../shared/hooks/useMoney';
 import { useAdminStore } from '../store/useAdminStore';
 import { toast } from 'react-hot-toast';
 import {
@@ -18,6 +19,7 @@ import { es } from 'date-fns/locale';
 
 export const AccountRequestsPage = () => {
     const { requests, getAccountRequests, approveRequest, rejectRequest, isLoading } = useAdminStore();
+    const { format: formatMoney } = useMoney();
     const [statusFilter, setStatusFilter] = useState('PENDIENTE');
 
     useEffect(() => {
@@ -122,7 +124,7 @@ export const AccountRequestsPage = () => {
                                             Q Saldo Inicial
                                         </p>
                                         <p className="text-lg font-black text-text-primary tracking-tighter">
-                                            Q {Number(cuenta.saldo || 0).toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+                                            {formatMoney(Number(cuenta.saldo || 0))}
                                         </p>
                                     </div>
                                     <div className="col-span-2 md:col-span-1">

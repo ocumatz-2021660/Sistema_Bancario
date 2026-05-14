@@ -97,109 +97,97 @@ export const UsersManagementPage = () => {
                     </select>
                 </div>
             </header>
-
             {isLoading ? (
                 <div className="py-32 flex flex-col items-center justify-center">
                     <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
                     <p className="text-text-secondary font-bold uppercase tracking-widest text-xs">Cargando base de datos...</p>
                 </div>
+            ) : filteredUsers.length === 0 ? (
+                <div className="py-20 text-center">
+                    <p className="text-sm font-bold text-text-secondary uppercase tracking-widest">No se encontraron usuarios</p>
+                </div>
             ) : (
-                <div className="bank-card p-0 overflow-hidden shadow-xl">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="bg-surface border-b border-border">
-                                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Usuario</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Contacto</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Rol</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Estado</th>
-                                    <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest text-right">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-border">
-                                {filteredUsers.map((user) => (
-                                    <tr key={user.id} className="hover:bg-primary/5 transition-colors group">
-                                        <td className="px-6 py-5">
-                                            <div className="flex items-center gap-4">
-                                                <UserAvatar src={user.profilePicture} className="w-10 h-10" />
-                                                <div>
-                                                    <p className="text-sm font-bold text-text-primary">{user.name} {user.surname}</p>
-                                                    <p className="text-[10px] text-text-secondary font-medium">@{user.username}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-5">
-                                            <div className="space-y-1">
-                                                <div className="flex items-center gap-2 text-xs text-text-secondary">
-                                                    <Mail className="w-3 h-3" />
-                                                    {user.email}
-                                                </div>
-                                                <div className="flex items-center gap-2 text-xs text-text-secondary">
-                                                    <Phone className="w-3 h-3" />
-                                                    {user.phone || 'No registrado'}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-5">
-                                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${user.role === 'ADMIN_ROLE' ? 'bg-amber-500/10 text-amber-500' : 'bg-blue-500/10 text-blue-500'
-                                                }`}>
-                                                {user.role === 'ADMIN_ROLE' ? <Shield className="w-3 h-3" /> : <User className="w-3 h-3" />}
-                                                {user.role === 'ADMIN_ROLE' ? 'Administrador' : 'Cliente'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-5">
-                                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-black uppercase ${user.status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                                                }`}>
-                                                {user.status ? 'Activo' : 'Inactivo'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-5 text-right">
-                                            <div className="flex items-center justify-end gap-2">
-                                                {/* Cambiar rol */}
-                                                <button
-                                                    onClick={() => handleRoleToggle(user)}
-                                                    title="Cambiar Rol"
-                                                    className="p-2 text-text-secondary hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-all"
-                                                >
-                                                    <Shield className="w-4 h-4" />
-                                                </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filteredUsers.map((user) => (
+                        <div key={user.id} className="bank-card p-6 flex flex-col gap-4 hover:shadow-xl hover:bg-green-50 transition-shadow">
 
-                                                {/* Activar cuenta — solo visible si el usuario está inactivo */}
-                                                {!user.status && (
-                                                    <button
-                                                        onClick={() => handleActivate(user)}
-                                                        title="Activar cuenta"
-                                                        className="p-2 text-text-secondary hover:text-green-500 hover:bg-green-50 rounded-lg transition-all"
-                                                    >
-                                                        <CheckCircle2 className="w-4 h-4" />
-                                                    </button>
-                                                )}
+                            {/* Avatar + nombre */}
+                            <div className="flex flex-col items-center text-center gap-2">
+                                <UserAvatar src={user.profilePicture} className="w-20 h-20" />
+                                <div>
+                                    <p className="text-sm font-bold text-text-primary">{user.name} {user.surname}</p>
+                                    <p className="text-[11px] text-text-secondary font-medium">@{user.username}</p>
+                                </div>
+                            </div>
 
-                                                {/* Desactivar cuenta — solo visible si el usuario está activo */}
-                                                {user.status && (
-                                                    <button
-                                                        onClick={() => handleDeactivate(user)}
-                                                        title="Desactivar cuenta"
-                                                        className="p-2 text-text-secondary hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                                                    >
-                                                        <Ban className="w-4 h-4" />
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                            {/* Contacto */}
+                            <div className="space-y-1.5">
+                                <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest">Contacto</p>
+                                <div className="flex items-center gap-2 text-xs text-text-secondary">
+                                    <Mail className="w-3 h-3 shrink-0" />
+                                    <span className="truncate">{user.email}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-xs text-text-secondary">
+                                    <Phone className="w-3 h-3 shrink-0" />
+                                    {user.phone || 'No registrado'}
+                                </div>
+                            </div>
 
-                                {filteredUsers.length === 0 && (
-                                    <tr>
-                                        <td colSpan="5" className="px-6 py-20 text-center">
-                                            <p className="text-sm font-bold text-text-secondary uppercase tracking-widest">No se encontraron usuarios</p>
-                                        </td>
-                                    </tr>
+                            {/* Rol */}
+                            <div className="space-y-1.5">
+                                <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest">Rol</p>
+                                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${user.role === 'ADMIN_ROLE'
+                                        ? 'bg-amber-500/10 text-amber-500'
+                                        : 'bg-blue-500/10 text-blue-500'
+                                    }`}>
+                                    {user.role === 'ADMIN_ROLE' ? <Shield className="w-3 h-3" /> : <User className="w-3 h-3" />}
+                                    {user.role === 'ADMIN_ROLE' ? 'Administrador' : 'Cliente'}
+                                </span>
+                            </div>
+
+                            {/* Estado */}
+                            <div className="flex items-center gap-2">
+                                <span className={`w-2 h-2 rounded-full ${user.status ? 'bg-green-500' : 'bg-red-500'}`} />
+                                <span className={`text-xs font-bold ${user.status ? 'text-green-600' : 'text-red-500'}`}>
+                                    {user.status ? 'Activo' : 'Inactivo'}
+                                </span>
+                            </div>
+
+                            {/* Acciones */}
+                            <div className="flex items-center gap-2 pt-2 border-t border-border mt-auto">
+                                <button
+                                    onClick={() => handleRoleToggle(user)}
+                                    title="Cambiar Rol"
+                                    className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-text-secondary hover:text-amber-500 hover:bg-amber-100 rounded-lg transition-all"
+                                >
+                                    <Shield className="w-4 h-4" />
+                                    Rol
+                                </button>
+
+                                {!user.status && (
+                                    <button
+                                        onClick={() => handleActivate(user)}
+                                        title="Activar cuenta"
+                                        className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-text-secondary hover:text-green-500 hover:bg-blue-100 rounded-lg transition-all"
+                                    >
+                                        <CheckCircle2 className="w-4 h-4" />
+                                        Activar
+                                    </button>
                                 )}
-                            </tbody>
-                        </table>
-                    </div>
+
+                                {user.status && (
+                                    <button
+                                        onClick={() => handleDeactivate(user)}
+                                        title="Desactivar cuenta"
+                                        className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-text-secondary hover:text-red-500 hover:bg-red-100 rounded-lg transition-all"
+                                    >
+                                        <Ban className="w-4 h-4" />
+                                        Banear
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             )}
         </div>

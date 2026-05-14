@@ -53,16 +53,13 @@ export const config = {
 
   // Rate Limiting (aligned with .NET AuthPolicy and ApiPolicy)
   rateLimit: {
-    // General API rate limiting (aligned with .NET ApiPolicy: 20 tokens per minute)
-    windowMs: 1 * 60 * 1000, // 1 minute
-    maxRequests: 100,
-    // Auth endpoints rate limiting (aligned with .NET AuthPolicy: 5 requests per minute)
-    authWindowMs: 1 * 60 * 1000, // 1 minute
-    authMaxRequests: 20,
-    // Email endpoints rate limiting (more restrictive for security)
-    emailWindowMs: 15 * 60 * 1000, // 15 minutes
-    emailMaxRequests: 3,
-  },
+    windowMs: 1 * 60 * 1000,
+    maxRequests: process.env.NODE_ENV === 'production' ? 100 : 10000,
+    authWindowMs: 1 * 60 * 1000,
+    authMaxRequests: process.env.NODE_ENV === 'production' ? 20 : 10000,
+    emailWindowMs: 15 * 60 * 1000,
+    emailMaxRequests: process.env.NODE_ENV === 'production' ? 3 : 100,
+},
 
   // Security (aligned with .NET Security configuration)
   security: {
