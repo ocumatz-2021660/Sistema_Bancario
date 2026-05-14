@@ -107,4 +107,29 @@ export const useTransactionStore = create((set) => ({
       set({ isLoading: false, withdrawals: [] });
     }
   },
+
+deleteTransaction: async (id_transaction, accountId) => {
+  set({ isLoading: true }); 
+  try {
+    await api.delete(`/transactions/cancelar/${id_transaction}`); 
+  
+    if (accountId) {
+      const response = await api.get(`/transactions/account/${accountId}`);
+      const raw = response.data.data || response.data;
+      const mapped = (Array.isArray(raw) ? raw : []).map(mapTransaction);
+      set({ history: mapped, isLoading: false });
+    } else {
+      set({ isLoading: false });
+    }
+
+    return { success: true };
+  } catch (error) {
+    set({ isLoading: false });
+    console.error("Error detallado:", error.response || error);
+    return {
+      success: false,
+      error: error.response?.data?.message || 'Error al procesar la cancelación'
+    };
+  }
+}
 }));

@@ -32,10 +32,10 @@ export const LoginPage = () => {
                         <Wallet className="w-8 h-8 text-white" />
                     </div>
                     <h1 className="text-3xl font-black text-text-primary tracking-tighter uppercase leading-none mb-3">
-                        Ban<span className="text-primary">Kinal</span>
+                        Cyber<span className="text-primary">Vault</span>
                     </h1>
                     <p className="text-text-secondary font-semibold text-sm uppercase tracking-widest">
-                        Banca Digital Institucional
+                        Banca Digital Institucional 
                     </p>
                 </div>
 
@@ -119,7 +119,7 @@ export const LoginPage = () => {
 
                 <div className="mt-8 text-center">
                     <p className="text-[10px] font-bold text-text-secondary/50 uppercase tracking-[0.2em]">
-                        © 2026 BanKinal — Todos los derechos reservados
+                        © 2026 CyberVault — Todos los derechos reservados
                     </p>
                 </div>
             </div>

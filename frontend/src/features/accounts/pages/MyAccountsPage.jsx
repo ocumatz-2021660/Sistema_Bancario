@@ -9,10 +9,10 @@ export const MyAccountsPage = () => {
   const { user } = useAuthStore();
 
   useEffect(() => {
-    if (accounts.length === 0 && !isLoading && !error) {
-      getAccounts(user?.id);
+    if (user?.id && accounts.length === 0) {
+      getAccounts(user.id);
     }
-  }, [getAccounts, user, accounts.length, isLoading, error]);
+  }, [user?.id]);
 
   return (
     <div className="space-y-10">
@@ -26,8 +26,8 @@ export const MyAccountsPage = () => {
           </h1>
           <p className="text-text-secondary font-medium mt-2">Gestiona tus cuentas monetarias y de ahorro.</p>
         </div>
-        
-        <Link 
+
+        <Link
           to="/dashboard/accounts/new"
           className="btn-primary flex items-center justify-center gap-2 h-14"
         >
@@ -47,21 +47,19 @@ export const MyAccountsPage = () => {
             <div key={acc._id} className="bank-card group flex flex-col justify-between h-[240px] relative overflow-hidden">
               {/* Decorative circle */}
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full group-hover:bg-primary/10 transition-colors" />
-              
+
               <div>
                 <div className="flex justify-between items-start mb-6">
-                  <div className={`p-3 rounded-2xl ${
-                    acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
-                  }`}>
+                  <div className={`p-3 rounded-2xl ${acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
+                    }`}>
                     <Landmark className="w-6 h-6" />
                   </div>
-                  <span className={`text-[10px] font-black uppercase px-3 py-1 rounded-full ${
-                    acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
-                  }`}>
+                  <span className={`text-[10px] font-black uppercase px-3 py-1 rounded-full ${acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
+                    }`}>
                     {acc.type}
                   </span>
                 </div>
-                
+
                 <h3 className="text-lg font-bold text-text-primary">No. {acc.accountNumber}</h3>
                 <p className="text-sm text-text-secondary mt-1">{acc.alias || 'Cuenta Personal'}</p>
               </div>
@@ -73,8 +71,8 @@ export const MyAccountsPage = () => {
                     Q {acc.balance?.toLocaleString()}
                   </h4>
                 </div>
-                
-                <Link 
+
+                <Link
                   to={`/dashboard/history/${acc._id}`}
                   className="w-10 h-10 bg-background border border-border rounded-xl flex items-center justify-center text-text-secondary hover:bg-primary hover:text-white hover:border-primary transition-all"
                 >

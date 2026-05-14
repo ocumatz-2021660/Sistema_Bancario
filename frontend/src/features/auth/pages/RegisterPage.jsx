@@ -34,6 +34,8 @@ export const RegisterPage = () => {
     };
 
     const onSubmit = async (data) => {
+        console.log('profilePicture en data:', data.profilePicture); 
+        console.log('archivo:', data.profilePicture?.[0]); 
         const formData = new FormData();
         Object.keys(data).forEach(key => {
             if (key === 'profilePicture') {
@@ -71,7 +73,7 @@ export const RegisterPage = () => {
                             Afiliación <span className="text-primary">Digital</span>
                         </h1>
                         <p className="text-[10px] font-bold text-text-secondary uppercase tracking-widest mt-1">
-                            Complete el formulario para unirse a BanKinal
+                            Complete el formulario para unirse a CyberVault
                         </p>
                     </div>
                 </div>
@@ -95,8 +97,8 @@ export const RegisterPage = () => {
                                             type="file"
                                             className="hidden"
                                             accept="image/*"
-                                            {...register('profilePicture')}
-                                            onChange={handleImageChange}
+                                            {...register('profilePicture')}   // ← RHF registra su propio onChange
+                                            onChange={handleImageChange}       // ← SOBREESCRIBE el onChange de RHF ❌
                                         />
                                     </label>
                                 </div>

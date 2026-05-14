@@ -81,10 +81,12 @@ const router = Router();
 router.post(
   '/register',
   authRateLimit,
-  upload.single('profilePicture'),
-  handleUploadError,
+  uploadProfileImage.single('profilePicture'),  
+  handleCloudinaryUploadError,                  
+  cleanUploaderFileOnFinish,                   
   validateRegister,
-  authController.register
+  authController.register,
+  deleteFileOnError                            
 );
 
 /**

@@ -1,4 +1,5 @@
 import { useAuthStore } from '../../auth/store/useAuthStore';
+import { useAdminStore } from '../../admin/store/useAdminStore';
 import { useAccountStore } from '../store/useAccountStore';
 import { useEffect, useState } from 'react';
 import { 
@@ -134,39 +135,15 @@ const UserDashboard = ({ user, accounts }) => {
 };
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({ usuarios: '-', pendientes: '-', transacciones: '-' });
+  const { users, requests, getAllUsers, getAccountRequests } = useAdminStore();
   const [actividad, setActividad] = useState([]);
-  const [loadingStats, setLoadingStats] = useState(true);
   const [loadingActividad, setLoadingActividad] = useState(true);
+  const loadingStats = users.length === 0;
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const [usuariosRes, pendientesRes, transRes] = await Promise.allSettled([
-          api.get('/users', { params: { page: 1, limit: 200 } }),
-          api.get('/request_accounts?estado_solicitud=PENDIENTE&limit=1'),
-          api.get('/transactions?limit=1'),
-        ]);
-        setStats({
-          usuarios: usuariosRes.status === 'fulfilled'
-            ? (() => {
-                const d = usuariosRes.value.data;
-                const arr = d.data || d;
-                if (Array.isArray(arr)) return arr.length.toLocaleString();
-                return d.pagination?.totalRecords?.toLocaleString() ?? '-';
-              })()
-            : '-',
-          pendientes: pendientesRes.status === 'fulfilled'
-            ? (pendientesRes.value.data.pagination?.totalRecords ?? pendientesRes.value.data.total ?? '-').toLocaleString()
-            : '-',
-          transacciones: transRes.status === 'fulfilled'
-            ? (transRes.value.data.pagination?.totalRecords ?? '-').toLocaleString()
-            : '-',
-        });
-      } finally {
-        setLoadingStats(false);
-      }
-    };
+    // Solo cargar si el store está vacío (evita recargas innecesarias al navegar)
+    if (users.length === 0) getAllUsers(1, 200);
+    if (requests.length === 0) getAccountRequests('PENDIENTE');
 
     const fetchActividad = async () => {
       try {
@@ -178,15 +155,19 @@ const AdminDashboard = () => {
         setLoadingActividad(false);
       }
     };
-
-    fetchStats();
     fetchActividad();
   }, []);
 
+  const stats = {
+    usuarios: users.length > 0 ? users.length.toLocaleString() : '-',
+    pendientes: requests.filter(r => r.estado_solicitud === 'PENDIENTE').length.toLocaleString(),
+    transacciones: '-',
+  };
+
   const statCards = [
-    { label: 'Usuarios Activos',       val: stats.usuarios,      icon: Users,        color: '#2d6a4f' },
-    { label: 'Solicitudes Pendientes', val: stats.pendientes,    icon: FileText,     color: '#f59e0b' },
-    { label: 'Transacciones Totales',  val: stats.transacciones, icon: ArrowUpRight, color: '#10b981' },
+    { label: 'Usuarios Activos',       val: loadingStats ? '-' : users.length.toLocaleString(),                                       icon: Users,        color: '#2d6a4f' },
+    { label: 'Solicitudes Pendientes', val: loadingStats ? '-' : requests.filter(r => r.estado_solicitud === 'PENDIENTE').length.toLocaleString(), icon: FileText,     color: '#f59e0b' },
+    { label: 'Total Solicitudes',      val: loadingStats ? '-' : requests.length.toLocaleString(),                                    icon: ArrowUpRight, color: '#10b981' },
   ];
 
   return (

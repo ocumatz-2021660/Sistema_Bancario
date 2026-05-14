@@ -13,7 +13,7 @@ export const useServiceStore = create((set) => ({
     try {
       const response = await api.get('/services');
       const rawServices = response.data.data || response.data;
-      
+
       // Mapear campos de backend a frontend para consistencia
       const mappedServices = (Array.isArray(rawServices) ? rawServices : []).map(s => ({
         ...s,
@@ -34,15 +34,15 @@ export const useServiceStore = create((set) => ({
     set({ isLoading: true });
     try {
       const payload = {
-        cuenta_id: data.accountId,
-        servicio_id: data.serviceId
+        cuenta_canje: data.accountId,
+        servicio_canje: data.serviceId
       };
       const response = await api.post('/redeem_services/redeem', payload);
       set({ isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });
-      return { success: false, error: error.response?.data?.message || 'Error al canjear servicio' };
+      return { success: false, error: error.response?.data?.message || 'Error al canjear' };
     }
   },
 
@@ -69,13 +69,36 @@ export const useServiceStore = create((set) => ({
     }
   },
 
+deleteRedeems: async (id_redeem_service, accountId) => {
+  try {
+    await api.delete(`/redeem_services/cancel/${id_redeem_service}`);
+    const response = await api.get(`/redeem_services/${accountId}`);
+    const rawRedeems = response.data.data || response.data;
+    const mappedRedeems = (Array.isArray(rawRedeems) ? rawRedeems : []).map(r => ({
+      ...r,
+      serviceName: r.servicio_canje?.nombre_servicio || 'Servicio Desconocido',
+      description: r.servicio_canje?.descripcion_servicio || '',
+      cost: r.servicio_canje?.puntos_requeridos || 0,
+      date: r.createdAt
+    }));
+    set({ redeems: mappedRedeems, isLoading: false });
+    return { success: true };
+  } catch (error) {
+    console.error("Error detallado en deleteRedeems:", error);
+    return { 
+      success: false, 
+      error: error.response?.data?.message || 'Error al procesar la cancelación' 
+    };
+  }
+},
+
   // --- ADMIN METHODS ---
   createService: async (data) => {
     set({ isLoading: true });
     try {
       const payload = {
-        nombre: data.name,
-        descripcion: data.description,
+        nombre_servicio: data.name,
+        descripcion_servicio: data.description,
         puntos_requeridos: parseFloat(data.points)
       };
       const response = await api.post('/services/create', payload);
@@ -91,8 +114,8 @@ export const useServiceStore = create((set) => ({
     set({ isLoading: true });
     try {
       const payload = {
-        nombre: data.name,
-        descripcion: data.description,
+        nombre_servicio: data.name,
+        descripcion_servicio: data.description,
         puntos_requeridos: parseFloat(data.points)
       };
       const response = await api.put(`/services/update/${id}`, payload);

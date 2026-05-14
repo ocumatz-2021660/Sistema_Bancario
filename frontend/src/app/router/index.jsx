@@ -27,7 +27,6 @@ import { MyRedeemsPage } from '../../features/services/pages/MyRedeemsPage';
 // Admin Pages
 import { UsersManagementPage } from '../../features/admin/pages/UsersManagementPage';
 import { AccountRequestsPage } from '../../features/admin/pages/AccountRequestsPage';
-import { AdminReportsPage } from '../../features/admin/pages/AdminReportsPage';
 import { AdminAccountsPage } from '../../features/admin/pages/AdminAccountsPage';
 import { AdminServicesPage } from '../../features/admin/pages/AdminServicesPage';
 
@@ -99,14 +98,6 @@ export const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={['ADMIN_ROLE']}>
                         <AdminServicesPage />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'admin/reports',
-                element: (
-                    <ProtectedRoute allowedRoles={['ADMIN_ROLE']}>
-                        <AdminReportsPage />
                     </ProtectedRoute>
                 )
             },
