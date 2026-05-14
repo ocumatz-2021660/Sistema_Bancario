@@ -29,6 +29,7 @@ import reddemServicesRoutes from '../../points-service/src/redeem_service/redeem
 import withdrawalsRoutes from '../../account-service/src/withdrawals/withdrawals.routes.js';
 import depositRoutes from '../../account-service/src/deposit/deposit.routes.js';
 import favoriteRoutes from '../../account-service/src/favorite_account/favorite_account.routes.js';
+import currencyRoutes from '../../account-service/src/currency/currency.routes.js';
 
 const BASE_PATH = '/api/v1';
 
@@ -52,6 +53,7 @@ const routes = (app) => {
   app.use(`${BASE_PATH}/withdrawals`, withdrawalsRoutes);
   app.use(`${BASE_PATH}/deposits`,depositRoutes);
   app.use(`${BASE_PATH}/favorite`,favoriteRoutes);
+  app.use(`${BASE_PATH}/currency`, currencyRoutes);
 
 
   app.get(`${BASE_PATH}/health`, (req, res) => {
