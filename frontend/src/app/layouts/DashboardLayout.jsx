@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from '../../shared/components/Sidebar';
+import { CurrencyPicker } from '../../shared/components/CurrencyPicker';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../../features/auth/store/useAuthStore';
-import { Bell, Search } from 'lucide-react';
 import { UserAvatar } from '../../shared/components/UserAvatar';
 
 export const DashboardLayout = () => {
@@ -24,6 +24,7 @@ export const DashboardLayout = () => {
           </div>
 
           <div className="flex items-center gap-6">
+            <CurrencyPicker />
             <div className="flex items-center gap-3 pl-6 border-l border-border">
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-bold text-text-primary leading-none mb-1">

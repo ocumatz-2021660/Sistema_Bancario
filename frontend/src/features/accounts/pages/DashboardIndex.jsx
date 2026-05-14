@@ -2,6 +2,7 @@ import { useAuthStore } from '../../auth/store/useAuthStore';
 import { useAdminStore } from '../../admin/store/useAdminStore';
 import { useAccountStore } from '../store/useAccountStore';
 import { useEffect, useState } from 'react';
+import { useMoney } from '../../../shared/hooks/useMoney';
 import { 
   Wallet, 
   TrendingUp, 
@@ -32,6 +33,7 @@ export const DashboardIndex = () => {
 };
 
 const UserDashboard = ({ user, accounts }) => {
+  const { format } = useMoney();
   const totalBalance = accounts.reduce((acc, curr) => acc + (curr.balance || 0), 0);
   const totalAhorro = accounts
     .filter(a => a.type === 'AHORRO')
@@ -59,7 +61,7 @@ const UserDashboard = ({ user, accounts }) => {
           </div>
           <p className="text-xs font-bold uppercase tracking-widest text-white/60 mb-2">Saldo Total Consolidado</p>
           <h3 className="text-3xl font-black tracking-tighter">
-            Q {totalBalance.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+            {format(totalBalance)}
           </h3>
           <div className="mt-6 flex items-center gap-2 text-[10px] font-bold bg-white/10 w-fit px-3 py-1 rounded-full">
             <TrendingUp className="w-3 h-3" /> {accounts.length} cuenta{accounts.length !== 1 ? 's' : ''} activa{accounts.length !== 1 ? 's' : ''}
@@ -75,7 +77,7 @@ const UserDashboard = ({ user, accounts }) => {
           </div>
           <p className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-1">Saldo en Ahorros</p>
           <h3 className="text-2xl font-black text-text-primary tracking-tighter">
-            Q {totalAhorro.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+            {format(totalAhorro)}
           </h3>
         </div>
 
@@ -88,7 +90,7 @@ const UserDashboard = ({ user, accounts }) => {
           </div>
           <p className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-1">Saldo Monetario</p>
           <h3 className="text-2xl font-black text-text-primary tracking-tighter">
-            Q {totalMonetaria.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+            {format(totalMonetaria)}
           </h3>
         </div>
       </div>
@@ -117,7 +119,7 @@ const UserDashboard = ({ user, accounts }) => {
               </div>
               <div className="text-right">
                 <h4 className="text-xl font-black text-text-primary tracking-tighter">
-                  Q {acc.balance?.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+                  {format(acc.balance)}
                 </h4>
                 <p className="text-[10px] font-bold text-green-500 uppercase mt-1">Activa</p>
               </div>
@@ -136,6 +138,7 @@ const UserDashboard = ({ user, accounts }) => {
 
 const AdminDashboard = () => {
   const { users, requests, getAllUsers, getAccountRequests } = useAdminStore();
+  const { format } = useMoney();
   const [actividad, setActividad] = useState([]);
   const [loadingActividad, setLoadingActividad] = useState(true);
   const loadingStats = users.length === 0;
@@ -220,9 +223,7 @@ const AdminDashboard = () => {
           <div className="space-y-6">
             {actividad.map((t, i) => {
               const tipo = t.tipo_transaccion || 'Transacción';
-              const monto = t.monto != null
-                ? `Q ${Number(t.monto).toLocaleString('es-GT', { minimumFractionDigits: 2 })}`
-                : '';
+              const monto = t.monto != null ? format(Number(t.monto)) : '';
               const fecha = t.createdAt
                 ? new Date(t.createdAt).toLocaleString('es-GT', { dateStyle: 'short', timeStyle: 'short' })
                 : '';

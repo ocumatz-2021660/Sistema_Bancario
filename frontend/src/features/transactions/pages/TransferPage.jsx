@@ -3,13 +3,16 @@ import { useAccountStore } from '../../accounts/store/useAccountStore';
 import { useTransactionStore } from '../store/useTransactionStore';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { useEffect } from 'react';
+import { useMoney } from '../../../shared/hooks/useMoney';
 import { toast } from 'react-hot-toast';
-import { 
-  Send, 
-  Wallet, 
-  User, 
-  MessageSquare, 
-  Loader2, 
+import { useCurrencyStore } from '../../../shared/store/useCurrencyStore';
+
+import {
+  Send,
+  Wallet,
+  User,
+  MessageSquare,
+  Loader2,
   ArrowLeftRight
 } from 'lucide-react';
 
@@ -18,6 +21,8 @@ export const TransferPage = () => {
   const { accounts, getAccounts } = useAccountStore();
   const { transfer, isLoading } = useTransactionStore();
   const { user } = useAuthStore();
+  const { format } = useMoney();
+  const { rate, symbol } = useCurrencyStore();
 
   const sourceAccount = watch('sourceAccount');
   const amount = watch('amount');
@@ -30,13 +35,14 @@ export const TransferPage = () => {
   const selectedAccount = accounts.find(acc => acc._id === sourceAccount);
 
   const onSubmit = async (data) => {
-    // Necesitamos el número de cuenta real, no el ID
     const sourceAcc = accounts.find(acc => acc._id === data.sourceAccount);
+    const amountInGTQ = parseFloat(data.amount) / rate;
     const result = await transfer({
       ...data,
+      amount: amountInGTQ,
       sourceAccountNumber: sourceAcc?.accountNumber
     });
-    
+
     if (result.success) {
       toast.success('¡Transferencia exitosa!');
       reset();
@@ -69,20 +75,19 @@ export const TransferPage = () => {
                       relative flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all
                       ${sourceAccount === acc._id ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'}
                     `}>
-                      <input 
-                        type="radio" 
-                        value={acc._id} 
+                      <input
+                        type="radio"
+                        value={acc._id}
                         className="hidden"
                         {...register('sourceAccount', { required: 'Seleccione cuenta origen' })}
                       />
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
-                      }`}>
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
+                        }`}>
                         <Wallet className="w-5 h-5" />
                       </div>
                       <div className="flex-1 overflow-hidden">
                         <p className="text-[10px] font-black uppercase text-text-secondary tracking-tighter truncate">{acc.type} - {acc.accountNumber}</p>
-                        <p className="text-xs font-bold text-text-primary truncate">Q {acc.balance?.toLocaleString()}</p>
+                        <p className="text-xs font-bold text-text-primary truncate">{format(acc.balance)}</p>
                       </div>
                     </label>
                   ))}
@@ -113,10 +118,10 @@ export const TransferPage = () => {
                   <label className="label-field">Monto a Transferir</label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-text-secondary font-bold">
-                      Q
+                      {symbol}
                     </div>
                     <input
-                      {...register('amount', { 
+                      {...register('amount', {
                         required: 'Requerido',
                         min: { value: 1, message: 'Mínimo Q 1' },
                         validate: value => !selectedAccount || value <= selectedAccount.balance || 'Saldo insuficiente'
@@ -151,10 +156,10 @@ export const TransferPage = () => {
                 <div className="hidden md:block">
                   <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest">Resumen de operación</p>
                   <p className="text-sm font-bold text-text-primary">
-                    {amount ? `Transfiriendo Q ${parseFloat(amount).toLocaleString()}` : 'Complete los datos'}
+                    {amount ? `Transfiriendo ${format(parseFloat(amount))}` : 'Complete los datos'}
                   </p>
                 </div>
-                
+
                 <button
                   disabled={isLoading}
                   type="submit"

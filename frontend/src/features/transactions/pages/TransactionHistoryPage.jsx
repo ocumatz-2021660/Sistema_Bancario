@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useMoney } from '../../../shared/hooks/useMoney';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
 import { useTransactionStore } from '../store/useTransactionStore';
 import { useAuthStore } from '../../auth/store/useAuthStore';
@@ -20,6 +21,7 @@ import { toast } from 'react-hot-toast';
 
 export const TransactionHistoryPage = () => {
   const { accounts, getAccounts, isLoading: accountsLoading, error: accountsError } = useAccountStore();
+  const { format: formatMoney } = useMoney();
   const { history, getHistory, isLoading, deleteTransaction } = useTransactionStore();
   const { user } = useAuthStore();
   const [selectedAccountId, setSelectedAccountId] = useState('');
@@ -41,7 +43,6 @@ export const TransactionHistoryPage = () => {
   const isIncoming = (tx) => {
     if (tx.type === 'DEPOSITO') return true;
     if (tx.type === 'TRANSFERENCIA') {
-      // destinationAccount es el no_cuenta del destino
       return tx.destinationAccount === selectedAccount?.accountNumber;
     }
     return false;
@@ -130,12 +131,12 @@ export const TransactionHistoryPage = () => {
             <div className="text-right">
               <p className="text-[10px] font-black uppercase text-white/50 tracking-widest mb-1">Saldo Disponible</p>
               <h3 className="text-4xl font-black tracking-tighter text-primary-light">
-                Q {selectedAccount?.balance?.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+                {formatMoney(selectedAccount?.balance)}
               </h3>
             </div>
           </div>
 
-          {/* Nota: el backend devuelve las últimas 5 transacciones */}
+          {/* devuelve las últimas 5 transacciones */}
           {history.length > 0 && (
             <p className="text-[10px] font-bold text-text-secondary uppercase tracking-widest text-right">
               Mostrando los últimos {history.length} movimiento{history.length !== 1 ? 's' : ''}
@@ -199,7 +200,7 @@ export const TransactionHistoryPage = () => {
                         </td>
                         <td className="px-6 py-5 text-right font-black tracking-tighter">
                           <span className={incoming ? 'text-green-500' : 'text-red-500'}>
-                            {incoming ? '+' : '-'}Q {tx.amount?.toLocaleString('es-GT', { minimumFractionDigits: 2 })}
+                            {incoming ? '+' : '-'}{formatMoney(tx.amount)}
                           </span>
                         </td>
                         <td className="px-6 py-5 text-right font-black tracking-tighter">

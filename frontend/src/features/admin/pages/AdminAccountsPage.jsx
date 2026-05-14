@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useMoney } from '../../../shared/hooks/useMoney';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
-import { useAdminStore } from '../store/useAdminStore';
 import { toast } from 'react-hot-toast';
 import { 
   Wallet, 
@@ -16,7 +16,8 @@ import {
 } from 'lucide-react';
 
 export const AdminAccountsPage = () => {
-  const { accounts, getAllAccounts, updateSaldo, deactivateAccount, deleteAccount, isLoading } = useAccountStore();
+  const { accounts, getAllAccounts, updateSaldo, activateAccount, deactivateAccount, deleteAccount, isLoading } = useAccountStore();
+  const { format } = useMoney();
   const [searchTerm, setSearchTerm] = useState('');
   const [editingAccount, setEditingAccount] = useState(null);
   const [newBalance, setNewBalance] = useState('');
@@ -27,7 +28,6 @@ export const AdminAccountsPage = () => {
 
   const handleUpdateBalance = async () => {
     if (!newBalance || isNaN(newBalance)) return toast.error('Ingrese un monto válido');
-    
     const result = await updateSaldo(editingAccount._id, parseFloat(newBalance));
     if (result.success) {
       toast.success('Saldo actualizado correctamente');
@@ -38,25 +38,32 @@ export const AdminAccountsPage = () => {
     }
   };
 
-  const handleDeactivate = async (id) => {
-    if (!confirm('¿Seguro que desea cambiar el estado de esta cuenta?')) return;
-    const result = await deactivateAccount(id);
+  const handleActivate = async (acc) => {
+    const result = await activateAccount(acc._id);
     if (result.success) {
-      toast.success('Estado actualizado');
-      getAllAccounts();
+      toast.success('Cuenta activada exitosamente');
     } else {
-      toast.error(result.error);
+      toast.error(result.error || 'No se pudo activar la cuenta');
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDeactivate = async (acc) => {
+    if (!confirm('¿Seguro que desea desactivar esta cuenta?')) return;
+    const result = await deactivateAccount(acc._id);
+    if (result.success) {
+      toast.success('Cuenta desactivada exitosamente');
+    } else {
+      toast.error(result.error || 'No se pudo desactivar la cuenta');
+    }
+  };
+
+  const handleDelete = async (acc) => {
     if (!confirm('¿ESTÁ SEGURO? Esta acción eliminará permanentemente la cuenta y todo su historial.')) return;
-    const result = await deleteAccount(id);
+    const result = await deleteAccount(acc._id);
     if (result.success) {
       toast.success('Cuenta eliminada');
-      getAllAccounts();
     } else {
-      toast.error(result.error);
+      toast.error(result.error || 'No se pudo eliminar la cuenta');
     }
   };
 
@@ -135,7 +142,7 @@ export const AdminAccountsPage = () => {
                       </span>
                     </td>
                     <td className="px-6 py-5 font-black text-text-primary tracking-tighter">
-                      Q {acc.balance?.toLocaleString()}
+                      {format(acc.balance)}
                     </td>
                     <td className="px-6 py-5">
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-black uppercase ${
@@ -146,24 +153,41 @@ export const AdminAccountsPage = () => {
                     </td>
                     <td className="px-6 py-5 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        {/* Editar saldo */}
                         <button 
                           onClick={() => { setEditingAccount(acc); setNewBalance(acc.balance); }}
+                          title="Editar saldo"
                           className="p-2 text-text-secondary hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
+
+                        {/* Activar cuenta — solo visible si está inactiva */}
+                        {!acc.status && (
+                          <button 
+                            onClick={() => handleActivate(acc)}
+                            title="Activar cuenta"
+                            className="p-2 text-text-secondary hover:text-green-500 hover:bg-green-50 rounded-lg transition-all"
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                          </button>
+                        )}
+
+                        {/* Desactivar cuenta — solo visible si está activa */}
+                        {acc.status && (
+                          <button 
+                            onClick={() => handleDeactivate(acc)}
+                            title="Desactivar cuenta"
+                            className="p-2 text-text-secondary hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                          >
+                            <Ban className="w-4 h-4" />
+                          </button>
+                        )}
+
+                        {/* Eliminar cuenta permanentemente */}
                         <button 
-                          onClick={() => handleDeactivate(acc._id)}
-                          className={`p-2 rounded-lg transition-all ${
-                            acc.status 
-                            ? 'text-text-secondary hover:text-red-500 hover:bg-red-50' 
-                            : 'text-text-secondary hover:text-green-500 hover:bg-green-50'
-                          }`}
-                        >
-                          {acc.status ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(acc._id)}
+                          onClick={() => handleDelete(acc)}
+                          title="Eliminar cuenta permanentemente"
                           className="p-2 text-text-secondary hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -172,6 +196,14 @@ export const AdminAccountsPage = () => {
                     </td>
                   </tr>
                 ))}
+
+                {filteredAccounts.length === 0 && (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-20 text-center">
+                      <p className="text-sm font-bold text-text-secondary uppercase tracking-widest">No se encontraron cuentas</p>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

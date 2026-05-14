@@ -9,8 +9,8 @@ import {
   Gift, 
   History, 
   Star, 
-  User, 
   Users, 
+  CircleUserRound,
   FileText, 
   LayoutDashboard,
   LogOut
@@ -24,12 +24,11 @@ export const Sidebar = () => {
     { to: '/dashboard/accounts', label: 'Mis Cuentas', icon: Wallet },
     { to: '/dashboard/transfer', label: 'Transferir', icon: Send },
     { to: '/dashboard/withdrawals', label: 'Retiros', icon: ArrowDownCircle },
-    { to: '/dashboard/deposits', label: 'Depósitos', icon: ArrowUpCircle },
     { to: '/dashboard/history', label: 'Historial', icon: History },
     { to: '/dashboard/services', label: 'Servicios', icon: Gift },
     { to: '/dashboard/redeems', label: 'Mis Canjes', icon: History },
     { to: '/dashboard/favorites', label: 'Favoritos', icon: Star },
-    { to: '/dashboard/profile', label: 'Mi Perfil', icon: User },
+    { to: '/dashboard/profile', label: 'Mi Perfil', icon: CircleUserRound },
   ];
 
   const adminLinks = [
@@ -38,8 +37,8 @@ export const Sidebar = () => {
     { to: '/dashboard/admin/requests', label: 'Solicitudes', icon: FileText },
     { to: '/dashboard/admin/accounts', label: 'Todas las Cuentas', icon: Wallet },
     { to: '/dashboard/admin/services', label: 'Servicios', icon: Gift },
-    { to: '/dashboard/admin/reports', label: 'Reportes', icon: History },
-    { to: '/dashboard/profile', label: 'Mi Perfil', icon: User },
+    { to: '/dashboard/deposits', label: 'Depósitos', icon: ArrowUpCircle },
+    { to: '/dashboard/profile', label: 'Mi Perfil', icon: CircleUserRound },
   ];
 
   const links = role === 'ADMIN_ROLE' ? adminLinks : userLinks;

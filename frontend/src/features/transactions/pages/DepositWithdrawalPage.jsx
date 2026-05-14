@@ -3,12 +3,14 @@ import { useAccountStore } from '../../accounts/store/useAccountStore';
 import { useTransactionStore } from '../store/useTransactionStore';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import { useEffect, useState } from 'react';
+import { useMoney } from '../../../shared/hooks/useMoney';
 import { toast } from 'react-hot-toast';
-import { 
-  ArrowUpCircle, 
-  ArrowDownCircle, 
-  Wallet, 
-  Loader2, 
+import { useCurrencyStore } from '../../../shared/store/useCurrencyStore';
+import {
+  ArrowUpCircle,
+  ArrowDownCircle,
+  Wallet,
+  Loader2,
   Landmark,
   Banknote,
   Search,
@@ -18,6 +20,8 @@ import {
 export const DepositWithdrawalPage = () => {
   const { user, role } = useAuthStore();
   const isAdmin = role === 'ADMIN_ROLE';
+  const { format } = useMoney();
+  const { rate, symbol} = useCurrencyStore();
 
   const [activeTab, setActiveTab] = useState(isAdmin ? 'DEPOSIT' : 'WITHDRAW');
   const [accountSearch, setAccountSearch] = useState('');
@@ -42,12 +46,14 @@ export const DepositWithdrawalPage = () => {
 
   const onSubmit = async (data) => {
     const acc = accounts.find(a => a._id === data.accountId);
+    const amountInGTQ = parseFloat(data.amount) / rate;
     const operation = activeTab === 'DEPOSIT' ? deposit : withdraw;
     const result = await operation({
       ...data,
+      amount: amountInGTQ,  // ← esto falta
       accountNumber: acc?.accountNumber
     });
-    
+
     if (result.success) {
       toast.success(`${activeTab === 'DEPOSIT' ? 'Depósito' : 'Retiro'} realizado con éxito`);
       reset();
@@ -81,17 +87,15 @@ export const DepositWithdrawalPage = () => {
           <div className="inline-flex p-1 bg-surface border border-border rounded-2xl shadow-sm">
             <button
               onClick={() => { setActiveTab('DEPOSIT'); reset(); }}
-              className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                activeTab === 'DEPOSIT' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
-              }`}
+              className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'DEPOSIT' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
+                }`}
             >
               Depósito
             </button>
             <button
               onClick={() => { setActiveTab('WITHDRAW'); reset(); }}
-              className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                activeTab === 'WITHDRAW' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
-              }`}
+              className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'WITHDRAW' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
+                }`}
             >
               Retiro
             </button>
@@ -136,20 +140,19 @@ export const DepositWithdrawalPage = () => {
                   relative flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all
                   ${selectedAccountId === acc._id ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'}
                 `}>
-                  <input 
-                    type="radio" 
-                    value={acc._id} 
+                  <input
+                    type="radio"
+                    value={acc._id}
                     className="hidden"
                     {...register('accountId', { required: 'Seleccione una cuenta' })}
                   />
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                    activeTab === 'DEPOSIT' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'
-                  }`}>
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${activeTab === 'DEPOSIT' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'
+                    }`}>
                     {activeTab === 'DEPOSIT' ? <ArrowUpCircle className="w-5 h-5" /> : <ArrowDownCircle className="w-5 h-5" />}
                   </div>
                   <div>
                     <p className="text-[10px] font-black uppercase text-text-secondary tracking-tighter">{acc.type} - {acc.accountNumber}</p>
-                    <p className="text-xs font-bold text-text-primary">Q {acc.balance?.toLocaleString()}</p>
+                    <p className="text-xs font-bold text-text-primary">{format(acc.balance)}</p>
                   </div>
                 </label>
               ))}
@@ -170,10 +173,10 @@ export const DepositWithdrawalPage = () => {
               <label className="label-field">Monto de la Operación</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-text-secondary font-bold">
-                  Q
+                  {symbol}
                 </div>
                 <input
-                  {...register('amount', { 
+                  {...register('amount', {
                     required: 'Requerido',
                     min: { value: 1, message: 'Mínimo Q 1' },
                     validate: value => activeTab === 'DEPOSIT' || !selectedAccount || value <= selectedAccount.balance || 'Saldo insuficiente'

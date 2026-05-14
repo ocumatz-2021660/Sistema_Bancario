@@ -27,13 +27,11 @@ export const ServicesCatalogPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (services.length === 0 && !serviceLoading && !serviceError) {
-      getServices();
-    }
-    if (user?.id && accounts.length === 0 && !accountsLoading && !accountsError) {
+    getServices();
+    if (user?.id) {
       getAccounts(user.id);
     }
-  }, [getServices, getAccounts, user, services.length, serviceLoading, serviceError, accounts.length, accountsLoading, accountsError]);
+  }, []);
 
   const handleRedeemClick = (service) => {
     setSelectedService(service);

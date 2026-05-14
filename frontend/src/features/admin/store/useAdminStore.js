@@ -19,12 +19,16 @@ export const useAdminStore = create((set) => ({
     }
   },
 
-  // PUT /users/:userId/status  → body: { isActive: boolean }
+  // PUT /users/:userId/status  → body: { accountStatus: 'activo' | 'deshabilitado' }
   updateUserStatus: async (userId, isActive) => {
     set({ isLoading: true });
     try {
-      const response = await api.put(`/users/${userId}/status`, { isActive });
-      set({ isLoading: false });
+      const accountStatus = isActive ? 'activo' : 'deshabilitado';
+      const response = await api.put(`/users/${userId}/status`, { accountStatus });
+      // Refrescar la lista para reflejar el nuevo estado
+      const usersRes = await api.get('/users', { params: { page: 1, limit: 50 } });
+      const raw = usersRes.data.data || usersRes.data;
+      set({ users: Array.isArray(raw) ? raw : [], isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });
@@ -40,7 +44,9 @@ export const useAdminStore = create((set) => ({
     set({ isLoading: true });
     try {
       const response = await api.put(`/users/${userId}/role`, { roleName });
-      set({ isLoading: false });
+      const usersRes = await api.get('/users', { params: { page: 1, limit: 50 } });
+      const raw = usersRes.data.data || usersRes.data;
+      set({ users: Array.isArray(raw) ? raw : [], isLoading: false });
       return { success: true, message: response.data.message };
     } catch (error) {
       set({ isLoading: false });
