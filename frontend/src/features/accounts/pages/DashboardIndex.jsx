@@ -170,7 +170,7 @@ const AdminDashboard = () => {
   const statCards = [
     { label: 'Usuarios Activos',       val: loadingStats ? '-' : users.length.toLocaleString(),                                       icon: Users,        color: '#2d6a4f' },
     { label: 'Solicitudes Pendientes', val: loadingStats ? '-' : requests.filter(r => r.estado_solicitud === 'PENDIENTE').length.toLocaleString(), icon: FileText,     color: '#f59e0b' },
-    { label: 'Total Solicitudes',      val: loadingStats ? '-' : requests.length.toLocaleString(),                                    icon: ArrowUpRight, color: '#10b981' },
+                                 
   ];
 
   return (
@@ -184,24 +184,6 @@ const AdminDashboard = () => {
         </h1>
         <p className="text-text-secondary font-medium mt-2">Monitoreo global del sistema bancario.</p>
       </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {statCards.map((stat, i) => (
-          <div key={i} className="bank-card">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-              style={{ backgroundColor: `${stat.color}15` }}
-            >
-              <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
-            </div>
-            <p className="text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">{stat.label}</p>
-            {loadingStats
-              ? <div className="h-8 w-20 bg-surface animate-pulse rounded-lg mt-1" />
-              : <h3 className="text-2xl font-black text-text-primary tracking-tighter">{stat.val}</h3>
-            }
-          </div>
-        ))}
-      </div>
 
       <div className="bank-card">
         <h3 className="text-xl font-black mb-6">Actividad Reciente</h3>
@@ -243,6 +225,24 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {statCards.map((stat, i) => (
+          <div key={i} className="bank-card">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
+              style={{ backgroundColor: `${stat.color}15` }}
+            >
+              <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
+            </div>
+            <p className="text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">{stat.label}</p>
+            {loadingStats
+              ? <div className="h-8 w-20 bg-surface animate-pulse rounded-lg mt-1" />
+              : <h3 className="text-2xl font-black text-text-primary tracking-tighter">{stat.val}</h3>
+            }
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 };
