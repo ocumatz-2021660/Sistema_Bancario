@@ -50,7 +50,7 @@ export const Sidebar = () => {
           <Wallet className="w-6 h-6 text-white" />
         </div>
         <h2 className="text-xl font-black tracking-tighter uppercase leading-none">
-          Ban<span className="text-primary-light">Kinal</span>
+          Cyber<span className="text-primary-light">Vault</span>
         </h2>
         <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] mt-2">
           {role === 'ADMIN_ROLE' ? 'Administration' : 'Client Access'}

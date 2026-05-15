@@ -2,17 +2,8 @@ import { useEffect, useState } from 'react';
 import { useMoney } from '../../../shared/hooks/useMoney';
 import { useAccountStore } from '../../accounts/store/useAccountStore';
 import { toast } from 'react-hot-toast';
-import { 
-  Wallet, 
-  Search, 
-  Edit2, 
-  Trash2, 
-  Ban, 
-  CheckCircle2, 
-  Loader2,
-  User,
-  DollarSign,
-  X
+import {
+  Wallet, Search, Edit2, Trash2, Loader2, DollarSign, X
 } from 'lucide-react';
 
 export const AdminAccountsPage = () => {
@@ -22,9 +13,7 @@ export const AdminAccountsPage = () => {
   const [editingAccount, setEditingAccount] = useState(null);
   const [newBalance, setNewBalance] = useState('');
 
-  useEffect(() => {
-    getAllAccounts();
-  }, [getAllAccounts]);
+  useEffect(() => { getAllAccounts(); }, [getAllAccounts]);
 
   const handleUpdateBalance = async () => {
     if (!newBalance || isNaN(newBalance)) return toast.error('Ingrese un monto válido');
@@ -38,37 +27,28 @@ export const AdminAccountsPage = () => {
     }
   };
 
-  const handleActivate = async (acc) => {
-    const result = await activateAccount(acc._id);
-    if (result.success) {
-      toast.success('Cuenta activada exitosamente');
+  const handleToggleStatus = async (acc) => {
+    if (acc.status) {
+      if (!confirm('¿Seguro que desea desactivar esta cuenta?')) return;
+      const result = await deactivateAccount(acc._id);
+      if (result.success) toast.success('Cuenta desactivada');
+      else toast.error(result.error || 'No se pudo desactivar');
     } else {
-      toast.error(result.error || 'No se pudo activar la cuenta');
-    }
-  };
-
-  const handleDeactivate = async (acc) => {
-    if (!confirm('¿Seguro que desea desactivar esta cuenta?')) return;
-    const result = await deactivateAccount(acc._id);
-    if (result.success) {
-      toast.success('Cuenta desactivada exitosamente');
-    } else {
-      toast.error(result.error || 'No se pudo desactivar la cuenta');
+      const result = await activateAccount(acc._id);
+      if (result.success) toast.success('Cuenta activada');
+      else toast.error(result.error || 'No se pudo activar');
     }
   };
 
   const handleDelete = async (acc) => {
-    if (!confirm('¿ESTÁ SEGURO? Esta acción eliminará permanentemente la cuenta y todo su historial.')) return;
+    if (!confirm('¿ESTÁ SEGURO? Esta acción eliminará permanentemente la cuenta.')) return;
     const result = await deleteAccount(acc._id);
-    if (result.success) {
-      toast.success('Cuenta eliminada');
-    } else {
-      toast.error(result.error || 'No se pudo eliminar la cuenta');
-    }
+    if (result.success) toast.success('Cuenta eliminada');
+    else toast.error(result.error || 'No se pudo eliminar');
   };
 
-  const filteredAccounts = accounts.filter(acc => 
-    acc.accountNumber?.includes(searchTerm) || 
+  const filteredAccounts = accounts.filter(acc =>
+    acc.accountNumber?.includes(searchTerm) ||
     acc.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     acc.user?.username?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -85,12 +65,11 @@ export const AdminAccountsPage = () => {
           </h1>
           <p className="text-text-secondary font-medium mt-2">Monitoreo y gestión de todos los activos financieros del banco.</p>
         </div>
-
         <div className="relative group w-full md:w-64">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
-          <input 
-            type="text" 
-            placeholder="No. Cuenta o Usuario..." 
+          <input
+            type="text"
+            placeholder="No. Cuenta o Usuario..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="input-field pl-12 h-12"
@@ -104,109 +83,154 @@ export const AdminAccountsPage = () => {
           <p className="text-text-secondary font-bold uppercase tracking-widest text-xs">Accediendo a las bóvedas...</p>
         </div>
       ) : (
-        <div className="bank-card p-0 overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-surface border-b border-border">
-                  <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Número de Cuenta</th>
-                  <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Titular</th>
-                  <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Tipo</th>
-                  <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Saldo</th>
-                  <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest">Estado</th>
-                  <th className="px-6 py-5 text-[10px] font-black text-text-secondary uppercase tracking-widest text-right">Acciones</th>
+        <div className="overflow-x-auto rounded-2xl border border-border shadow-lg">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr style={{ background: 'linear-gradient(90deg, #d1fae5 0%, #bbf7d0 100%)' }}>
+                <th className="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-gray-600">No. Cuenta</th>
+                <th className="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-gray-600">Usuario</th>
+                <th className="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-gray-600">Contacto</th>
+                <th className="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-gray-600">Saldo</th>
+                <th className="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-gray-600">Estado</th>
+                <th className="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-gray-600 text-center">Modificar Estado</th>
+                <th className="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-gray-600 text-right">Funciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {filteredAccounts.length === 0 && (
+                <tr>
+                  <td colSpan="7" className="px-6 py-20 text-center text-sm font-bold text-text-secondary uppercase tracking-widest">
+                    No se encontraron cuentas
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {filteredAccounts.map((acc) => (
-                  <tr key={acc._id} className="hover:bg-primary/5 transition-colors group">
-                    <td className="px-6 py-5 font-black text-text-primary tracking-tighter">
-                      {acc.accountNumber}
-                    </td>
-                    <td className="px-6 py-5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center text-text-secondary">
-                          <User className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-text-primary">{acc.user?.name} {acc.user?.surname}</p>
-                          <p className="text-[10px] text-text-secondary">@{acc.user?.username}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-5">
-                      <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${
-                        acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-100 text-blue-700'
-                      }`}>
+              )}
+
+              {filteredAccounts.map((acc, idx) => (
+                <>
+                  {idx !== 0 && (
+                    <tr key={`sep-${acc._id}`} style={{ height: 8, background: '#f3f4f6' }}>
+                      <td colSpan="7" />
+                    </tr>
+                  )}
+
+                  <tr
+                    key={acc._id}
+                    style={{ background: '#ffffff' }}
+                    className="transition-colors hover:bg-emerald-50/40 group"
+                  >
+                    {/* No. Cuenta */}
+                    <td className="px-5 py-4">
+                      <p className="text-sm font-black text-text-primary tracking-tight">{acc.accountNumber}</p>
+                      <span style={{
+                        fontSize: '10px',
+                        fontWeight: 800,
+                        letterSpacing: '0.06em',
+                        color: acc.type === 'AHORRO' ? '#15803d' : '#1d4ed8',
+                      }}>
                         {acc.type}
                       </span>
                     </td>
-                    <td className="px-6 py-5 font-black text-text-primary tracking-tighter">
-                      {format(acc.balance)}
+
+                    {/* Usuario */}
+                    <td className="px-5 py-4">
+                      <p className="text-sm font-bold text-text-primary">{acc.user?.name} {acc.user?.surname}</p>
+                      <p className="text-[11px] text-text-secondary">@{acc.user?.username}</p>
                     </td>
-                    <td className="px-6 py-5">
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-black uppercase ${
-                        acc.status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                      }`}>
+
+                    {/* Contacto */}
+                    <td className="px-5 py-4">
+                      <p className="text-xs text-text-secondary">{acc.user?.email}</p>
+                    </td>
+
+                    {/* Saldo */}
+                    <td className="px-5 py-4">
+                      <span className="text-sm font-black text-text-primary tracking-tight">{format(acc.balance)}</span>
+                    </td>
+
+                    {/* Estado */}
+                    <td className="px-5 py-4">
+                      <span style={{ display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        padding: '3px 10px',
+                        borderRadius: '999px',
+                        fontSize: '10px',
+                        fontWeight: 800,
+                        letterSpacing: '0.07em',
+                        textTransform: 'uppercase',
+                        background: acc.status ? '#dcfce7' : '#fee2e2',
+                        color: acc.status ? '#15803d' : '#b91c1c',
+                      }}>
+                        <span style={{
+                          width: 6, height: 6,
+                          borderRadius: '50%',
+                          background: acc.status ? '#16a34a' : '#dc2626',
+                          display: 'inline-block'
+                        }} />
                         {acc.status ? 'Activa' : 'Inactiva'}
                       </span>
                     </td>
-                    <td className="px-6 py-5 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {/* Editar saldo */}
-                        <button 
+
+                    {/* Checkbox */}
+                    <td className="px-5 py-4 text-center">
+                      <input
+                        type="checkbox"
+                        checked={acc.status}
+                        onChange={() => handleToggleStatus(acc)}
+                        style={{
+                          width: 16,
+                          height: 16,
+                          cursor: 'pointer',
+                          accentColor: '#16a34a',
+                        }}
+                      />
+                    </td>
+
+                    {/* Acciones */}
+                    <td className="px-5 py-4 text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <button
                           onClick={() => { setEditingAccount(acc); setNewBalance(acc.balance); }}
                           title="Editar saldo"
-                          className="p-2 text-text-secondary hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
+                          style={{
+                            padding: '7px',
+                            borderRadius: 10,
+                            border: '1.5px solid #e5e7eb',
+                            background: '#fff',
+                            cursor: 'pointer',
+                            transition: 'all 0.18s',
+                            color: '#6b7280',
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.background = '#eff6ff'; e.currentTarget.style.borderColor = '#3b82f6'; e.currentTarget.style.color = '#2563eb'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.color = '#6b7280'; }}
                         >
-                          <Edit2 className="w-4 h-4" />
+                          <Edit2 size={14} />
                         </button>
-
-                        {/* Activar cuenta — solo visible si está inactiva */}
-                        {!acc.status && (
-                          <button 
-                            onClick={() => handleActivate(acc)}
-                            title="Activar cuenta"
-                            className="p-2 text-text-secondary hover:text-green-500 hover:bg-green-50 rounded-lg transition-all"
-                          >
-                            <CheckCircle2 className="w-4 h-4" />
-                          </button>
-                        )}
-
-                        {/* Desactivar cuenta — solo visible si está activa */}
-                        {acc.status && (
-                          <button 
-                            onClick={() => handleDeactivate(acc)}
-                            title="Desactivar cuenta"
-                            className="p-2 text-text-secondary hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                          >
-                            <Ban className="w-4 h-4" />
-                          </button>
-                        )}
-
-                        {/* Eliminar cuenta permanentemente */}
-                        <button 
+                        <button
                           onClick={() => handleDelete(acc)}
-                          title="Eliminar cuenta permanentemente"
-                          className="p-2 text-text-secondary hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                          title="Eliminar cuenta"
+                          style={{
+                            padding: '7px',
+                            borderRadius: 10,
+                            border: '1.5px solid #e5e7eb',
+                            background: '#fff',
+                            cursor: 'pointer',
+                            transition: 'all 0.18s',
+                            color: '#6b7280',
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.borderColor = '#ef4444'; e.currentTarget.style.color = '#dc2626'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.color = '#6b7280'; }}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))}
-
-                {filteredAccounts.length === 0 && (
-                  <tr>
-                    <td colSpan="6" className="px-6 py-20 text-center">
-                      <p className="text-sm font-bold text-text-secondary uppercase tracking-widest">No se encontraron cuentas</p>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                </>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
@@ -227,7 +251,7 @@ export const AdminAccountsPage = () => {
                 <label className="label-field">Nuevo Saldo (Q)</label>
                 <div className="relative">
                   <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
-                  <input 
+                  <input
                     type="number"
                     value={newBalance}
                     onChange={(e) => setNewBalance(e.target.value)}
@@ -235,10 +259,7 @@ export const AdminAccountsPage = () => {
                   />
                 </div>
               </div>
-              <button 
-                onClick={handleUpdateBalance}
-                className="btn-primary w-full h-14 flex items-center justify-center gap-2"
-              >
+              <button onClick={handleUpdateBalance} className="btn-primary w-full h-14 flex items-center justify-center gap-2">
                 Actualizar Fondos
               </button>
             </div>

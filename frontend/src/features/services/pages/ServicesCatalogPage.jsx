@@ -58,15 +58,7 @@ export const ServicesCatalogPage = () => {
     }
   };
 
-  // Helper para iconos según descripción o nombre
-  const getServiceIcon = (name) => {
-    const n = name.toLowerCase();
-    if (n.includes('luz') || n.includes('energía')) return <Zap className="w-6 h-6" />;
-    if (n.includes('agua')) return <Droplets className="w-6 h-6" />;
-    if (n.includes('internet') || n.includes('wifi')) return <Wifi className="w-6 h-6" />;
-    if (n.includes('teléfono') || n.includes('celular')) return <Phone className="w-6 h-6" />;
-    return <Gift className="w-6 h-6" />;
-  };
+
 
   return (
     <div className="space-y-10">
@@ -100,9 +92,6 @@ export const ServicesCatalogPage = () => {
             <div key={service._id} className="bank-card group hover:border-primary transition-all duration-300 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-6">
-                  <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                    {getServiceIcon(service.name)}
-                  </div>
                   <span className="text-[10px] font-black uppercase text-green-500 bg-green-50 px-3 py-1 rounded-full">
                     Disponible
                   </span>
