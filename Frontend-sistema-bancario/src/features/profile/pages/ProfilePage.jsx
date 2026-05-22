@@ -11,7 +11,8 @@ import {
   CheckCircle2,
   Loader2,
   Save,
-  Building2
+  Building2,
+  AtSign
 } from 'lucide-react';
 import { UserAvatar } from '../../../shared/components/UserAvatar';
 
@@ -30,6 +31,7 @@ export const ProfilePage = () => {
         name: user.name || '',
         surname: user.surname || '',
         phone: user.phone || '',
+        username: user.username || '',
       });
       setPreview(user.profilePicture);
     }
@@ -49,6 +51,7 @@ export const ProfilePage = () => {
     formData.append('name', data.name);
     formData.append('surname', data.surname);
     formData.append('phone', data.phone);
+    if (data.username) formData.append('username', data.username);
 
     if (data.profilePicture[0]) {
       formData.append('profilePicture', data.profilePicture[0]);
@@ -163,6 +166,26 @@ export const ProfilePage = () => {
                     placeholder="+502 0000-0000"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="label-field">Nombre de Usuario</label>
+                <div className="relative group">
+                  <AtSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary group-focus-within:text-primary transition-colors" />
+                  <input
+                    {...register('username', {
+                      minLength: { value: 3, message: 'Mínimo 3 caracteres' },
+                      maxLength: { value: 50, message: 'Máximo 50 caracteres' },
+                      pattern: { value: /^[a-zA-Z0-9_]+$/, message: 'Solo letras, números y guión bajo' }
+                    })}
+                    className="input-field pl-12"
+                    placeholder="tu_username"
+                  />
+                </div>
+                {errors.username && (
+                  <p className="text-[10px] text-red-500 font-bold uppercase mt-1">{errors.username.message}</p>
+                )}
+                <p className="text-[10px] text-text-secondary font-medium mt-1">Actual: @{user?.username}</p>
               </div>
 
               <div>
