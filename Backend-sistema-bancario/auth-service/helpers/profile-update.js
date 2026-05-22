@@ -3,16 +3,11 @@ import { findUserById } from './user-db.js';
 import { buildUserResponse } from '../utils/user-helpers.js';
 import { deleteImage } from './cloudinary-service.js';
 
-/**
- * Actualiza los datos de perfil de un usuario autenticado.
- * Permite cambiar: nombre, apellido, teléfono y foto de perfil.
- * La foto de perfil viene ya subida a Cloudinary (req.file.path).
- */
 export const updateProfileHelper = async (userId, updateData) => {
   const transaction = await User.sequelize.transaction();
 
   try {
-    const { name, surname, phone, profilePicture } = updateData;
+    const { name, surname, phone, profilePicture, username } = updateData;
 
     const user = await findUserById(userId);
     if (!user) {
@@ -21,10 +16,22 @@ export const updateProfileHelper = async (userId, updateData) => {
       throw err;
     }
 
-    // Construir objeto solo con los campos que llegaron
+    // Validar username si se quiere cambiar
+    if (username && username.trim() !== user.Username) {
+      const existing = await User.findOne({
+        where: { Username: username.trim() },
+      });
+      if (existing) {
+        const err = new Error('Ese nombre de usuario ya está en uso');
+        err.status = 409;
+        throw err;
+      }
+    }
+
     const userUpdates = {};
-    if (name)    userUpdates.Name    = name.trim();
-    if (surname) userUpdates.Surname = surname.trim();
+    if (name)     userUpdates.Name     = name.trim();
+    if (surname)  userUpdates.Surname  = surname.trim();
+    if (username) userUpdates.Username = username.trim();
 
     if (Object.keys(userUpdates).length > 0) {
       await User.update(userUpdates, {
@@ -33,12 +40,10 @@ export const updateProfileHelper = async (userId, updateData) => {
       });
     }
 
-    // Actualizar perfil (teléfono y/o foto)
     const profileUpdates = {};
     if (phone) profileUpdates.Phone = phone;
 
     if (profilePicture) {
-      // Si ya tenía una foto personalizada en Cloudinary, eliminarla
       const oldPicture = user.UserProfile?.ProfilePicture;
       if (oldPicture && oldPicture.includes('res.cloudinary.com')) {
         await deleteImage(oldPicture).catch((err) =>
@@ -57,7 +62,6 @@ export const updateProfileHelper = async (userId, updateData) => {
 
     await transaction.commit();
 
-    // Retornar usuario actualizado
     const updatedUser = await findUserById(userId);
     return {
       success: true,
