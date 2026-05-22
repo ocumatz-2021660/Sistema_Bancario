@@ -3,10 +3,15 @@ import { Sidebar } from '../../shared/components/Sidebar';
 import { CurrencyPicker } from '../../shared/components/CurrencyPicker';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../../features/auth/store/useAuthStore';
+import { useEffect } from 'react';
 import { Wallet } from 'lucide-react';
 
 export const DashboardLayout = () => {
-  const { role } = useAuthStore();
+  const { role, user, getProfile } = useAuthStore();
+  
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-background font-inter">
@@ -23,14 +28,13 @@ export const DashboardLayout = () => {
           <div className="flex items-center gap-6">
             <CurrencyPicker />
 
-            {/* Logo CyberVault donde estaba el usuario */}
             <div className="flex items-center gap-3 pl-6 border-l border-border">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-black text-text-primary uppercase leading-none tracking-tighter">
-                  Cyber<span className="text-primary">Vault</span>
+                <p className="text-sm font-black text-text-primary leading-none tracking-tight">
+                  {user?.name} {user?.surname}
                 </p>
                 <p className="text-[10px] font-bold text-text-secondary uppercase tracking-[0.2em] mt-1">
-                  {role === 'ADMIN_ROLE' ? 'Administration' : 'Client Access'}
+                  @{user?.username}
                 </p>
               </div>
               <div className="w-10 h-10 bg-primary-dark rounded-xl flex items-center justify-center shadow-md">
