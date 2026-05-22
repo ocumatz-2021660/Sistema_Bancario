@@ -2,13 +2,15 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAccountStore } from '../store/useAccountStore';
 import { toast } from 'react-hot-toast';
-import { 
-  PlusCircle, 
-  ArrowLeft, 
-  Landmark, 
-  Coins, 
-  Tag, 
-  Loader2, 
+import { useMoney } from '../../../shared/hooks/useMoney';
+import { useCurrencyStore } from '../../../shared/store/useCurrencyStore';
+import {
+  PlusCircle,
+  ArrowLeft,
+  Landmark,
+  Coins,
+  Tag,
+  Loader2,
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
@@ -22,10 +24,11 @@ export const CreateAccountPage = () => {
   });
   const { createAccountRequest, isLoading } = useAccountStore();
   const navigate = useNavigate();
-
+  const { format } = useMoney();
+  const { rate, symbol } = useCurrencyStore();
   const onSubmit = async (data) => {
     const result = await createAccountRequest(data);
-    
+
     if (result.success) {
       toast.success('Solicitud enviada correctamente. Pendiente de aprobación.');
       navigate('/dashboard/accounts');
@@ -37,8 +40,8 @@ export const CreateAccountPage = () => {
   return (
     <div className="max-w-[800px] mx-auto space-y-10">
       <header className="flex items-center gap-4">
-        <Link 
-          to="/dashboard/accounts" 
+        <Link
+          to="/dashboard/accounts"
           className="w-10 h-10 bg-surface border border-border rounded-xl flex items-center justify-center text-text-secondary hover:text-primary transition-colors shadow-sm"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -67,9 +70,9 @@ export const CreateAccountPage = () => {
                       hover:border-primary/30
                       has-[:checked]:border-primary has-[:checked]:bg-primary/5
                     `}>
-                      <input 
-                        type="radio" 
-                        value="MONETARIA" 
+                      <input
+                        type="radio"
+                        value="MONETARIA"
                         className="hidden"
                         {...register('type', { required: 'Seleccione un tipo' })}
                       />
@@ -84,9 +87,9 @@ export const CreateAccountPage = () => {
                       hover:border-primary/30
                       has-[:checked]:border-primary has-[:checked]:bg-primary/5
                     `}>
-                      <input 
-                        type="radio" 
-                        value="AHORRO" 
+                      <input
+                        type="radio"
+                        value="AHORRO"
                         className="hidden"
                         {...register('type', { required: 'Seleccione un tipo' })}
                       />
@@ -99,15 +102,15 @@ export const CreateAccountPage = () => {
                 </div>
 
                 <div>
-                  <label className="label-field">Saldo Inicial (Mín. Q 100)</label>
+                  <label className="label-field">Saldo Inicial (Mín. {symbol} 100)</label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-text-secondary font-bold">
-                      Q
+                      {symbol}
                     </div>
                     <input
-                      {...register('balance', { 
+                      {...register('balance', {
                         required: 'Requerido',
-                        min: { value: 100, message: 'Mínimo Q 100' }
+                        min: { value: 100, message: `Mínimo ${symbol} 100` }
                       })}
                       type="number"
                       className="input-field pl-10"
@@ -170,7 +173,7 @@ export const CreateAccountPage = () => {
               </li>
               <li className="flex items-start gap-2">
                 <div className="w-1 h-1 bg-primary-light rounded-full mt-1.5 shrink-0" />
-                Monto mínimo de Q 100.00
+                Monto mínimo de {symbol} 100.00
               </li>
             </ul>
           </div>
