@@ -50,7 +50,7 @@ export const DepositWithdrawalPage = () => {
     const operation = activeTab === 'DEPOSIT' ? deposit : withdraw;
     const result = await operation({
       ...data,
-      amount: amountInGTQ,  // ← esto falta
+      amount: amountInGTQ,
       accountNumber: acc?.accountNumber
     });
 
@@ -74,7 +74,7 @@ export const DepositWithdrawalPage = () => {
         <div>
           <h1 className="text-4xl font-black text-text-primary tracking-tighter">
             {isAdmin ? (
-              <>Depósitos y <span className="text-primary">Retiros</span></>
+              <><span className="text-primary">Depósitos</span></>
             ) : (
               <span className="text-primary">Retiros</span>
             )}
@@ -83,24 +83,6 @@ export const DepositWithdrawalPage = () => {
           <p className="text-text-secondary font-medium mt-2">{isAdmin ? 'Realiza depósitos a cualquier cuenta del sistema.' : 'Gestiona el efectivo de tus cuentas institucionales.'}</p>
         </div>
 
-        {isAdmin && (
-          <div className="inline-flex p-1 bg-surface border border-border rounded-2xl shadow-sm">
-            <button
-              onClick={() => { setActiveTab('DEPOSIT'); reset(); }}
-              className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'DEPOSIT' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
-                }`}
-            >
-              Depósito
-            </button>
-            <button
-              onClick={() => { setActiveTab('WITHDRAW'); reset(); }}
-              className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'WITHDRAW' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-secondary hover:text-primary'
-                }`}
-            >
-              Retiro
-            </button>
-          </div>
-        )}
       </header>
 
       <div className="bank-card shadow-xl border-t-4 border-t-primary">
