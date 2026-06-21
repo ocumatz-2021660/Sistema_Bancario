@@ -3,12 +3,12 @@ import { useAdminStore } from '../../admin/store/useAdminStore';
 import { useAccountStore } from '../store/useAccountStore';
 import { useEffect, useState } from 'react';
 import { useMoney } from '../../../shared/hooks/useMoney';
-import { 
-  Wallet, 
-  TrendingUp, 
-  Users, 
-  FileText, 
-  ArrowUpRight, 
+import {
+  Wallet,
+  TrendingUp,
+  Users,
+  FileText,
+  ArrowUpRight,
   ArrowDownLeft,
   HandCoins,
   ShieldCheck
@@ -107,9 +107,8 @@ const UserDashboard = ({ user, accounts }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {accounts.slice(0, 2).map((acc) => (
             <div key={acc._id} className="bank-card flex items-center gap-6 group">
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
-                acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
-              }`}>
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${acc.type === 'AHORRO' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
+                }`}>
                 <Wallet className="w-7 h-7" />
               </div>
               <div className="flex-1">
@@ -168,15 +167,14 @@ const AdminDashboard = () => {
   };
 
   const statCards = [
-    { label: 'Usuarios Activos',       val: loadingStats ? '-' : users.length.toLocaleString(),                                       icon: Users,        color: '#2d6a4f' },
-    { label: 'Solicitudes Pendientes', val: loadingStats ? '-' : requests.filter(r => r.estado_solicitud === 'PENDIENTE').length.toLocaleString(), icon: FileText,     color: '#f59e0b' },
-                                 
+    { label: 'Usuarios Activos', val: loadingStats ? '-' : users.length.toLocaleString(), icon: Users, color: '#2d6a4f' },
+    { label: 'Solicitudes Pendientes', val: loadingStats ? '-' : requests.filter(r => r.estado_solicitud === 'PENDIENTE').length.toLocaleString(), icon: FileText, color: '#f59e0b' },
   ];
 
   return (
     <div className="space-y-10">
       <header>
-        <h1 className="text-4xl font-black text-text-primary tracking-tighter flex items-center gap-3">
+        <h1 className="text-2xl sm:text-3xl lg:text-5xl font-black flex flex-wrap items-center gap-2">
           Consola de <span className="text-primary">Administración</span>
           <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
             <ShieldCheck className="w-6 h-6 text-primary" />
@@ -225,7 +223,7 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {statCards.map((stat, i) => (
           <div key={i} className="bank-card">
             <div

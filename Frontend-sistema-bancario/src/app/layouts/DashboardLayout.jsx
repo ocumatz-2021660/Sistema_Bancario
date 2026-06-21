@@ -5,10 +5,13 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '../../features/auth/store/useAuthStore';
 import { useEffect } from 'react';
 import { Wallet } from 'lucide-react';
+import { useSidebarStore } from '../../shared/store/useSidebarStore';
+import { Menu } from 'lucide-react';
 
 export const DashboardLayout = () => {
   const { role, user, getProfile } = useAuthStore();
-  
+  const { toggle } = useSidebarStore();
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -17,10 +20,15 @@ export const DashboardLayout = () => {
     <div className="flex min-h-screen bg-background font-inter">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col ml-64 overflow-hidden">
+      <div className="flex-1 flex flex-col lg:ml-64 overflow-hidden">
         {/* Header */}
         <header className="h-20 bg-surface border-b border-border flex items-center justify-between px-10 sticky top-0 z-20">
-          
+
+          {/* Botón para abrir el menú del sidebar*/}
+          <button onClick={toggle} className="text-text-primary lg:hidden cursor-pointer">
+            <Menu className="w-6 h-6" />
+          </button>
+
           <h2 className="text-xl font-bold text-text-primary capitalize">
             {role === 'ADMIN_ROLE' ? 'Panel de Control' : 'Mi Banca Digital'}
           </h2>

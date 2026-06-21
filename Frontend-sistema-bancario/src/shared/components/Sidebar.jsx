@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '../../features/auth/store/useAuthStore';
+import { useSidebarStore } from '../store/useSidebarStore';
 import { UserAvatar } from '../components/UserAvatar';
 import {
   Home,
@@ -14,11 +15,13 @@ import {
   CircleUserRound,
   FileText,
   LayoutDashboard,
-  LogOut
+  LogOut,
+  X
 } from 'lucide-react';
 
 export const Sidebar = () => {
   const { role, logout, user } = useAuthStore();
+  const { isOpen, close } = useSidebarStore();
 
   const userLinks = [
     { to: '/dashboard', label: 'Inicio', icon: Home },
@@ -45,51 +48,72 @@ export const Sidebar = () => {
   const links = role === 'ADMIN_ROLE' ? adminLinks : userLinks;
 
   return (
-    <aside className="w-64 bg-primary-dark text-white flex flex-col h-screen fixed left-0 top-0 z-30 shadow-xl">
+    <>
+      {isOpen && (
+        <div
+          onClick={close}
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        />
+      )}
 
-
-      {/* Usuario arriba */}
-      <div className="px-6 py-8 flex flex-col items-center gap-3 border-b border-white/10">
-        <UserAvatar src={user?.profilePicture} className="w-16 h-16 border-2 border-white/20" />
-        <div className="text-center">
-          <p className="text-sm font-bold text-white leading-snug">
-            {user?.name} {user?.surname}
-          </p>
-          <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-1">
-            {role === 'ADMIN_ROLE' ? 'Administrador' : `@${user?.username}`}
-          </p>
-        </div>
-      </div>
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
-        {links.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            end={link.to === '/dashboard'}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
-                ? 'bg-primary text-white shadow-lg shadow-black/20'
-                : 'text-white/60 hover:text-white hover:bg-white/5'
-              }`
-            }
-          >
-            <link.icon className="w-5 h-5 transition-transform group-hover:scale-110" />
-            <span className="text-sm font-semibold">{link.label}</span>
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* Cerrar sesión */}
-      <div className="p-4 border-t border-white/10">
+      <aside
+        className={`w-64 bg-primary-dark text-white flex flex-col h-screen fixed left-0 top-0 z-50 shadow-xl
+          transition-transform duration-300
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:translate-x-0`}
+      >
+        {/* Botón cerrar */}
         <button
-          onClick={logout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200"
+          onClick={close}
+          className="absolute top-4 right-4 text-white/60 hover:text-white lg:hidden cursor-pointer"
         >
-          <LogOut className="w-5 h-5" />
-          <span className="text-sm font-semibold">Cerrar Sesión</span>
+          <X className="w-6 h-6" />
         </button>
-      </div>
-    </aside>
+
+        {/* Usuario arriba */}
+        <div className="px-6 py-8 flex flex-col items-center gap-3 border-b border-white/10">
+          <UserAvatar src={user?.profilePicture} className="w-16 h-16 border-2 border-white/20" />
+          <div className="text-center">
+            <p className="text-sm font-bold text-white leading-snug">
+              {user?.name} {user?.surname}
+            </p>
+            <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mt-1">
+              {role === 'ADMIN_ROLE' ? 'Administrador' : `@${user?.username}`}
+            </p>
+          </div>
+        </div>
+        {/* Nav */}
+        <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+          {links.map((link) => (
+            <NavLink
+              onClick={close}
+              key={link.to}
+              to={link.to}
+              end={link.to === '/dashboard'}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
+                  ? 'bg-primary text-white shadow-lg shadow-black/20'
+                  : 'text-white/60 hover:text-white hover:bg-white/5'
+                }`
+              }
+            >
+              <link.icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+              <span className="text-sm font-semibold">{link.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Cerrar sesión */}
+        <div className="p-4 border-t border-white/10">
+          <button
+            onClick={logout}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200"
+          >
+            <LogOut className="w-5 h-5"/>
+            <span className="text-sm font-semibold cursor-pointer">Cerrar Sesión</span>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
