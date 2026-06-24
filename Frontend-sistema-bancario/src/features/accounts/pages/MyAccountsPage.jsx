@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMoney } from '../../../shared/hooks/useMoney';
 import { useAccountStore } from '../store/useAccountStore';
 import { useAuthStore } from '../../auth/store/useAuthStore';
@@ -10,12 +10,20 @@ export const MyAccountsPage = () => {
   const { user } = useAuthStore();
   const { format } = useMoney();
 
-  useEffect(() => {
-    if (accounts.length === 0 && !isLoading && !error) {
-      getAccounts(user?.id);
-    }
-  }, [getAccounts, user, accounts.length, isLoading, error]);
+const [hasFetched, setHasFetched] = useState(false);
 
+  useEffect(() => {
+    // Si hay un usuario, y no estamos cargando, y aún no hemos hecho la petición inicial...
+    if (user?.id && !isLoading && !hasFetched) {
+      getAccounts(user.id);
+      setHasFetched(true); // Marcamos que la petición ya se envió
+    }
+  }, [user?.id, isLoading, hasFetched, getAccounts]);
+
+  // Si el usuario cambia (por ejemplo, cierra sesión e inicia otra), reiniciamos la bandera
+  useEffect(() => {
+    setHasFetched(false);
+  }, [user?.id]);
   return (
     <div className="space-y-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
