@@ -19,11 +19,19 @@ export const DashboardIndex = () => {
   const { user, role } = useAuthStore();
   const { accounts, getAccounts, isLoading, error } = useAccountStore();
 
-  useEffect(() => {
-    if (role === 'USER_ROLE' && accounts.length === 0 && !isLoading && !error) {
-      getAccounts(user?.id);
+  const [hasFetched, setHasFetched] = useState(false);
+useEffect(() => {
+    // 2. Si es un usuario normal, no se está cargando la API y aún no se ha hecho el fetch
+    if (role === 'USER_ROLE' && user?.id && !isLoading && !hasFetched) {
+      getAccounts(user.id);
+      setHasFetched(true); // Bloqueamos futuras peticiones automáticas
     }
-  }, [role, getAccounts, user, accounts.length, isLoading, error]);
+  }, [role, user?.id, isLoading, hasFetched, getAccounts]);
+
+  // 3. Si el usuario cambia o se cierra sesión, reiniciamos el estado de control
+  useEffect(() => {
+    setHasFetched(false);
+  }, [user?.id, role]);
 
   if (role === 'ADMIN_ROLE') {
     return <AdminDashboard />;
