@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import PDFDocument from 'pdfkit';
-import { config } from '../../../auth-service/configs/config.js';
-import { User } from '../../../auth-service/src/users/user.model.js';
+import { config } from '../../configs/config.js';
+import { User } from '../../src/users/user.model.js';
 
 
 const createTransporter = () => {

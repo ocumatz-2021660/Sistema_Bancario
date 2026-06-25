@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { createService, getServices, updateService, deleteService } from './service.controller.js';
-import { validateJWT } from '../../../auth-service/middlewares/validate-JWT.js';
-import { isAdmin } from '../../../account-service/middlewares/is.admin.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
+import { isAdmin } from '../../middlewares/isAdmin.js';
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 'use strict';
 
 import { Router } from 'express';
-import { validateJWT } from '../../../auth-service/middlewares/validate-JWT.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
 import { isAdmin } from '../../middlewares/is.admin.js';
 import { isAccountOwnerWithdrawal } from '../../middlewares/is_account_owner.js';
 import { validateWithdrawalInput, validateDailyLimit } from '../../middlewares/withdrawals-validation.js';

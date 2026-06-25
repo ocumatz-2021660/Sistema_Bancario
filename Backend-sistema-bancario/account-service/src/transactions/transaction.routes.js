@@ -6,7 +6,7 @@ import { validateTransactionInput, validateAccountsAndFunds } from '../../middle
 import { canCancelTransaction } from '../../middlewares/time-out-transaction.js';
 import { validateDailyLimit } from '../../middlewares/max-transaction-money.js';
 import { getTransaccionesByCuenta } from './transaction.controller.js';
-import { validateJWT } from '../../../auth-service/middlewares/validate-JWT.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
 import { isAdmin } from '../../middlewares/is.admin.js';
 import { isAccountOwnerTransaction } from '../../middlewares/is_account_owner.js';
 

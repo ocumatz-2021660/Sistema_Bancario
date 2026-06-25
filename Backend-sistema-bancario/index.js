@@ -1,19 +1,8 @@
-import dotenv from 'dotenv';
-import { initServer } from './auth-service/configs/app.js';
-
-// Configurar variables de entorno
-dotenv.config();
-
-// Manejar errores no capturados
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (err, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', err);
-  process.exit(1);
-});
-
-// Inicializar servidor
-initServer();
+console.log('🏦 Sistema Bancario');
+console.log('');
+console.log('Usa "pnpm dev" para iniciar todos los servicios.');
+console.log('');
+console.log('Servicios:');
+console.log('  pnpm dev:auth    → Puerto 3001');
+console.log('  pnpm dev:account → Puerto 3002');
+console.log('  pnpm dev:points  → Puerto 3003');

@@ -1,9 +1,12 @@
 'use strict';
 
+import { fileURLToPath } from 'url';
+import path from 'path';
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 // Configuración de PostgreSQL (igual que la API .NET)
 export const sequelize = new Sequelize({

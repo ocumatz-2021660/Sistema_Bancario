@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { canjearServicio, getAllCanjes, getCanjesByCuenta, cancelarCanje } from './redeem_service.controller.js';
-import { isAdmin } from '../../../account-service/middlewares/is.admin.js';
-import { validateJWT } from '../../../auth-service/middlewares/validate-JWT.js';
+import { isAdmin } from '../../middlewares/isAdmin.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
 import { verificarPuntos } from '../../middlewares/redeem_service.validation.js';
 import { canCancelCanje } from '../../middlewares/time-out-redeem_service.js';
 

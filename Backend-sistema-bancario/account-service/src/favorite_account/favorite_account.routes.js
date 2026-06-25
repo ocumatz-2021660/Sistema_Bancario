@@ -1,7 +1,7 @@
 'use strict';
 
 import { Router } from 'express';
-import { validateJWT } from '../../../auth-service/middlewares/validate-JWT.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
 import { addFavorito, getMisFavoritos, updateAliasFavorito, deleteFavorito } from './favorite_account.controller.js';
 
 const router = Router();

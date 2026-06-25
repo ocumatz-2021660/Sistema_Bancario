@@ -1,5 +1,5 @@
 
-import Cuenta from '../../account-service/src/account/account.model.js';
+import Cuenta from '../src/account/account.model.js';
 import Service from '../src/services/service.model.js';
 
 export const verificarPuntos = async (request, response, next) => {

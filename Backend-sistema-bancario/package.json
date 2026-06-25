@@ -1,55 +1,16 @@
 {
-  "name": "auth-node",
+  "name": "sistema-bancario",
   "version": "1.0.0",
-  "description": "API REST de autenticación robusta con Node.js y PostgreSQL",
-  "main": "backend/index.js",
+  "private": true,
+  "description": "Sistema Bancario - Monorepo",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_ENV=production node index.js",
-    "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  },
-  "keywords": [
-    "auth",
-    "authentication",
-    "nodejs",
-    "postgresql",
-    "jwt",
-    "api"
-  ],
-  "author": "GRUPO 1 IN6BM",
-  "license": "MIT",
-  "dependencies": {
-    "argon2": "^0.44.0",
-    "cloudinary": "^2.7.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0",
-    "express-rate-limit": "^8.1.0",
-    "express-validator": "^7.2.1",
-    "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^9.2.1",
-    "morgan": "^1.10.1",
-    "multer": "^1.4.5-lts.1",
-    "multer-storage-cloudinary": "^4.0.0",
-    "node-cron": "^4.2.1",
-    "node-fetch": "^3.3.2",
-    "nodemailer": "^6.9.17",
-    "nodemon": "^3.1.10",
-    "pdfkit": "^0.17.2",
-    "pg": "^8.13.1",
-    "sequelize": "^6.35.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "uuid": "^11.1.0"
+    "dev": "concurrently -n auth,account,points -c blue,green,yellow \"pnpm --filter auth-service dev\" \"pnpm --filter account-service dev\" \"pnpm --filter points-service dev\"",
+    "dev:auth": "pnpm --filter auth-service dev",
+    "dev:account": "pnpm --filter account-service dev",
+    "dev:points": "pnpm --filter points-service dev"
   },
   "devDependencies": {
-    "cross-env": "^10.1.0",
-    "nodemon": "^3.1.10"
+    "concurrently": "^9.1.2"
   }
 }

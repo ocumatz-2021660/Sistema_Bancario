@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '../../features/auth/store/useAuthStore';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3005/api/v1',
+    baseURL: import.meta.env.VITE_API_URL || '/api/v1',
 });
 
 // Request interceptor

@@ -1,6 +1,6 @@
 
 import Canje from './redeem_service.model.js';
-import Cuenta from '../../../account-service/src/account/account.model.js';
+import Cuenta from '../../src/account/account.model.js';
 
 export const canjearServicio = async (request, response) => {
     try {

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getRate } from './currency.controller.js';
-import { validateJWT } from '../../../auth-service/middlewares/validate-JWT.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
 
 const router = Router();
 

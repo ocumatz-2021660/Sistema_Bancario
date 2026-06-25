@@ -30,8 +30,6 @@ const options = {
   // Le decimos a swagger-jsdoc dónde buscar los comentarios de documentación
   apis: [
     './auth-service/src/**/*.routes.js',
-    './account-service/src/**/*.routes.js',
-    './points-service/src/**/*.routes.js',
   ],
 };
 

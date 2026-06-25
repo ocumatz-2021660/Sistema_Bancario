@@ -1,5 +1,5 @@
 // helpers/enrich-with-user.js conecta PG y MONGO para consultas
-import { User } from '../../auth-service/src/users/user.model.js';
+import { User } from '../src/users/user.model.js';
 
 /**
  * Enriquece uno o varios documentos de MongoDB con los datos del usuario

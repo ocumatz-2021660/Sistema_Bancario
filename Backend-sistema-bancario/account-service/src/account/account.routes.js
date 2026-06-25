@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validateAccountInput } from "../../middlewares/account-validation.js";
-import { validateJWT } from "../../../auth-service/middlewares/validate-JWT.js";
+import { validateJWT } from "../../middlewares/validate-JWT.js";
 import { isAdmin } from "../../middlewares/is.admin.js";
 import {
     createCuenta,

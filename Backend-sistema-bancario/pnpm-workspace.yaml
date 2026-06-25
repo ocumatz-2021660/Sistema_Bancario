@@ -1,0 +1,4 @@
+packages:
+  - 'auth-service'
+  - 'account-service'
+  - 'points-service'

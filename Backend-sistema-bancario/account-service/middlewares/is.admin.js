@@ -1,5 +1,5 @@
-import { getUserRoleNames } from '../../auth-service/helpers/role-db.js';
-import { ADMIN_ROLE } from '../../auth-service/helpers/role-constants.js';
+import { getUserRoleNames } from '../helpers/role-db.js';
+import { ADMIN_ROLE } from '../helpers/role-constants.js';
 
 export const isAdmin = async (req, res, next) => {
   try {
