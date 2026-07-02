@@ -12,7 +12,7 @@ import {
     Mail,
     Phone
 } from 'lucide-react';
-import { UserAvatar } from '../../../shared/components/UserAvatar';
+import { UserAvatar } from '../../../shared/components/userAvatar';
 
 export const UsersManagementPage = () => {
     const { users, getAllUsers, updateUserStatus, updateUserRole, isLoading } = useAdminStore();

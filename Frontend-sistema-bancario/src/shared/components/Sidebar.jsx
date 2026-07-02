@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '../../features/auth/store/useAuthStore';
 import { useSidebarStore } from '../store/useSidebarStore';
-import { UserAvatar } from '../components/UserAvatar';
+import { UserAvatar } from './userAvatar';
 import {
   Home,
   Wallet,

@@ -1,0 +1,124 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: sistema-bancario-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: GESTION_BANCARIA_B1
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: admin
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sistema-bancario-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d GESTION_BANCARIA_B1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  mongodb:
+    image: mongo:7
+    container_name: sistema-bancario-mongodb
+    restart: unless-stopped
+    expose:
+      - "27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - sistema-bancario-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.auth
+    container_name: sistema-bancario-auth
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+    volumes:
+      - uploads_data:/app/backend/uploads
+    networks:
+      - sistema-bancario-network
+    working_dir: /app/backend
+    command: ["node", "auth-service/index.js"]
+
+  account-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.account
+    container_name: sistema-bancario-account
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "3002:3002"
+    volumes:
+      - uploads_data:/app/backend/uploads
+    networks:
+      - sistema-bancario-network
+    working_dir: /app/backend
+    command: ["node", "account-service/index.js"]
+
+  points-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.points
+    container_name: sistema-bancario-points
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "3003:3003"
+    networks:
+      - sistema-bancario-network
+    working_dir: /app/backend
+    command: ["node", "points-service/index.js"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: sistema-bancario-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - auth-service
+      - account-service
+      - points-service
+    networks:
+      - sistema-bancario-network
+
+networks:
+  sistema-bancario-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  uploads_data:

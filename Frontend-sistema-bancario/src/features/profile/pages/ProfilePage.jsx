@@ -14,7 +14,7 @@ import {
   Building2,
   AtSign
 } from 'lucide-react';
-import { UserAvatar } from '../../../shared/components/UserAvatar';
+import { UserAvatar } from '../../../shared/components/userAvatar';
 
 export const ProfilePage = () => {
   const { user, updateProfile, getProfile, isLoading } = useAuthStore();
