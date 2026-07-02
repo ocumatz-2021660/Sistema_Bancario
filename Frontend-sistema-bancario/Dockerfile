@@ -4,10 +4,10 @@ WORKDIR /app
 
 RUN npm install -g pnpm@10
 
-COPY Frontend-sistema-bancario/package.json Frontend-sistema-bancario/pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-COPY Frontend-sistema-bancario/ .
+COPY . .
 RUN pnpm build
 
 FROM nginx:alpine

@@ -1,26 +1,7 @@
-import nodemailer from 'nodemailer';
 import PDFDocument from 'pdfkit';
 import { config } from '../../configs/config.js';
 import { User } from '../../src/users/user.model.js';
-
-const createTransporter = () => {
-  if (!config.smtp.username || !config.smtp.password) {
-    console.warn('SMTP credentials not configured.');
-    return null;
-  }
-  return nodemailer.createTransport({
-    host: config.smtp.host,
-    port: config.smtp.port,
-    secure: config.smtp.enableSsl,
-    auth: { user: config.smtp.username, pass: config.smtp.password },
-    connectionTimeout: 10_000,
-    greetingTimeout:   10_000,
-    socketTimeout:     10_000,
-    tls: { rejectUnauthorized: false },
-  });
-};
-
-const transporter = createTransporter();
+import { sendBrevoEmail } from '../../helpers/brevo-client.js';
 
 const getUserEmail = async (userId) => {
   if (!userId) return null;
@@ -125,7 +106,6 @@ const generateWithdrawalPDF = (retiro, cuenta, usuario) =>
 
 // Envío de correo de retiro
 export const sendWithdrawalEmail = async (retiro, cuenta) => {
-  if (!transporter) return;
   try {
     const usuario = await getUserEmail(cuenta.usuario_cuenta);
     if (!usuario) {
@@ -136,13 +116,11 @@ export const sendWithdrawalEmail = async (retiro, cuenta) => {
     const monto = `Q ${Number(retiro.monto).toFixed(2)}`;
     const retId = retiro.id_retiro || String(retiro._id);
     const fecha = formatDate(retiro.fecha_retiro || retiro.createdAt);
-    const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
 
     const pdf = await generateWithdrawalPDF(retiro, cuenta, usuario);
 
-    await transporter.sendMail({
-      from,
-      to:      usuario.Email,
+    await sendBrevoEmail({
+      to: usuario.Email,
       subject: `Comprobante de Retiro - ${monto} | Ref: ${retId}`,
       html: `
         <div style="background:#f4f4f4;padding:40px 20px;font-family:Arial,sans-serif;text-align:center;">
@@ -166,7 +144,7 @@ export const sendWithdrawalEmail = async (retiro, cuenta) => {
             </p>
           </div>
         </div>`,
-      attachments: [{ filename: `retiro-${retId}.pdf`, content: pdf, contentType: 'application/pdf' }],
+      attachments: [{ filename: `retiro-${retId}.pdf`, content: pdf }],
     });
 
     console.log(`[withdrawal-email] Correo enviado a ${usuario.Email}`);
@@ -278,7 +256,6 @@ const generateHistoryPDF = (retiros, cuenta, usuario) =>
 
 // ─── Envío de correo de HISTORIAL ────────────────────────────────────────────
 export const sendWithdrawalHistoryEmail = async (retiros, cuenta) => {
-  if (!transporter) return;
   try {
     const usuario = await getUserEmail(cuenta.usuario_cuenta);
     if (!usuario) {
@@ -286,7 +263,6 @@ export const sendWithdrawalHistoryEmail = async (retiros, cuenta) => {
       return;
     }
 
-    const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
     const fecha = formatDate(new Date());
     const pdf   = await generateHistoryPDF(retiros, cuenta, usuario);
 
@@ -301,9 +277,8 @@ export const sendWithdrawalHistoryEmail = async (retiros, cuenta) => {
           </tr>`).join('')
       : `<tr><td colspan="5" style="padding:16px;text-align:center;color:#888;">No hay retiros registrados.</td></tr>`;
 
-    await transporter.sendMail({
-      from,
-      to:      usuario.Email,
+    await sendBrevoEmail({
+      to: usuario.Email,
       subject: `Historial de Retiros - Cuenta ${cuenta.no_cuenta} | ${fecha}`,
       html: `
         <div style="background:#f4f4f4;padding:40px 20px;font-family:Arial,sans-serif;text-align:center;">
@@ -336,7 +311,7 @@ export const sendWithdrawalHistoryEmail = async (retiros, cuenta) => {
             </p>
           </div>
         </div>`,
-      attachments: [{ filename: `historial-retiros-${cuenta.no_cuenta}.pdf`, content: pdf, contentType: 'application/pdf' }],
+      attachments: [{ filename: `historial-retiros-${cuenta.no_cuenta}.pdf`, content: pdf }],
     });
 
     console.log(`[withdrawal-email] Historial enviado a ${usuario.Email}`);

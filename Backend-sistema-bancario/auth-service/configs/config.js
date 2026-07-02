@@ -26,6 +26,13 @@ export const config = {
     fromName: process.env.EMAIL_FROM_NAME,
   },
 
+  // Brevo (Sendinblue) transactional email API
+  brevo: {
+    apiKey: process.env.BREVO_API_KEY,
+    senderEmail: process.env.EMAIL_FROM,
+    senderName: process.env.EMAIL_FROM_NAME,
+  },
+
   // File Upload Configuration (aligned with .NET FileValidator)
   upload: {
     maxSize: 5 * 1024 * 1024, // 5MB (aligned with .NET)

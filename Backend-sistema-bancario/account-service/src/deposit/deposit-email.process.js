@@ -1,26 +1,7 @@
-import nodemailer from 'nodemailer';
 import PDFDocument from 'pdfkit';
 import { config } from '../../configs/config.js';
 import { User } from '../../src/users/user.model.js';
-
-const createTransporter = () => {
-  if (!config.smtp.username || !config.smtp.password) {
-    console.warn('SMTP credentials not configured.');
-    return null;
-  }
-  return nodemailer.createTransport({
-    host: config.smtp.host,
-    port: config.smtp.port,
-    secure: config.smtp.enableSsl,
-    auth: { user: config.smtp.username, pass: config.smtp.password },
-    connectionTimeout: 10_000,
-    greetingTimeout:   10_000,
-    socketTimeout:     10_000,
-    tls: { rejectUnauthorized: false },
-  });
-};
-
-const transporter = createTransporter();
+import { sendBrevoEmail } from '../../helpers/brevo-client.js';
 
 const getUserEmail = async (userId) => {
   if (!userId) return null;
@@ -227,7 +208,6 @@ const generateDepositHistoryPDF = (depositos, cuenta, usuario) =>
   });
 
 export const sendDepositEmail = async (deposito, cuenta) => {
-  if (!transporter) return;
   try {
     const usuario = await getUserEmail(cuenta.usuario_cuenta);
     if (!usuario) {
@@ -238,12 +218,10 @@ export const sendDepositEmail = async (deposito, cuenta) => {
     const monto = `Q ${Number(deposito.monto).toFixed(2)}`;
     const depId = deposito.id_deposito || String(deposito._id);
     const fecha = formatDate(deposito.fecha_deposito || deposito.createdAt);
-    const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
     const pdf   = await generateDepositPDF(deposito, cuenta, usuario);
 
-    await transporter.sendMail({
-      from,
-      to:      usuario.Email,
+    await sendBrevoEmail({
+      to: usuario.Email,
       subject: `Deposito recibido - ${monto} | Ref: ${depId}`,
       html: `
         <div style="background:#f4f4f4;padding:40px 20px;font-family:Arial,sans-serif;text-align:center;">
@@ -267,7 +245,7 @@ export const sendDepositEmail = async (deposito, cuenta) => {
             </p>
           </div>
         </div>`,
-      attachments: [{ filename: `deposito-${depId}.pdf`, content: pdf, contentType: 'application/pdf' }],
+      attachments: [{ filename: `deposito-${depId}.pdf`, content: pdf }],
     });
 
     console.log(`[deposit-email] Comprobante enviado a ${usuario.Email}`);
@@ -277,7 +255,6 @@ export const sendDepositEmail = async (deposito, cuenta) => {
 };
 
 export const sendDepositHistoryEmail = async (depositos, cuenta) => {
-  if (!transporter) return;
   try {
     const usuario = await getUserEmail(cuenta.usuario_cuenta);
     if (!usuario) {
@@ -285,7 +262,6 @@ export const sendDepositHistoryEmail = async (depositos, cuenta) => {
       return;
     }
 
-    const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
     const fecha = formatDate(new Date());
     const pdf   = await generateDepositHistoryPDF(depositos, cuenta, usuario);
 
@@ -300,9 +276,8 @@ export const sendDepositHistoryEmail = async (depositos, cuenta) => {
           </tr>`).join('')
       : `<tr><td colspan="5" style="padding:16px;text-align:center;color:#888;">No hay depositos registrados.</td></tr>`;
 
-    await transporter.sendMail({
-      from,
-      to:      usuario.Email,
+    await sendBrevoEmail({
+      to: usuario.Email,
       subject: `Historial de Depositos - Cuenta ${cuenta.no_cuenta} | ${fecha}`,
       html: `
         <div style="background:#f4f4f4;padding:40px 20px;font-family:Arial,sans-serif;text-align:center;">
@@ -335,7 +310,7 @@ export const sendDepositHistoryEmail = async (depositos, cuenta) => {
             </p>
           </div>
         </div>`,
-      attachments: [{ filename: `historial-depositos-${cuenta.no_cuenta}.pdf`, content: pdf, contentType: 'application/pdf' }],
+      attachments: [{ filename: `historial-depositos-${cuenta.no_cuenta}.pdf`, content: pdf }],
     });
 
     console.log(`[deposit-email] Historial enviado a ${usuario.Email}`);

@@ -1,0 +1,8 @@
+**/node_modules
+.git
+.gitIgnore
+*.md
+.prettierrc.json
+eslint.config.js
+README.md
+uploads/

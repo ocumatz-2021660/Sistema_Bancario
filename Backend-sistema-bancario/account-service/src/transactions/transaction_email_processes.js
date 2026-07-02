@@ -1,27 +1,7 @@
-import nodemailer from 'nodemailer';
 import PDFDocument from 'pdfkit';
 import { config } from '../../configs/config.js';
 import { User } from '../../src/users/user.model.js';
-
-
-const createTransporter = () => {
-  if (!config.smtp.username || !config.smtp.password) {
-    console.warn('SMTP credentials not configured.');
-    return null;
-  }
-  return nodemailer.createTransport({
-    host: config.smtp.host,
-    port: config.smtp.port,
-    secure: config.smtp.enableSsl,
-    auth: { user: config.smtp.username, pass: config.smtp.password },
-    connectionTimeout: 10_000,
-    greetingTimeout:   10_000,
-    socketTimeout:     10_000,
-    tls: { rejectUnauthorized: false },
-  });
-};
-
-const transporter = createTransporter();
+import { sendBrevoEmail } from '../../helpers/brevo-client.js';
 
 const getUserEmail = async (userId) => {
   if (!userId) return null;
@@ -157,7 +137,6 @@ export const sendTransactionEmails = async (
   cuentaOrigen,  saldoAnteriorOrigen,
   cuentaDestino, saldoAnteriorDestino
 ) => {
-  if (!transporter) return;
   try {
     const [usuarioOrigen, usuarioDestino] = await Promise.all([
       cuentaOrigen  ? getUserEmail(cuentaOrigen.usuario_cuenta)  : Promise.resolve(null),
@@ -168,8 +147,6 @@ export const sendTransactionEmails = async (
     const monto = `Q ${Number(transaccion.monto).toFixed(2)}`;
     const trxId = transaccion.id_transaccion || String(transaccion._id);
     const fecha = formatDate(transaccion.fecha_transaccion || transaccion.createdAt);
-    const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
-
     if (cuentaOrigen && usuarioOrigen) {
       const pdf = await generateTransactionPDF(
         transaccion,
@@ -182,8 +159,8 @@ export const sendTransactionEmails = async (
         ? `<tr><td style="padding:10px;color:#666;">Saldo anterior</td><td style="padding:10px;font-weight:bold;color:#888;">Q ${Number(saldoAnteriorOrigen).toFixed(2)}</td></tr>`
         : '';
 
-      await transporter.sendMail({
-        from, to: usuarioOrigen.Email,
+      await sendBrevoEmail({
+        to: usuarioOrigen.Email,
         subject: `Confirmacion de ${tipo} - ${monto} | Ref: ${trxId}`,
         html: `<div style="background:#f4f4f4;padding:40px 20px;font-family:Arial,sans-serif;text-align:center;">
           <div style="max-width:520px;margin:0 auto;background:#fff;border-top:4px solid #004a99;border-radius:4px;padding:30px;">
@@ -201,7 +178,7 @@ export const sendTransactionEmails = async (
             </table>
             <p style="color:#888;font-size:12px;border-top:1px solid #eee;padding-top:16px;">Se adjunta el comprobante oficial en PDF.</p>
           </div></div>`,
-        attachments: [{ filename: `comprobante-${trxId}.pdf`, content: pdf, contentType: 'application/pdf' }],
+        attachments: [{ filename: `comprobante-${trxId}.pdf`, content: pdf }],
       });
     }
 
@@ -211,8 +188,8 @@ export const sendTransactionEmails = async (
         ? `<tr><td style="padding:10px;color:#666;">Saldo anterior</td><td style="padding:10px;font-weight:bold;color:#888;">Q ${Number(saldoAnteriorDestino).toFixed(2)}</td></tr>`
         : '';
 
-      await transporter.sendMail({
-        from, to: usuarioDestino.Email,
+      await sendBrevoEmail({
+        to: usuarioDestino.Email,
         subject: `Deposito recibido - ${monto} | Ref: ${trxId}`,
         html: `<div style="background:#f4f4f4;padding:40px 20px;font-family:Arial,sans-serif;text-align:center;">
           <div style="max-width:520px;margin:0 auto;background:#fff;border-top:4px solid #28a745;border-radius:4px;padding:30px;">
@@ -241,7 +218,6 @@ export const sendCancellationEmails = async (
   cuentaOrigen,  saldoAnteriorOrigen,
   cuentaDestino, saldoAnteriorDestino
 ) => {
-  if (!transporter) return;
   try {
     console.log('[cancelacion] usuario_cuenta origen:', cuentaOrigen?.usuario_cuenta ?? 'null');
     console.log('[cancelacion] usuario_cuenta destino:', cuentaDestino?.usuario_cuenta ?? 'null');
@@ -258,8 +234,6 @@ export const sendCancellationEmails = async (
     const monto = `Q ${Number(transaccion.monto).toFixed(2)}`;
     const trxId = transaccion.id_transaccion || String(transaccion._id);
     const fecha = formatDate(transaccion.fecha_transaccion || transaccion.createdAt);
-    const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
-
     // Pre-construir filas seguras (sin null access en template)
     const filaOrigen  = cuentaOrigen
       ? `<tr style="background:#fff5f5;"><td style="padding:10px;color:#666;">Cuenta origen</td><td style="padding:10px;font-weight:bold;">${cuentaOrigen.no_cuenta}</td></tr>`
@@ -296,8 +270,8 @@ export const sendCancellationEmails = async (
       const filaSaldoAnt = saldoAnteriorOrigen !== null
         ? `<tr><td style="padding:10px;color:#666;">Saldo anterior</td><td style="padding:10px;font-weight:bold;color:#888;">Q ${Number(saldoAnteriorOrigen).toFixed(2)}</td></tr>`
         : '';
-      envios.push(transporter.sendMail({
-        from, to: usuarioOrigen.Email,
+      envios.push(sendBrevoEmail({
+        to: usuarioOrigen.Email,
         subject: `Cancelacion de ${tipo} - ${monto} | Ref: ${trxId}`,
         html: buildHtml(
           `${usuarioOrigen.Name} ${usuarioOrigen.Surname}`,
@@ -311,8 +285,8 @@ export const sendCancellationEmails = async (
       const filaSaldoAnt = saldoAnteriorDestino !== null
         ? `<tr><td style="padding:10px;color:#666;">Saldo anterior</td><td style="padding:10px;font-weight:bold;color:#888;">Q ${Number(saldoAnteriorDestino).toFixed(2)}</td></tr>`
         : '';
-      envios.push(transporter.sendMail({
-        from, to: usuarioDestino.Email,
+      envios.push(sendBrevoEmail({
+        to: usuarioDestino.Email,
         subject: `Notificacion de cancelacion - ${monto} | Ref: ${trxId}`,
         html: buildHtml(
           `${usuarioDestino.Name} ${usuarioDestino.Surname}`,
@@ -452,7 +426,6 @@ const generateTransactionHistoryPDF = (transacciones, cuenta, usuario) =>
   });
 
 export const sendTransactionHistoryEmail = async (transacciones, cuenta) => {
-  if (!transporter) return;
   try {
     const usuario = await getUserEmail(cuenta.usuario_cuenta);
     if (!usuario) {
@@ -460,7 +433,6 @@ export const sendTransactionHistoryEmail = async (transacciones, cuenta) => {
       return;
     }
 
-    const from  = `${config.smtp.fromName} <${config.smtp.fromEmail}>`;
     const fecha = formatDate(new Date());
     const pdf   = await generateTransactionHistoryPDF(transacciones, cuenta, usuario);
 
@@ -480,9 +452,8 @@ export const sendTransactionHistoryEmail = async (transacciones, cuenta) => {
         }).join('')
       : `<tr><td colspan="6" style="padding:16px;text-align:center;color:#888;">No hay transacciones registradas.</td></tr>`;
 
-    await transporter.sendMail({
-      from,
-      to:      usuario.Email,
+    await sendBrevoEmail({
+      to: usuario.Email,
       subject: `Historial de Transacciones - Cuenta ${cuenta.no_cuenta} | ${fecha}`,
       html: `
         <div style="background:#f4f4f4;padding:40px 20px;font-family:Arial,sans-serif;text-align:center;">
@@ -516,7 +487,7 @@ export const sendTransactionHistoryEmail = async (transacciones, cuenta) => {
             </p>
           </div>
         </div>`,
-      attachments: [{ filename: `historial-transacciones-${cuenta.no_cuenta}.pdf`, content: pdf, contentType: 'application/pdf' }],
+      attachments: [{ filename: `historial-transacciones-${cuenta.no_cuenta}.pdf`, content: pdf }],
     });
 
     console.log(`[transaction-email] Historial enviado a ${usuario.Email}`);

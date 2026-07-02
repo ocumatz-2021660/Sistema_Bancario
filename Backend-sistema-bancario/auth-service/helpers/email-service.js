@@ -1,44 +1,41 @@
-import nodemailer from 'nodemailer';
 import { config } from '../configs/config.js';
- 
-// Configurar el transportador de email (aligned with .NET SmtpSettings)
-const createTransporter = () => {
-  if (!config.smtp.username || !config.smtp.password) {
-    console.warn(
-      'SMTP credentials not configured. Email functionality will not work.'
-    );
-    return null;
+
+const sendBrevoEmail = async ({ to, subject, html }) => {
+  if (!config.brevo?.apiKey) {
+    throw new Error('Brevo API key not configured');
   }
- 
-  return nodemailer.createTransport({
-    host: config.smtp.host,
-    port: config.smtp.port,
-    secure: config.smtp.enableSsl, // true para 465, false para 587
-    auth: {
-      user: config.smtp.username,
-      pass: config.smtp.password,
+
+  const payload = {
+    sender: {
+      email: config.brevo.senderEmail,
+      name: config.brevo.senderName,
     },
-    // Evitar que las peticiones HTTP queden colgadas si SMTP no responde
-    connectionTimeout: 10_000, // 10s
-    greetingTimeout: 10_000, // 10s
-    socketTimeout: 10_000, // 10s
-    tls: {
-      rejectUnauthorized: false,
+    to: [{ email: to }],
+    subject,
+    htmlContent: html,
+  };
+
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': config.brevo.apiKey,
+      'Content-Type': 'application/json',
     },
+    body: JSON.stringify(payload),
   });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`Brevo API error (${response.status}): ${errorBody}`);
+  }
 };
- 
-const transporter = createTransporter();
- 
+
 export const sendVerificationEmail = async (email, name, verificationToken) => {
-  if (!transporter) throw new Error('SMTP transporter not configured');
- 
   try {
     const frontendUrl = config.app.frontendUrl || 'http://localhost:3000';
     const verificationUrl = `${frontendUrl}/verify-email?token=${verificationToken}`;
- 
-    const mailOptions = {
-      from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
+
+    await sendBrevoEmail({
       to: email,
       subject: 'Verificación de Seguridad - Registro de Cuenta',
       html: `
@@ -59,24 +56,19 @@ export const sendVerificationEmail = async (email, name, verificationToken) => {
           </div>
         </div>
       `,
-    };
- 
-    await transporter.sendMail(mailOptions);
+    });
   } catch (error) {
     console.error('Error sending verification email:', error);
     throw error;
   }
 };
- 
+
 export const sendPasswordResetEmail = async (email, name, resetToken) => {
-  if (!transporter) throw new Error('SMTP transporter not configured');
- 
   try {
     const frontendUrl = config.app.frontendUrl || 'http://localhost:3000';
     const resetUrl = `${frontendUrl}/reset-password?token=${resetToken}`;
- 
-    const mailOptions = {
-      from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
+
+    await sendBrevoEmail({
       to: email,
       subject: 'Notificación de Seguridad: Restablecimiento de Contraseña',
       html: `
@@ -98,21 +90,16 @@ export const sendPasswordResetEmail = async (email, name, resetToken) => {
           </div>
         </div>
       `,
-    };
- 
-    await transporter.sendMail(mailOptions);
+    });
   } catch (error) {
     console.error('Error sending password reset email:', error);
     throw error;
   }
 };
- 
+
 export const sendWelcomeEmail = async (email, name) => {
-  if (!transporter) throw new Error('SMTP transporter not configured');
- 
   try {
-    const mailOptions = {
-      from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
+    await sendBrevoEmail({
       to: email,
       subject: 'Bienvenido/a a su Banca Digital',
       html: `
@@ -127,21 +114,16 @@ export const sendWelcomeEmail = async (email, name) => {
           </div>
         </div>
       `,
-    };
- 
-    await transporter.sendMail(mailOptions);
+    });
   } catch (error) {
     console.error('Error sending welcome email:', error);
     throw error;
   }
 };
- 
+
 export const sendPasswordChangedEmail = async (email, name) => {
-  if (!transporter) throw new Error('SMTP transporter not configured');
- 
   try {
-    const mailOptions = {
-      from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
+    await sendBrevoEmail({
       to: email,
       subject: 'Alerta de Seguridad: Cambio de Contraseña Confirmado',
       html: `
@@ -161,12 +143,9 @@ export const sendPasswordChangedEmail = async (email, name) => {
           </div>
         </div>
       `,
-    };
- 
-    await transporter.sendMail(mailOptions);
+    });
   } catch (error) {
     console.error('Error sending password changed email:', error);
     throw error;
   }
 };
- 

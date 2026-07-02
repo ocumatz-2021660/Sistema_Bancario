@@ -21,6 +21,12 @@ export const config = {
     fromEmail: process.env.EMAIL_FROM,
     fromName: process.env.EMAIL_FROM_NAME,
   },
+
+  brevo: {
+    apiKey: process.env.BREVO_API_KEY,
+    senderEmail: process.env.EMAIL_FROM,
+    senderName: process.env.EMAIL_FROM_NAME,
+  },
   upload: {
     maxSize: 5 * 1024 * 1024,
     allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
