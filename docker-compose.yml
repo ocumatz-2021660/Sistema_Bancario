@@ -20,23 +20,6 @@ services:
       retries: 5
       start_period: 30s
 
-  mongodb:
-    image: mongo:7
-    container_name: sistema-bancario-mongodb
-    restart: unless-stopped
-    expose:
-      - "27017"
-    volumes:
-      - mongodb_data:/data/db
-    networks:
-      - sistema-bancario-network
-    healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand('ping').ok"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-
   auth-service:
     build:
       context: ./Backend-sistema-bancario
@@ -47,8 +30,6 @@ services:
       - .env.docker
     depends_on:
       postgres:
-        condition: service_healthy
-      mongodb:
         condition: service_healthy
     ports:
       - "3001:3001"
@@ -70,8 +51,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      mongodb:
-        condition: service_healthy
     ports:
       - "3002:3002"
     volumes:
@@ -89,9 +68,6 @@ services:
     restart: unless-stopped
     env_file:
       - .env.docker
-    depends_on:
-      mongodb:
-        condition: service_healthy
     ports:
       - "3003:3003"
     networks:
@@ -120,5 +96,4 @@ networks:
 
 volumes:
   postgres_data:
-  mongodb_data:
   uploads_data:
