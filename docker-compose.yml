@@ -54,6 +54,10 @@ services:
       dockerfile: Dockerfile
     container_name: sistema-bancario-frontend
     restart: unless-stopped
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - ACCOUNT_SERVICE_URL=http://account-service:3002
+      - POINTS_SERVICE_URL=http://points-service:3003
     ports:
       - "5173:80"
     depends_on:
