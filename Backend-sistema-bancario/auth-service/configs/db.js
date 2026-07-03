@@ -9,6 +9,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 // Configuración de PostgreSQL (igual que la API .NET)
+const sslConfig = process.env.DB_SSL === 'true'
+  ? { ssl: { require: true, rejectUnauthorized: false } }
+  : {};
+
 export const sequelize = new Sequelize({
   dialect: 'postgres',
   host: process.env.DB_HOST,
@@ -17,12 +21,13 @@ export const sequelize = new Sequelize({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   logging: process.env.DB_SQL_LOGGING === 'true' ? console.log : false,
+  dialectOptions: sslConfig,
   define: {
-    freezeTableName: true, // Usar nombres exactos sin pluralización
+    freezeTableName: true,
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    underscored: true, // Usar snake_case para todos los campos
+    underscored: true,
   },
   pool: {
     max: 10,

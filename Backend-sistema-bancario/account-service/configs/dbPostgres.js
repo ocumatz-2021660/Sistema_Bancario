@@ -6,6 +6,10 @@ import dotenv from 'dotenv';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
+const sslConfig = process.env.DB_SSL === 'true'
+  ? { ssl: { require: true, rejectUnauthorized: false } }
+  : {};
+
 const sequelize = new Sequelize({
   dialect: 'postgres',
   host: process.env.DB_HOST,
@@ -14,6 +18,7 @@ const sequelize = new Sequelize({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   logging: false,
+  dialectOptions: sslConfig,
   define: {
     freezeTableName: true,
     timestamps: true,
