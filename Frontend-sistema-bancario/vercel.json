@@ -1,0 +1,17 @@
+{
+  "rewrites": [
+    { "source": "/api/v1/auth/:path*", "destination": "https://sistema-bancario-auth-5zkq.onrender.com/api/v1/auth/:path*" },
+    { "source": "/api/v1/users/:path*", "destination": "https://sistema-bancario-auth-5zkq.onrender.com/api/v1/users/:path*" },
+    { "source": "/api/v1/health", "destination": "https://sistema-bancario-auth-5zkq.onrender.com/api/v1/health" },
+    { "source": "/api/v1/cuentas/:path*", "destination": "https://sistema-bancario-account.onrender.com/api/v1/cuentas/:path*" },
+    { "source": "/api/v1/request_accounts/:path*", "destination": "https://sistema-bancario-account.onrender.com/api/v1/request_accounts/:path*" },
+    { "source": "/api/v1/transactions/:path*", "destination": "https://sistema-bancario-account.onrender.com/api/v1/transactions/:path*" },
+    { "source": "/api/v1/withdrawals/:path*", "destination": "https://sistema-bancario-account.onrender.com/api/v1/withdrawals/:path*" },
+    { "source": "/api/v1/deposits/:path*", "destination": "https://sistema-bancario-account.onrender.com/api/v1/deposits/:path*" },
+    { "source": "/api/v1/favorite/:path*", "destination": "https://sistema-bancario-account.onrender.com/api/v1/favorite/:path*" },
+    { "source": "/api/v1/currency/:path*", "destination": "https://sistema-bancario-account.onrender.com/api/v1/currency/:path*" },
+    { "source": "/api/v1/services/:path*", "destination": "https://sistema-bancario-points.onrender.com/api/v1/services/:path*" },
+    { "source": "/api/v1/redeem_services/:path*", "destination": "https://sistema-bancario-points.onrender.com/api/v1/redeem_services/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
