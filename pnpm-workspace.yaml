@@ -1,3 +1,7 @@
+packages:
+  - 'Backend-sistema-bancario/*'
+  - 'Frontend-sistema-bancario'
+
 allowBuilds:
   '@scarf/scarf': false
   argon2: false
