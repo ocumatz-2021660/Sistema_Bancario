@@ -10,8 +10,8 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 // Configuración de PostgreSQL (igual que la API .NET)
 const sslConfig = process.env.DB_SSL === 'true'
-  ? { ssl: { require: true, rejectUnauthorized: false } }
-  : {};
+  ? { ssl: { require: true, rejectUnauthorized: false }, family: 4 }
+  : { family: 4 };
 
 export const sequelize = new Sequelize({
   dialect: 'postgres',

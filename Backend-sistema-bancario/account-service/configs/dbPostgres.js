@@ -7,8 +7,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const sslConfig = process.env.DB_SSL === 'true'
-  ? { ssl: { require: true, rejectUnauthorized: false } }
-  : {};
+  ? { ssl: { require: true, rejectUnauthorized: false }, family: 4 }
+  : { family: 4 };
 
 const sequelize = new Sequelize({
   dialect: 'postgres',
