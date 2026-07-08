@@ -57,12 +57,14 @@ export const AdminAccountsPage = () => {
     <div className="space-y-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black text-text-primary tracking-tighter flex items-center gap-3">
-            Control de <span className="text-primary">Cuentas</span>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
-              <Wallet className="w-6 h-6 text-primary" />
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-text-primary tracking-tighter">
+              Control de <span className="text-primary">Cuentas</span>
+            </h1>
+            <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10">
+              <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
             </span>
-          </h1>
+          </div>
           <p className="text-text-secondary font-medium mt-2">Monitoreo y gestión de todos los activos financieros del banco.</p>
         </div>
         <div className="relative group w-full md:w-64">
@@ -150,7 +152,8 @@ export const AdminAccountsPage = () => {
 
                     {/* Estado */}
                     <td className="px-5 py-4">
-                      <span style={{ display: 'inline-flex',
+                      <span style={{
+                        display: 'inline-flex',
                         alignItems: 'center',
                         gap: '5px',
                         padding: '3px 10px',

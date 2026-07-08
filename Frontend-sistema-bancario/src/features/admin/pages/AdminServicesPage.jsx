@@ -71,12 +71,14 @@ export const AdminServicesPage = () => {
     <div className="space-y-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black text-text-primary tracking-tighter flex items-center gap-3">
-            Gestión de <span className="text-primary">Servicios</span>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
-              <Gift className="w-6 h-6 text-primary" />
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-text-primary tracking-tighter">
+              Gestión de <span className="text-primary">Servicios</span>
+            </h1>
+            <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10">
+              <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
             </span>
-          </h1>
+          </div>
           <p className="text-text-secondary font-medium mt-2">
             Configura el catálogo de pagos y canjes disponibles.
           </p>
@@ -105,11 +107,10 @@ export const AdminServicesPage = () => {
               <div className="flex justify-between items-start mb-6">
                 <div className="w-19 h-19 text-primary rounded-xl flex items-center justify-center">
                   <span
-                    className={`text-[10px] font-black uppercase px-3 py-1 rounded-full ${
-                      service.isActive
-                        ? 'text-green-500 bg-green-50'
-                        : 'text-red-500 bg-red-50'
-                    }`}
+                    className={`text-[10px] font-black uppercase px-3 py-1 rounded-full ${service.isActive
+                      ? 'text-green-500 bg-green-50'
+                      : 'text-red-500 bg-red-50'
+                      }`}
                   >
                     {service.isActive ? 'Disponible' : 'Inactivo'}
                   </span>
