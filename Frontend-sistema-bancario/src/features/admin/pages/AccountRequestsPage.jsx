@@ -49,12 +49,14 @@ export const AccountRequestsPage = () => {
         <div className="space-y-10">
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-black text-text-primary tracking-tighter flex items-center gap-3">
-                        Solicitudes de <span className="text-primary">Cuenta</span>
-                        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
-                            <FileText className="w-6 h-6 text-primary" />
+                    <div className="flex flex-wrap items-center gap-2">
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-text-primary tracking-tighter">
+                            Solicitudes de <span className="text-primary">Cuenta</span>
+                        </h1>
+                        <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10">
+                            <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                         </span>
-                    </h1>
+                    </div>
                     <p className="text-text-secondary font-medium mt-2">Revisa y autoriza las nuevas solicitudes de productos financieros.</p>
                 </div>
 
@@ -65,8 +67,8 @@ export const AccountRequestsPage = () => {
                             key={estado}
                             onClick={() => setStatusFilter(estado)}
                             className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${statusFilter === estado
-                                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                    : 'text-text-secondary hover:text-primary'
+                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                                : 'text-text-secondary hover:text-primary'
                                 }`}
                         >
                             {estado}
