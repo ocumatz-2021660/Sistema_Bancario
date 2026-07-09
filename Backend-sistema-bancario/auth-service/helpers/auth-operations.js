@@ -4,24 +4,28 @@ import {
   checkUserExists,
   createNewUser,
   findUserByEmailOrUsername,
-  updateEmailVerificationToken,
-  markEmailAsVerified,
   findUserByEmail,
   updatePasswordResetToken,
   updateUserPassword,
-  findUserByEmailVerificationToken,
   findUserByPasswordResetToken,
 } from './user-db.js';
 import {
   generateEmailVerificationToken,
   generatePasswordResetToken,
 } from '../utils/auth-helpers.js';
-import { verifyPassword } from '../utils/password-utils.js';
+import { hashPassword, verifyPassword } from '../utils/password-utils.js';
 import { buildUserResponse } from '../utils/user-helpers.js';
 import { sendVerificationEmail } from './email-service.js';
 import { generateJWT } from './generate-jwt.js';
 import { uploadImage } from './cloudinary-service.js';
 import { config } from '../configs/config.js';
+import {
+  createPendingRegistration,
+  findPendingByToken,
+  findPendingByEmail,
+  findPendingByUsername,
+  deletePendingRegistration,
+} from './pending-registration-db.js';
 
 const getExpirationTime = (timeString) => {
   const timeValue = parseInt(timeString);
@@ -52,6 +56,12 @@ export const registerUserHelper = async (userData) => {
       throw new Error(
         'Ya existe un usuario con este email o nombre de usuario'
       );
+    }
+
+    // Verificar si el username ya está en uso en un registro pendiente (otro email)
+    const pendingUsername = await findPendingByUsername(username);
+    if (pendingUsername && pendingUsername.email !== email.toLowerCase()) {
+      throw new Error('Este nombre de usuario ya está en un registro pendiente');
     }
     let profilePictureToStore = profilePicture;
     if (profilePicture) {
@@ -103,27 +113,29 @@ export const registerUserHelper = async (userData) => {
       }
     }
 
-    // Crear el usuario
-    const newUser = await createNewUser({
-      name,
-      surname,
-      username,
-      email,
-      password,
-      phone,
-      profilePicture: profilePictureToStore,
-    });
+    // Hash de la contraseña
+    const hashedPassword = await hashPassword(password);
 
     // Generar token de verificación de email
     const verificationToken = await generateEmailVerificationToken();
-    const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    const tokenExpiry = new Date(Date.now() + config.verification.emailTokenExpiry);
 
-    // Guardar el token en la base de datos
-    await updateEmailVerificationToken(
-      newUser.Id,
-      verificationToken,
-      tokenExpiry
-    );
+    // Guardar en MongoDB como registro pendiente (NO en PostgreSQL)
+    await createPendingRegistration({
+      token: verificationToken,
+      email: email.toLowerCase(),
+      username: username.toLowerCase(),
+      userData: {
+        name,
+        surname,
+        username: username.toLowerCase(),
+        email: email.toLowerCase(),
+        phone,
+        profilePicture: profilePictureToStore,
+      },
+      hashedPassword,
+      expiresAt: tokenExpiry,
+    });
 
     // Enviar email de verificación en background para no bloquear la respuesta
     // Si falla, se registra en consola pero no afecta la respuesta
@@ -133,13 +145,8 @@ export const registerUserHelper = async (userData) => {
         console.error('Async email send (verification) failed:', err)
       );
 
-    // Note: No JWT token returned in register (aligned with .NET RegisterResponseDto)
-    // JWT will be generated only at login
-
-    // RegisterResponseDto equivalent structure
     return {
       success: true,
-      user: buildUserResponse(newUser),
       message:
         'Usuario registrado exitosamente. Por favor, verifica tu email para activar la cuenta.',
       emailVerificationRequired: true,
@@ -218,24 +225,21 @@ export const verifyEmailHelper = async (token) => {
       throw new Error('Token inválido para verificación de email');
     }
 
-    // Find user by verification token (like .NET does)
-    const user = await findUserByEmailVerificationToken(token);
-    if (!user) {
-      throw new Error('Usuario no encontrado o token inválido');
+    // Buscar el registro pendiente en MongoDB por token
+    const pending = await findPendingByToken(token);
+    if (!pending) {
+      throw new Error('Token inválido o expirado');
     }
 
-    // Verificar que el token no haya expirado (ya se verifica en jwt.verify, pero por seguridad)
-    const userEmail = user.UserEmail;
-    if (!userEmail) {
-      throw new Error('Registro de email no encontrado');
-    }
+    // Crear el usuario en PostgreSQL AHORA con email ya verificado
+    const user = await createNewUser({
+      ...pending.userData,
+      hashedPassword: pending.hashedPassword,
+      emailVerified: true,
+    });
 
-    if (userEmail.EmailVerified) {
-      throw new Error('El email ya ha sido verificado');
-    }
-
-    // Marcar el email como verificado
-    await markEmailAsVerified(user.Id);
+    // Eliminar el registro pendiente de MongoDB
+    await deletePendingRegistration(token);
 
     // Enviar email de bienvenida en background (aligned with .NET)
     Promise.resolve()
@@ -258,64 +262,68 @@ export const verifyEmailHelper = async (token) => {
     };
   } catch (error) {
     console.error('Error verificando email:', error);
-
-    if (error.name === 'JsonWebTokenError') {
-      throw new Error('Token de verificación inválido');
-    } else if (error.name === 'TokenExpiredError') {
-      throw new Error('Token de verificación expirado');
-    }
-
     throw error;
   }
 };
 
 export const resendVerificationEmailHelper = async (email) => {
   try {
-    const user = await findUserByEmail(email.toLowerCase());
+    const normalizedEmail = email.toLowerCase();
 
-    if (!user) {
-      // EmailResponseDto equivalent structure
-      return {
-        success: false,
-        message: 'Usuario no encontrado',
-        data: { email, sent: false },
-      };
-    }
-
-    // Verificar si ya está verificado
-    if (user.UserEmail && user.UserEmail.EmailVerified) {
-      // EmailResponseDto equivalent structure
+    // Verificar si el usuario ya existe en PostgreSQL (ya verificó)
+    const existingUser = await findUserByEmail(normalizedEmail);
+    if (existingUser && existingUser.UserEmail?.EmailVerified) {
       return {
         success: false,
         message: 'El email ya ha sido verificado',
-        data: { email: user.Email, verified: true },
+        data: { email: normalizedEmail, verified: true },
+      };
+    }
+
+    // Buscar registro pendiente en MongoDB
+    const pending = await findPendingByEmail(normalizedEmail);
+    if (!pending) {
+      return {
+        success: false,
+        message:
+          'No se encontró un registro pendiente para este email. Por favor, regístrate nuevamente.',
+        data: { email: normalizedEmail, sent: false },
       };
     }
 
     // Generar nuevo token de verificación
     const verificationToken = await generateEmailVerificationToken();
-    const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    const tokenExpiry = new Date(Date.now() + config.verification.emailTokenExpiry);
 
-    // Actualizar token en la base de datos
-    await updateEmailVerificationToken(user.Id, verificationToken, tokenExpiry);
+    // Actualizar token en MongoDB
+    await createPendingRegistration({
+      token: verificationToken,
+      email: pending.email,
+      username: pending.username,
+      userData: pending.userData,
+      hashedPassword: pending.hashedPassword,
+      expiresAt: tokenExpiry,
+    });
 
     // Enviar email de forma síncrona para reportar errores correctamente
     try {
-      await sendVerificationEmail(user.Email, user.Name, verificationToken);
-      // EmailResponseDto equivalent structure
+      await sendVerificationEmail(
+        normalizedEmail,
+        pending.userData.name || pending.userData.username,
+        verificationToken
+      );
       return {
         success: true,
         message: 'Email de verificación enviado exitosamente',
-        data: { email: user.Email, sent: true },
+        data: { email: normalizedEmail, sent: true },
       };
     } catch (emailError) {
       console.error('Error sending verification email:', emailError);
-      // EmailResponseDto equivalent structure
       return {
         success: false,
         message:
           'Error al enviar el email de verificación. Por favor, intenta nuevamente más tarde.',
-        data: { email: user.Email, sent: false },
+        data: { email: normalizedEmail, sent: false },
       };
     }
   } catch (error) {

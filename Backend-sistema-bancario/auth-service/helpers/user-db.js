@@ -86,10 +86,11 @@ export const createNewUser = async (userData) => {
   const transaction = await User.sequelize.transaction();
 
   try {
-    const { name, surname, username, email, password, phone, profilePicture } =
+    const { name, surname, username, email, password, phone, profilePicture, hashedPassword: preHashedPassword, emailVerified } =
       userData;
 
-    const hashedPassword = await hashPassword(password);
+    const hashedPassword = preHashedPassword || await hashPassword(password);
+    const isVerified = emailVerified === true;
 
     // Crear el usuario principal
     const user = await User.create(
@@ -99,7 +100,7 @@ export const createNewUser = async (userData) => {
         Username: username.toLowerCase(),
         Email: email.toLowerCase(),
         Password: hashedPassword,
-        Status: false, // Empieza desactivado hasta que verifique el email
+        Status: isVerified,
       },
       { transaction }
     );
@@ -123,7 +124,7 @@ export const createNewUser = async (userData) => {
     await UserEmail.create(
       {
         UserId: user.Id,
-        EmailVerified: false,
+        EmailVerified: isVerified,
       },
       { transaction }
     );
