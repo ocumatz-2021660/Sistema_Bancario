@@ -10,12 +10,13 @@ import {
     CheckCircle2,
     Loader2,
     Mail,
-    Phone
+    Phone,
+    Trash2
 } from 'lucide-react';
 import { UserAvatar } from '../../../shared/components/userAvatar';
 
 export const UsersManagementPage = () => {
-    const { users, getAllUsers, updateUserStatus, updateUserRole, isLoading } = useAdminStore();
+    const { users, getAllUsers, updateUserStatus, updateUserRole, deleteUser, isLoading } = useAdminStore();
     const [searchTerm, setSearchTerm] = useState('');
     const [roleFilter, setRoleFilter] = useState('ALL');
 
@@ -48,6 +49,16 @@ export const UsersManagementPage = () => {
             toast.success(`Rol actualizado a ${newRole === 'ADMIN_ROLE' ? 'Administrador' : 'Cliente'}`);
         } else {
             toast.error(result.error || 'No se pudo actualizar el rol');
+        }
+    };
+
+    const handleDelete = async (user) => {
+        if (!confirm(`¿Estás seguro de eliminar a ${user.name} ${user.surname}? Esta acción eliminará su perfil, cuentas, solicitudes y favoritos. Las transacciones y canjes se conservarán.`)) return;
+        const result = await deleteUser(user.id);
+        if (result.success) {
+            toast.success('Usuario eliminado exitosamente');
+        } else {
+            toast.error(result.error || 'No se pudo eliminar al usuario');
         }
     };
 
@@ -111,7 +122,16 @@ export const UsersManagementPage = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {filteredUsers.map((user) => (
-                        <div key={user.id} className="bank-card p-6 flex flex-col gap-4 hover:shadow-xl hover:bg-green-50 transition-shadow">
+                        <div key={user.id} className="bank-card p-6 flex flex-col gap-4 hover:shadow-xl hover:bg-green-50 transition-shadow relative">
+
+                            {/* Botón eliminar */}
+                            <button
+                                onClick={() => handleDelete(user)}
+                                title="Eliminar usuario"
+                                className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full text-text-secondary hover:text-red-500 hover:bg-red-100 transition-all"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </button>
 
                             {/* Avatar + nombre */}
                             <div className="flex flex-col items-center text-center gap-2">

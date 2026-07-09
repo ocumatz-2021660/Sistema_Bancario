@@ -7,6 +7,7 @@ import {
   getUsersByRole,
   getUsers,
   updateUser,
+  deleteUser,
 } from './user.controller.js';
 import {
   updateAccountStatus,
@@ -95,6 +96,35 @@ router.get('/', validateJWT, isAdmin, getUsers);
  *         description: Usuario no encontrado
  */
 router.put('/:userId', validateJWT, isAdmin, updateUser);
+
+/**
+ * @swagger
+ * /usuarios/{userId}:
+ *   delete:
+ *     summary: Eliminar un usuario (solo Admin)
+ *     description: Elimina permanentemente un usuario, su perfil, cuentas, solicitudes y favoritos. Las transacciones y canjes se conservan.
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario a eliminar
+ *         example: usr_8dgjEaBFTePn
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado exitosamente
+ *       401:
+ *         description: Token requerido o inválido
+ *       403:
+ *         description: No tienes permisos o el usuario está protegido
+ *       404:
+ *         description: Usuario no encontrado
+ */
+router.delete('/:userId', validateJWT, isAdmin, deleteUser);
 
 /**
  * @swagger

@@ -57,6 +57,24 @@ export const useAdminStore = create((set) => ({
     }
   },
 
+  // DELETE /users/:userId
+  deleteUser: async (userId) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.delete(`/users/${userId}`);
+      const usersRes = await api.get('/users', { params: { page: 1, limit: 50 } });
+      const raw = usersRes.data.data || usersRes.data;
+      set({ users: Array.isArray(raw) ? raw : [], isLoading: false });
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      set({ isLoading: false });
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Error al eliminar usuario',
+      };
+    }
+  },
+
   // ── SOLICITUDES DE CUENTA ─────────────────────────────────────────────
   getAccountRequests: async (estado = '') => {
     set({ isLoading: true });
